@@ -1,0 +1,7 @@
+{
+  "name": "ICEM Tech Fest 2026 - Nexus of Innovation",
+  "description": "Official registration and event portal for the futuristic ICEM Tech Fest 2026, featuring team registrations, QR tickets, and admin dashboards.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
