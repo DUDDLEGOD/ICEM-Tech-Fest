@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ICEM Tech Fest 2026 Website
 
-# Run and deploy your AI Studio app
+Single-page React + Vite website for ICEM Tech Fest 2026 registration and event showcase.
 
-This contains everything you need to run your app locally.
+## Stack
 
-View your app in AI Studio: https://ai.studio/apps/0a1f79e4-6396-4809-957c-900fbf5297b5
+- React 19
+- TypeScript
+- Vite
+- Framer Motion
+- Tailwind CSS (via CDN in `index.html`)
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+## Run locally
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Start development server:
    `npm run dev`
+3. Build production bundle:
+   `npm run build`
+4. Run type check:
+   `npm run lint`
+
+## Registration API
+
+- Configure endpoint in `.env.local`:
+  `VITE_REGISTRATION_API_URL=<your-google-apps-script-web-app-url>`
+- Reference backend setup:
+  `docs/registration-backend.md`

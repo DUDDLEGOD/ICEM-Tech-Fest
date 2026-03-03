@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { EventID, Registration } from '../types';
+import { EventID, Registration, RegistrationApiResult } from '../types';
 import { EVENTS } from '../constants';
 import { 
   AlertTriangle, 
@@ -16,25 +16,65 @@ import {
   Send 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { submitRegistration } from '../services/registrationApi';
 
 interface RegistrationFormProps {
-  onSuccess: (reg: Registration) => void;
+  onSuccess: (reg: Registration, toastMessage?: string) => void;
   initialEventId: string | null;
 }
 
 type Step = 'leader' | 'team' | 'abstract' | 'members' | 'confirm';
+type LeaderField = 'name' | 'email' | 'phone' | 'college';
+
+interface LeaderInfo {
+  name: string;
+  email: string;
+  phone: string;
+  college: string;
+}
+
+const isEventId = (value: string | null): value is EventID => {
+  return value !== null && Object.values(EventID).includes(value as EventID);
+};
+
+const createToken = (size: number) => Math.random().toString(36).slice(2, 2 + size).toUpperCase();
+const DEFAULT_CONFIRMED_TOAST = 'Cloud sync complete. Check your email for further instructions.';
+const DEFAULT_QUEUED_TOAST = 'Registration submitted successfully. Confirmation email may take a few minutes.';
+
+const resolveFailureMessage = (result: RegistrationApiResult) =>
+  result.message ?? 'Submission failed. Please verify your network and try again.';
+
+const resolveDuplicateMessage = (result: RegistrationApiResult) => {
+  if (result.message) return result.message;
+  if (result.registrationId) {
+    return `A registration already exists for this event (Ref: ${result.registrationId}).`;
+  }
+  return 'A registration already exists for this event with the same leader email.';
+};
+
+const leaderInputs: Array<{ label: string; key: LeaderField; type: string; placeholder: string }> = [
+  { label: 'Full Name', key: 'name', type: 'text', placeholder: 'Major John Doe' },
+  { label: 'Email Address', key: 'email', type: 'email', placeholder: 'john@indiraicem.ac.in' },
+  { label: 'Phone Number', key: 'phone', type: 'tel', placeholder: '+91 00000 00000' },
+  { label: 'Institution', key: 'college', type: 'text', placeholder: 'ICEM Pune' }
+];
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, initialEventId }) => {
-  const [selectedEventId, setSelectedEventId] = useState<string>(initialEventId || EventID.VAC);
+  const [selectedEventId, setSelectedEventId] = useState<EventID>(isEventId(initialEventId) ? initialEventId : EventID.VAC);
   const [teamName, setTeamName] = useState('');
-  const [leaderInfo, setLeaderInfo] = useState({ name: '', email: '', phone: '', college: 'Indira College of Engineering and Management' });
+  const [leaderInfo, setLeaderInfo] = useState<LeaderInfo>({
+    name: '',
+    email: '',
+    phone: '',
+    college: 'Indira College of Engineering and Management'
+  });
   const [members, setMembers] = useState<{ name: string; email: string }[]>([]);
   const [abstractText, setAbstractText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
 
-  const currentEvent = EVENTS.find(e => e.id === selectedEventId)!;
+  const currentEvent = EVENTS.find((event) => event.id === selectedEventId) ?? EVENTS[0];
 
   const addMember = () => {
     if (members.length + 1 < currentEvent.maxTeam) {
@@ -50,9 +90,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   };
 
   const updateMember = (index: number, field: 'name' | 'email', value: string) => {
-    const updated = [...members];
-    updated[index][field] = value;
-    setMembers(updated);
+    setMembers((previousMembers) =>
+      previousMembers.map((member, memberIndex) => {
+        if (memberIndex !== index) return member;
+        return { ...member, [field]: value };
+      })
+    );
   };
 
   const validateLeader = () => {
@@ -92,10 +135,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     setError('');
     
     const registration: Registration = {
-      id: Math.random().toString(36).substr(2, 9).toUpperCase(),
+      id: createToken(9),
       teamName,
-      eventId: selectedEventId as EventID,
-      leaderId: 'LEAD_' + Math.random().toString(36).substr(2, 5).toUpperCase(),
+      eventId: selectedEventId,
+      leaderId: `LEAD_${createToken(5)}`,
       leaderName: leaderInfo.name,
       leaderEmail: leaderInfo.email,
       leaderPhone: leaderInfo.phone,
@@ -108,23 +151,40 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     };
 
     try {
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPt0Mn7i2OhWBEUYbsKGvzF5iI-SpobfRlnOhYh0fTbBM4Ox0-ybvoMXl3hrdTtYeE/exec";
-      
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registration)
+      const result = await submitRegistration({
+        registration,
+        eventName: currentEvent.name,
+        eventDateLabel: currentEvent.eventDateLabel,
+        eventTimeLabel: currentEvent.eventTimeLabel,
+        venueLabel: currentEvent.venueLabel
       });
 
+      if (result.status === 'duplicate') {
+        setError(resolveDuplicateMessage(result));
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (result.status === 'failed') {
+        setError(resolveFailureMessage(result));
+        setIsSubmitting(false);
+        return;
+      }
+
+      const finalizedRegistration: Registration = {
+        ...registration,
+        id: result.registrationId ?? registration.id,
+        status: result.status === 'queued' ? 'Pending' : 'Confirmed'
+      };
+
       setIsSubmitting(false);
-      onSuccess(registration);
+      onSuccess(
+        finalizedRegistration,
+        result.message ?? (result.status === 'queued' ? DEFAULT_QUEUED_TOAST : DEFAULT_CONFIRMED_TOAST)
+      );
     } catch (err) {
       console.error("Submission error:", err);
-      setError("Cloud sync failed. Data saved locally, but check your network for global sync.");
+      setError('Unexpected submission error. Please retry in a moment.');
       setIsSubmitting(false);
     }
   };
@@ -196,19 +256,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  { label: 'Full Name', key: 'name', type: 'text', placeholder: 'Major John Doe' },
-                  { label: 'Email Address', key: 'email', type: 'email', placeholder: 'john@indiraicem.ac.in' },
-                  { label: 'Phone Number', key: 'phone', type: 'tel', placeholder: '+91 00000 00000' },
-                  { label: 'Institution', key: 'college', type: 'text', placeholder: 'ICEM Pune' }
-                ].map((input) => (
+                {leaderInputs.map((input) => (
                   <div key={input.key} className="space-y-2">
                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">{input.label}</label>
                     <input 
                       type={input.type}
                       placeholder={input.placeholder}
-                      value={(leaderInfo as any)[input.key]}
-                      onChange={(e) => setLeaderInfo({...leaderInfo, [input.key]: e.target.value})}
+                      value={leaderInfo[input.key]}
+                      onChange={(e) => setLeaderInfo({ ...leaderInfo, [input.key]: e.target.value })}
                       className="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-amber-500 transition-all font-bold text-white text-sm"
                     />
                   </div>
@@ -247,7 +302,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   <select 
                     value={selectedEventId}
                     onChange={(e) => {
-                      setSelectedEventId(e.target.value);
+                      setSelectedEventId(e.target.value as EventID);
                       setError('');
                     }}
                     className="w-full bg-stone-950 border border-white/10 p-5 rounded-2xl outline-none focus:border-amber-500 transition-all font-bold appearance-none cursor-pointer text-white"

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Marquee } from './components/Marquee';
@@ -11,20 +11,33 @@ import { Footer } from './components/Footer';
 import { BackgroundEffect } from './components/BackgroundEffect';
 import { CustomCursor } from './components/CustomCursor';
 import { BackgroundMusic } from './components/BackgroundMusic';
-import { Registration } from './types';
+import { AppView, Registration } from './types';
 import { CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function App() {
-  const [view, setView] = useState<'home' | 'register' | 'about'>('home');
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
+const REGISTRATIONS_STORAGE_KEY = 'nexus_regs';
+const SUCCESS_TOAST_TIMEOUT_MS = 5000;
+const DEFAULT_SUCCESS_TOAST_MESSAGE = 'Cloud sync complete. Check your email for further instructions.';
 
-  useEffect(() => {
-    const stored = localStorage.getItem('nexus_regs');
-    if (stored) setRegistrations(JSON.parse(stored));
-  }, []);
+const loadStoredRegistrations = (): Registration[] => {
+  try {
+    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error('Failed to parse stored registrations:', error);
+    return [];
+  }
+};
+
+export default function App() {
+  const [view, setView] = useState<AppView>('home');
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successToastMessage, setSuccessToastMessage] = useState(DEFAULT_SUCCESS_TOAST_MESSAGE);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const successToastTimeoutRef = useRef<number | null>(null);
 
   const handleRegister = (eventId: string) => {
     setSelectedEventId(eventId);
@@ -32,15 +45,31 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const onRegistrationSuccess = (reg: Registration) => {
-    const newRegs = [...registrations, reg];
-    setRegistrations(newRegs);
-    localStorage.setItem('nexus_regs', JSON.stringify(newRegs));
+  const onRegistrationSuccess = (reg: Registration, toastMessage?: string) => {
+    const nextRegistrations = [...loadStoredRegistrations(), reg];
+    localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(nextRegistrations));
     
     setView('home');
+    setSuccessToastMessage(toastMessage ?? DEFAULT_SUCCESS_TOAST_MESSAGE);
     setShowSuccessToast(true);
-    setTimeout(() => setShowSuccessToast(false), 5000);
+
+    if (successToastTimeoutRef.current !== null) {
+      window.clearTimeout(successToastTimeoutRef.current);
+    }
+
+    successToastTimeoutRef.current = window.setTimeout(() => {
+      setShowSuccessToast(false);
+      successToastTimeoutRef.current = null;
+    }, SUCCESS_TOAST_TIMEOUT_MS);
   };
+
+  useEffect(() => {
+    return () => {
+      if (successToastTimeoutRef.current !== null) {
+        window.clearTimeout(successToastTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const renderView = () => {
     switch (view) {
@@ -99,7 +128,7 @@ export default function App() {
               </div>
               <div className="flex-1">
                 <h4 className="font-futuristic text-sm font-black uppercase text-white tracking-tighter">Registration Successful</h4>
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Cloud sync complete. Check your email for further instructions.</p>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">{successToastMessage}</p>
               </div>
               <button onClick={() => setShowSuccessToast(false)} className="text-slate-500 hover:text-white transition-colors">
                 <X size={20} />

@@ -17,14 +17,13 @@ export const BackgroundMusic: React.FC = () => {
         const playPromise = audioRef.current.play();
         
         if (playPromise !== undefined) {
-          playPromise.then(() => {
-            console.log("Interaction play succeeded");
-          }).catch(err => {
-            console.log("Interaction play failed:", err);
+          playPromise.catch(() => {
             // If it failed, we try again with a direct call
             if (audioRef.current) {
               audioRef.current.muted = false;
-              audioRef.current.play().catch(e => console.log("Final attempt failed", e));
+              audioRef.current.play().catch(() => {
+                // Ignore autoplay failures from browser policy.
+              });
             }
           });
         }

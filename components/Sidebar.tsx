@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Home, 
   Terminal, 
   Cpu, 
@@ -14,19 +14,15 @@ import {
   ChevronRight,
   ShieldCheck
 } from 'lucide-react';
-import { Department } from '../types';
+import { AppView, Department } from '../types';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onNavigate: (view: 'home' | 'register' | 'about', section?: string) => void;
+  onNavigate: (view: AppView, section?: string) => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onNavigate }) => {
-  useEffect(() => {
-    console.log('Sidebar Initialized: Connectivity Active.');
-  }, []);
-
   const menuItems = [
     { name: 'Home Portal', icon: Home, action: () => onNavigate('home') },
     { name: 'About ICEM', icon: Info, action: () => onNavigate('about') },

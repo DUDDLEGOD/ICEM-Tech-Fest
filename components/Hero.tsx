@@ -6,7 +6,7 @@ import { SponsorLogos } from './SponsorLogos';
 
 const ScrambleText: React.FC<{ text: string; delay?: number; className?: string }> = ({ text, delay = 0, className = "" }) => {
   const [displayText, setDisplayText] = useState('');
-  const chars = '!<>-_\\/[]{}—=+*^?#________';
+  const chars = '!<>-_\\/[]{}\u2014=+*^?#________';
 
   useEffect(() => {
     let iteration = 0;

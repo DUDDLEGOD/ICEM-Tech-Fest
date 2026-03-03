@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Home, Zap, Info, Menu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Sidebar } from './Sidebar';
+import { AppView } from '../types';
 
 const TechnoLogo = () => {
   return (
@@ -58,8 +59,8 @@ const TechnoLogo = () => {
 };
 
 interface NavbarProps {
-  currentView: 'home' | 'register' | 'about';
-  setView: (v: 'home' | 'register' | 'about') => void;
+  currentView: AppView;
+  setView: (v: AppView) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
@@ -80,19 +81,32 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
   };
 
   const handleRegisterClick = () => {
-    if (currentView !== 'home') {
-      setView('home');
-      setTimeout(() => {
-        document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
-    }
+    handleSidebarNavigate('home', 'events-section');
   };
 
   const handleAboutClick = () => {
     setView('about');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSidebarNavigate = (view: AppView, section?: string) => {
+    setView(view);
+
+    const navigateToTarget = () => {
+      if (section) {
+        document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    if (view !== currentView) {
+      setTimeout(navigateToTarget, 100);
+      return;
+    }
+
+    navigateToTarget();
   };
 
   return (
@@ -153,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
-        onNavigate={(view) => setView(view)} 
+        onNavigate={handleSidebarNavigate} 
       />
     </>
   );

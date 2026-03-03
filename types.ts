@@ -17,6 +17,13 @@ export enum EventID {
   VIBE = 'VIBE'
 }
 
+export type AppView = 'home' | 'register' | 'about';
+
+export interface EventRound {
+  title: string;
+  desc: string;
+}
+
 export interface EventConfig {
   id: EventID;
   name: string;
@@ -28,8 +35,14 @@ export interface EventConfig {
   fee: number | string;
   requiresUpload: boolean;
   prizePool: string;
+  eventDateLabel: string;
+  eventTimeLabel: string;
+  venueLabel: string;
+  coordinatorName: string;
+  coordinatorEmail: string;
+  coordinatorPhone: string;
   rules: string[];
-  rounds: { title: string; desc: string }[];
+  rounds: EventRound[];
 }
 
 export interface User {
@@ -54,4 +67,10 @@ export interface Registration {
   qrHash: string;
   timestamp: number;
   feePaid: number;
+}
+
+export interface RegistrationApiResult {
+  status: 'confirmed' | 'duplicate' | 'queued' | 'failed';
+  registrationId?: string;
+  message?: string;
 }

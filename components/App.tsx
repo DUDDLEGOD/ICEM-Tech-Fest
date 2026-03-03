@@ -1,1 +1,0 @@
-// This file is deprecated to resolve duplication conflicts. The main App entry point is in the root directory.

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Instagram, Twitter, Heart, MessageCircle, Share2 } from 'lucide-react';
@@ -6,48 +5,48 @@ import { Instagram, Twitter, Heart, MessageCircle, Share2 } from 'lucide-react';
 const POSTS = [
   {
     id: 1,
-    user: "@cyber_kavi",
-    msg: "Just registered for #CodeVerse at #TechnoFest2026! 🚀 The logic problems look insane. Team Matrix ready for battle!",
-    type: "Twitter",
+    user: '@cyber_kavi',
+    msg: 'Just registered for #CodeVerse at #TechnoFest2026! \uD83D\uDE80 The logic problems look insane. Team Matrix ready for battle!',
+    type: 'Twitter',
     likes: 124,
     comments: 12,
-    color: "from-blue-500/20 to-transparent"
+    color: 'from-blue-500/20 to-transparent'
   },
   {
     id: 2,
-    user: "tech_aura",
-    msg: "Bridge-It prep is in full swing! 🌉 Testing structural integrity with 10kg loads. See you at ICEM on March 14th!",
-    type: "Instagram",
+    user: 'tech_aura',
+    msg: 'Bridge-It prep is in full swing! \uD83C\uDF09 Testing structural integrity with 10kg loads. See you at ICEM on March 14th!',
+    type: 'Instagram',
     likes: 450,
     comments: 34,
-    color: "from-pink-500/20 to-transparent"
+    color: 'from-pink-500/20 to-transparent'
   },
   {
     id: 3,
-    user: "@ai_junkie",
-    msg: "Agentic AI rounds are going to be a game changer. Building a swarm that solves real-world logistics. 🔥 #TechnoFestInnovation",
-    type: "Twitter",
+    user: '@ai_junkie',
+    msg: 'Agentic AI rounds are going to be a game changer. Building a swarm that solves real-world logistics. \uD83D\uDD25 #TechnoFestInnovation',
+    type: 'Twitter',
     likes: 89,
     comments: 5,
-    color: "from-amber-500/20 to-transparent"
+    color: 'from-amber-500/20 to-transparent'
   },
   {
     id: 4,
-    user: "@pune_coder",
-    msg: "The TechnoFest arena is looking futuristic! Can't wait to see the RoboVerse battles. 🤖🔥 #ICEMTechnoFest",
-    type: "Twitter",
+    user: '@pune_coder',
+    msg: "The TechnoFest arena is looking futuristic! Can't wait to see the RoboVerse battles. \uD83E\uDD16\uD83D\uDD25 #ICEMTechnoFest",
+    type: 'Twitter',
     likes: 210,
     comments: 18,
-    color: "from-purple-500/20 to-transparent"
+    color: 'from-purple-500/20 to-transparent'
   },
   {
     id: 5,
-    user: "design_node",
-    msg: "Vibe Coding is my new favorite genre. UI design with live rhythm? Count me in! 🎨🎹",
-    type: "Instagram",
+    user: 'design_node',
+    msg: 'Vibe Coding is my new favorite genre. UI design with live rhythm? Count me in! \uD83C\uDFA8\uD83C\uDFB9',
+    type: 'Instagram',
     likes: 567,
     comments: 42,
-    color: "from-emerald-500/20 to-transparent"
+    color: 'from-emerald-500/20 to-transparent'
   }
 ];
 
@@ -58,7 +57,7 @@ export const SocialFeed: React.FC = () => {
     <section className="py-16 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 mb-10 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-4">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -66,7 +65,7 @@ export const SocialFeed: React.FC = () => {
           >
             Live Feed
           </motion.h2>
-          <motion.h3 
+          <motion.h3
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -76,7 +75,7 @@ export const SocialFeed: React.FC = () => {
             #TechnoFest26
           </motion.h3>
         </div>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -98,7 +97,7 @@ export const SocialFeed: React.FC = () => {
               className="w-[320px] md:w-[400px] shrink-0 glass p-8 rounded-[2.5rem] border border-white/5 space-y-6 group/card hover:border-amber-500/40 transition-all relative overflow-hidden bg-stone-900/40 backdrop-blur-xl"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${post.color} opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}></div>
-              
+
               <div className="relative z-10 flex justify-between items-center">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center font-black text-white text-lg group-hover/card:scale-110 transition-transform">
@@ -120,11 +119,11 @@ export const SocialFeed: React.FC = () => {
 
               <div className="relative z-10 flex items-center gap-6 pt-6 border-t border-white/5 text-slate-500">
                 <div className="flex items-center gap-2 hover:text-red-500 transition-colors cursor-pointer group/stat">
-                  <Heart size={16} className="group-hover/stat:fill-red-500 transition-all" /> 
+                  <Heart size={16} className="group-hover/stat:fill-red-500 transition-all" />
                   <span className="text-xs font-black">{post.likes}</span>
                 </div>
                 <div className="flex items-center gap-2 hover:text-blue-500 transition-colors cursor-pointer group/stat">
-                  <MessageCircle size={16} className="group-hover/stat:fill-blue-500 transition-all" /> 
+                  <MessageCircle size={16} className="group-hover/stat:fill-blue-500 transition-all" />
                   <span className="text-xs font-black">{post.comments}</span>
                 </div>
                 <div className="ml-auto hover:text-white transition-colors cursor-pointer">
