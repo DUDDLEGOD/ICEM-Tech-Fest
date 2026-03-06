@@ -9,8 +9,9 @@ import { AboutPage } from './components/AboutPage';
 import { SocialFeed } from './components/SocialFeed';
 import { Footer } from './components/Footer';
 import { BackgroundEffect } from './components/BackgroundEffect';
-import { CustomCursor } from './components/CustomCursor';
+
 import { BackgroundMusic } from './components/BackgroundMusic';
+import { AdminDashboard } from './components/AdminDashboard';
 import { AppView, Registration } from './types';
 import { CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,12 +33,26 @@ const loadStoredRegistrations = (): Registration[] => {
   }
 };
 
+const BROCHURES_STORAGE_KEY = 'nexus_brochures';
+
 export default function App() {
   const [view, setView] = useState<AppView>('home');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [successToastMessage, setSuccessToastMessage] = useState(DEFAULT_SUCCESS_TOAST_MESSAGE);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [brochureVisibility, setBrochureVisibility] = useState<Record<string, boolean>>({});
   const successToastTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    try {
+      const storedVisibility = localStorage.getItem(BROCHURES_STORAGE_KEY);
+      if (storedVisibility) {
+        setBrochureVisibility(JSON.parse(storedVisibility));
+      }
+    } catch (e) {
+      console.error('Failed to parse brochure settings:', e);
+    }
+  }, [view]);
 
   const handleRegister = (eventId: string) => {
     setSelectedEventId(eventId);
@@ -82,11 +97,13 @@ export default function App() {
         );
       case 'about':
         return <AboutPage onNavigateBack={() => setView('home')} />;
+      case 'admin':
+        return <AdminDashboard onNavigateBack={() => setView('home')} />;
       default:
         return (
           <>
             <Hero />
-            <EventCatalog onRegister={handleRegister} />
+            <EventCatalog onRegister={handleRegister} brochureVisibility={brochureVisibility} />
             <Marquee />
             <div id="social-section">
               <SocialFeed />
@@ -97,8 +114,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen relative text-slate-50 selection:bg-amber-500 selection:text-white cursor-none bg-[#0c0a09]">
-      <CustomCursor />
+    <div className="min-h-screen relative text-slate-50 selection:bg-amber-500 selection:text-white bg-[#0c0a09]">
       <BackgroundEffect />
       
       <Navbar 
@@ -108,11 +124,11 @@ export default function App() {
 
       <BackgroundMusic />
 
-      <main className="relative z-10 pt-20 md:pt-24">
+      <main className="relative z-10 pt-20 md:pt-24 min-h-[80vh]">
         {renderView()}
       </main>
 
-      <Footer />
+      <Footer setView={setView} />
 
       <AnimatePresence>
         {showSuccessToast && (

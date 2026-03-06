@@ -17,7 +17,7 @@ export enum EventID {
   VIBE = 'VIBE'
 }
 
-export type AppView = 'home' | 'register' | 'about';
+export type AppView = 'home' | 'register' | 'about' | 'admin';
 
 export interface EventRound {
   title: string;

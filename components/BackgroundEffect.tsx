@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-export const BackgroundEffect: React.FC = () => {
+export const BackgroundEffect: React.FC = React.memo(() => {
   const { scrollY } = useScroll();
   // Simplified transform for better performance
   const y1 = useTransform(scrollY, [0, 2000], [0, -100]);
@@ -42,4 +41,7 @@ export const BackgroundEffect: React.FC = () => {
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-light.png')] opacity-[0.01]"></div>
     </div>
   );
-};
+});
+
+// Adding a display name for debugging purposes
+BackgroundEffect.displayName = 'BackgroundEffect';

@@ -13,7 +13,8 @@ import {
   MapPin,
   ChevronRight,
   Mail,
-  Phone
+  Phone,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 
@@ -40,6 +41,7 @@ const cardVariants: Variants = {
 
 interface EventCatalogProps {
   onRegister: (id: string) => void;
+  brochureVisibility?: Record<string, boolean>;
 }
 
 interface EventCardProps {
@@ -52,6 +54,7 @@ interface EventModalProps {
   event: EventConfig;
   onClose: () => void;
   onRegister: (id: string) => void;
+  showBrochure?: boolean;
 }
 
 const EventRulesList: React.FC<{ rules: string[] }> = ({ rules }) => (
@@ -82,7 +85,7 @@ const EventRoundsTimeline: React.FC<{ rounds: EventConfig['rounds'] }> = ({ roun
 );
 
 const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails }) => (
-  <motion.div key={event.id} variants={cardVariants} whileHover="hover" className="group relative h-[440px] cursor-none">
+  <motion.div key={event.id} variants={cardVariants} whileHover="hover" className="group relative h-[440px]">
     <div className="absolute -inset-[1px] bg-gradient-to-br from-white/10 to-transparent rounded-[2.5rem] group-hover:from-amber-500/50 transition-all duration-500 -z-10"></div>
 
     <div className="absolute inset-0 bg-stone-950/80 backdrop-blur-2xl rounded-[2.5rem] border border-white/5 overflow-hidden flex flex-col justify-between transition-all duration-500">
@@ -133,8 +136,24 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails 
   </motion.div>
 );
 
-const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister }) => (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-3xl overflow-y-auto cursor-none">
+const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, showBrochure }) => {
+  const handleDownloadBrochure = () => {
+    // In a real app, this would be a PDF URL specifically for the event
+    // For this prototype, we'll create a text file to download
+    const content = `TECHNQFEST 2026 - EVENT BROCHURE\n\nEvent: ${event.name}\nDepartment: ${event.department}\nDetails: ${event.description}\n\nRules:\n${event.rules.join('\n')}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `TechnoFest26_${event.id}_Brochure.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/95 backdrop-blur-3xl overflow-y-auto">
     <motion.div
       initial={{ opacity: 0, scale: 0.95, y: 30 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -225,6 +244,14 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister }) =
                   {event.coordinatorPhone}
                 </a>
               </div>
+              {showBrochure && (
+                <button
+                  onClick={handleDownloadBrochure}
+                  className="w-full md:w-auto px-8 py-6 bg-transparent border-2 border-teal-500/50 hover:border-teal-400 hover:bg-teal-500/10 text-teal-400 font-black uppercase tracking-[0.2em] text-[11px] rounded-2xl transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3"
+                >
+                  <Download size={16} /> BROCHURE
+                </button>
+              )}
             </div>
 
             <button
@@ -238,9 +265,10 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister }) =
       </div>
     </motion.div>
   </div>
-);
+  );
+};
 
-export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister }) => {
+export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochureVisibility = {} }) => {
   const [selectedEvent, setSelectedEvent] = useState<EventConfig | null>(null);
 
   return (
@@ -277,7 +305,16 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister }) => {
         ))}
       </motion.div>
 
-      <AnimatePresence>{selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} onRegister={onRegister} />}</AnimatePresence>
+      <AnimatePresence>
+        {selectedEvent && (
+          <EventModal 
+            event={selectedEvent} 
+            onClose={() => setSelectedEvent(null)} 
+            onRegister={onRegister} 
+            showBrochure={brochureVisibility[selectedEvent.id]}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 };

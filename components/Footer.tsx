@@ -1,8 +1,12 @@
-
 import React from 'react';
-import { Github, Instagram, Linkedin, Mail, Phone, MapPin, ExternalLink, Globe, Zap, Home, ShieldCheck } from 'lucide-react';
+import { Github, Instagram, Linkedin, Mail, Phone, MapPin, ExternalLink, Globe, Zap, Home, ShieldCheck, Database } from 'lucide-react';
+import { AppView } from '../types';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  setView: (view: AppView) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ setView }) => {
   const deptLinks = [
     { name: 'COMPUTER ENGINEERING', url: 'https://indiraicem.ac.in/programs/computer-engineering/' },
     { name: 'INFORMATION TECHNOLOGY', url: 'https://indiraicem.ac.in/programs/information-technology/' },
@@ -69,8 +73,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10">
-          <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left">© 2026 ICEM TECHNOFEST • OFFICIAL REGISTRATION PORTAL</p>
+        <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10 min-h-[50px]">
+          <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left relative group">
+            <span onDoubleClick={() => setView('admin')} className="cursor-pointer">&copy; 2026 ICEM TECHNOFEST &bull; OFFICIAL REGISTRATION PORTAL</span>
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-2 py-1 rounded text-[8px] text-amber-500 pointer-events-none w-max block">Double click to open Admin Dashboard</span>
+          </p>
           <div className="flex items-center gap-3 px-5 py-2.5 bg-blue-500/5 rounded-xl border border-blue-500/20">
             <ShieldCheck size={14} className="text-blue-500" />
             <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">SSL SECURE CONNECTION</span>
