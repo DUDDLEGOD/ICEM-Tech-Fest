@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,77 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechnoFest | ICEM Tech Fest 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --stormy-teal: #006466;
+            --dark-teal: #065a60;
+            --dark-teal-2: #0b525b;
+            --dark-teal-3: #144552;
+            --charcoal-blue: #1b3a4b;
+            --deep-space: #212f45;
+            --space-indigo: #272640;
+            --midnight-violet: #312244;
+            --midnight-violet-2: #3e1f47;
+            --deep-purple: #4d194d;
+            --bg: #0a0a12;
+            --accent: #06b6d4;
+        }
         html, body {
             max-width: 100%;
             overflow-x: hidden;
-            background-color: #0c0a09;
+            background-color: var(--bg);
             scroll-behavior: smooth;
         }
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            color: #f8fafc;
+            font-family: 'Manrope', sans-serif;
+            color: #f0f0f5;
             margin: 0;
-            cursor: none;
         }
-        .font-futuristic {
-            font-family: 'Orbitron', sans-serif;
-        }
-        /* Noise Texture Overlay */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.04;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        /* Electric Thunder Animation */
-        .electric-thunder {
-            animation: thunder-flicker 5s infinite;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-        }
-        @keyframes thunder-flicker {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% {
-                filter: brightness(1) drop-shadow(0 0 5px rgba(245, 158, 11, 0.2));
-                opacity: 1;
-            }
-            20%, 24%, 55% {
-                filter: brightness(2) drop-shadow(0 0 20px rgba(245, 158, 11, 0.8)) drop-shadow(0 0 40px rgba(59, 130, 246, 0.6));
-                opacity: 0.8;
-                transform: translateX(1px);
-            }
-            21%, 56% {
-                transform: translateX(-1px);
-                filter: brightness(1.5);
-            }
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0c0a09;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #f59e0b;
-            border-radius: 10px;
-        }
+        .font-futuristic { font-family: 'Orbitron', sans-serif; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--stormy-teal); border-radius: 10px; }
         .glass {
-            background: rgba(12, 10, 9, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .hud-grid {
-            background-image: 
-                linear-gradient(rgba(245, 158, 11, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(245, 158, 11, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background: rgba(10, 10, 18, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
     </style>
 </head>

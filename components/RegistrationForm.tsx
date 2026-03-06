@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { EventID, Registration, RegistrationApiResult } from '../types';
-import { EVENTS } from '../constants';
+import { useSiteConfig } from '../contexts/SiteContext';
 import { 
   AlertTriangle, 
   ShieldCheck, 
@@ -60,6 +60,7 @@ const leaderInputs: Array<{ label: string; key: LeaderField; type: string; place
 ];
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, initialEventId }) => {
+  const { config } = useSiteConfig();
   const [selectedEventId, setSelectedEventId] = useState<EventID>(isEventId(initialEventId) ? initialEventId : EventID.VAC);
   const [teamName, setTeamName] = useState('');
   const [leaderInfo, setLeaderInfo] = useState<LeaderInfo>({
@@ -74,7 +75,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
 
-  const currentEvent = EVENTS.find((event) => event.id === selectedEventId) ?? EVENTS[0];
+  const currentEvent = config.events.find((event) => event.id === selectedEventId) ?? config.events[0];
 
   const addMember = () => {
     if (members.length + 1 < currentEvent.maxTeam) {
@@ -307,7 +308,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                     }}
                     className="w-full bg-stone-950 border border-white/10 p-5 rounded-2xl outline-none focus:border-amber-500 transition-all font-bold appearance-none cursor-pointer text-white"
                   >
-                    {EVENTS.map(ev => <option key={ev.id} value={ev.id} className="bg-stone-900">{ev.name} ({ev.department})</option>)}
+                    {config.events.map(ev => <option key={ev.id} value={ev.id} className="bg-stone-900">{ev.name} ({ev.department})</option>)}
                   </select>
                 </div>
                 <div className="space-y-3">

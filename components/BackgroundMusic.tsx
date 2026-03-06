@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,17 +12,13 @@ export const BackgroundMusic: React.FC = () => {
     const handleFirstInteraction = () => {
       if (!hasInteracted && audioRef.current && isPlayingRef.current) {
         setHasInteracted(true);
-        // Try playing
         const playPromise = audioRef.current.play();
         
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // If it failed, we try again with a direct call
             if (audioRef.current) {
               audioRef.current.muted = false;
-              audioRef.current.play().catch(() => {
-                // Ignore autoplay failures from browser policy.
-              });
+              audioRef.current.play().catch(() => {});
             }
           });
         }
@@ -71,9 +66,7 @@ export const BackgroundMusic: React.FC = () => {
         preload="auto"
         onCanPlay={() => {
           if (isPlayingRef.current && !hasInteracted) {
-            audioRef.current?.play().catch(() => {
-              // Autoplay blocked, this is expected
-            });
+            audioRef.current?.play().catch(() => {});
           }
         }}
         onPlay={() => {
@@ -123,7 +116,6 @@ export const BackgroundMusic: React.FC = () => {
           )}
         </AnimatePresence>
         
-        {/* Visualizer bars when playing */}
         {isPlaying && (
           <div className="absolute -top-1 flex gap-0.5 items-end h-3">
             {[1, 2, 3].map((i) => (

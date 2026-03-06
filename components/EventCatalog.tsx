@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EVENTS } from '../constants';
+import { useSiteConfig } from '../contexts/SiteContext';
 import { EventConfig } from '../types';
 import {
   Trophy,
@@ -61,7 +61,7 @@ const EventRulesList: React.FC<{ rules: string[] }> = ({ rules }) => (
   <ul className="space-y-5">
     {rules.map((rule, i) => (
       <li key={i} className="flex gap-5 text-slate-300 text-[13px] font-medium items-start leading-relaxed">
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(245,158,11,1)]"></span>
+        <span className="w-1.5 h-1.5 rounded-full bg-[#06b6d4] mt-2 flex-shrink-0 shadow-[0_0_8px_rgba(6,182,212,1)]"></span>
         {rule}
       </li>
     ))}
@@ -72,7 +72,7 @@ const EventRoundsTimeline: React.FC<{ rounds: EventConfig['rounds'] }> = ({ roun
   <div className="relative space-y-8 pl-10 border-l border-white/10 ml-2">
     {rounds.map((round, i) => (
       <div key={i} className="relative">
-        <div className="absolute -left-[51px] top-0 w-6 h-6 rounded-full bg-stone-900 border-2 border-amber-500/50 flex items-center justify-center text-[10px] font-black text-amber-500 z-10">
+        <div className="absolute -left-[51px] top-0 w-6 h-6 rounded-full bg-stone-900 border-2 border-[#06b6d4]/50 flex items-center justify-center text-[10px] font-black text-[#06b6d4] z-10">
           {i + 1}
         </div>
         <div className="space-y-2">
@@ -86,30 +86,30 @@ const EventRoundsTimeline: React.FC<{ rounds: EventConfig['rounds'] }> = ({ roun
 
 const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails }) => (
   <motion.div key={event.id} variants={cardVariants} whileHover="hover" className="group relative h-[440px]">
-    <div className="absolute -inset-[1px] bg-gradient-to-br from-white/10 to-transparent rounded-[2.5rem] group-hover:from-amber-500/50 transition-all duration-500 -z-10"></div>
+    <div className="absolute -inset-[1px] bg-gradient-to-br from-white/10 to-transparent rounded-[2.5rem] group-hover:from-teal-500/40 transition-all duration-500 -z-10"></div>
 
-    <div className="absolute inset-0 bg-stone-950/80 backdrop-blur-2xl rounded-[2.5rem] border border-white/5 overflow-hidden flex flex-col justify-between transition-all duration-500">
+    <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl rounded-[2.5rem] border border-white/5 overflow-hidden flex flex-col justify-between transition-all duration-500">
       <div className="relative z-10 p-8 flex flex-col h-full text-left">
         <div className="flex justify-between items-start mb-8">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5 px-3 py-1 bg-amber-500/5 border border-amber-500/20 rounded-full w-fit">
-              <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">
+            <div className="flex items-center gap-2.5 px-3 py-1 bg-[#06b6d4]/5 border border-[#06b6d4]/20 rounded-full w-fit">
+              <span className="text-[10px] font-black text-[#06b6d4] uppercase tracking-widest">
                 {event.department.split(' ')[0]}
               </span>
             </div>
             <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em] block ml-1">SECTOR_{event.id}</span>
           </div>
-          <div className="p-3 bg-white/5 rounded-2xl text-amber-500 border border-white/5 group-hover:bg-amber-500 group-hover:text-black transition-all duration-300">
+          <div className="p-3 bg-white/5 rounded-2xl text-[#06b6d4] border border-white/5 group-hover:bg-[#06b6d4] group-hover:text-black transition-all duration-300">
             <Trophy size={18} />
           </div>
         </div>
 
         <div className="flex-1 space-y-3">
-          <h4 className="text-3xl font-futuristic font-black text-white group-hover:text-amber-500 transition-colors uppercase leading-[0.9] italic tracking-tighter">
+          <h4 className="text-3xl font-futuristic font-black text-white group-hover:text-[#06b6d4] transition-colors uppercase leading-[0.9] italic tracking-tighter">
             {event.name}
           </h4>
           <div className="flex items-center gap-3">
-            <div className="w-1 h-1 rounded-full bg-amber-500" />
+            <div className="w-1 h-1 rounded-full bg-[#06b6d4]" />
             <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em]">{event.tagline}</p>
           </div>
           <div className="pt-4">
@@ -126,7 +126,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails 
           </button>
           <button
             onClick={() => onRegister(event.id)}
-            className="flex-[1.8] py-4 bg-amber-500 hover:bg-white text-black font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all shadow-xl shadow-amber-500/5 flex items-center justify-center gap-2"
+            className="flex-[1.8] py-4 bg-[#06b6d4] hover:bg-white text-black font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all shadow-xl shadow-[#06b6d4]/5 flex items-center justify-center gap-2"
           >
             JOIN_ARENA <ChevronRight size={14} />
           </button>
@@ -138,8 +138,6 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails 
 
 const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, showBrochure }) => {
   const handleDownloadBrochure = () => {
-    // In a real app, this would be a PDF URL specifically for the event
-    // For this prototype, we'll create a text file to download
     const content = `TECHNQFEST 2026 - EVENT BROCHURE\n\nEvent: ${event.name}\nDepartment: ${event.department}\nDetails: ${event.description}\n\nRules:\n${event.rules.join('\n')}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -171,7 +169,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-10 border-b border-white/5 pb-12">
           <div className="space-y-5 max-w-3xl">
             <div className="flex items-center gap-4">
-              <div className="px-4 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 leading-none">
+              <div className="px-4 py-1.5 bg-[#06b6d4]/10 border border-[#06b6d4]/20 rounded-full text-[#06b6d4] text-[11px] font-black uppercase tracking-widest flex items-center gap-2 leading-none">
                 <Target size={14} /> {event.department}
               </div>
             </div>
@@ -181,7 +179,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
             <p className="text-xl text-slate-400 italic font-medium leading-relaxed">"{event.tagline}"</p>
           </div>
           <div className="flex-shrink-0">
-            <div className="bg-amber-500 border border-amber-400 px-8 py-6 rounded-3xl text-center shadow-2xl shadow-amber-500/10">
+            <div className="bg-[#06b6d4] border border-[#06b6d4] px-8 py-6 rounded-3xl text-center shadow-2xl shadow-[#06b6d4]/10">
               <span className="text-[11px] uppercase tracking-[0.3em] text-black font-black block mb-2 opacity-60">Prize Fund</span>
               <p className="text-3xl font-futuristic font-black text-black leading-none">{event.prizePool}</p>
             </div>
@@ -191,7 +189,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
         <div className="grid lg:grid-cols-2 gap-16">
           <div className="space-y-8">
             <div className="flex items-center gap-4">
-              <Shield size={18} className="text-amber-500" />
+              <Shield size={18} className="text-[#06b6d4]" />
               <h4 className="font-futuristic text-xs font-black tracking-[0.5em] text-white uppercase">Combat Rules</h4>
             </div>
             <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8">
@@ -201,7 +199,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
 
           <div className="space-y-8">
             <div className="flex items-center gap-4">
-              <Clock size={18} className="text-amber-500" />
+              <Clock size={18} className="text-[#06b6d4]" />
               <h4 className="font-futuristic text-xs font-black tracking-[0.5em] text-white uppercase">Timeline Phase</h4>
             </div>
             <EventRoundsTimeline rounds={event.rounds} />
@@ -211,36 +209,36 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
         <div className="pt-10 border-t border-white/5 flex flex-col gap-8">
           <div className="flex flex-wrap justify-center md:justify-start gap-10">
             <div className="flex items-center gap-3">
-              <Calendar size={16} className="text-amber-500" />
+              <Calendar size={16} className="text-[#06b6d4]" />
               <span className="text-[11px] font-black text-white uppercase tracking-widest">{event.eventDateLabel}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Clock size={16} className="text-amber-500" />
+              <Clock size={16} className="text-[#06b6d4]" />
               <span className="text-[11px] font-black text-white uppercase tracking-widest">{event.eventTimeLabel}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Users size={16} className="text-amber-500" />
+              <Users size={16} className="text-[#06b6d4]" />
               <span className="text-[11px] font-black text-white uppercase tracking-widest">
                 {event.minTeam}-{event.maxTeam} Combatants
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <MapPin size={16} className="text-amber-500" />
+              <MapPin size={16} className="text-[#06b6d4]" />
               <span className="text-[11px] font-black text-white uppercase tracking-widest">{event.venueLabel}</span>
             </div>
           </div>
 
           <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
-              <p className="text-[10px] font-black text-amber-500 uppercase tracking-[0.3em]">Coordinator Desk</p>
+              <p className="text-[10px] font-black text-[#06b6d4] uppercase tracking-[0.3em]">Coordinator Desk</p>
               <p className="text-white font-bold text-base">{event.coordinatorName}</p>
               <div className="flex flex-wrap gap-6">
                 <a href={`mailto:${event.coordinatorEmail}`} className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors text-xs font-semibold">
-                  <Mail size={14} className="text-amber-500" />
+                  <Mail size={14} className="text-[#06b6d4]" />
                   {event.coordinatorEmail}
                 </a>
                 <a href={`tel:${event.coordinatorPhone.replace(/\s+/g, '')}`} className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors text-xs font-semibold">
-                  <Phone size={14} className="text-amber-500" />
+                  <Phone size={14} className="text-[#06b6d4]" />
                   {event.coordinatorPhone}
                 </a>
               </div>
@@ -256,7 +254,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
 
             <button
               onClick={() => onRegister(event.id)}
-              className="w-full md:w-auto px-16 py-6 bg-white hover:bg-amber-500 text-black font-black uppercase tracking-[0.5em] text-[11px] rounded-2xl transition-all shadow-2xl active:scale-95 flex items-center justify-center gap-4"
+              className="w-full md:w-auto px-16 py-6 bg-white hover:bg-[#06b6d4] text-black font-black uppercase tracking-[0.5em] text-[11px] rounded-2xl transition-all shadow-2xl active:scale-95 flex items-center justify-center gap-4"
             >
               <Zap size={18} /> INITIALIZE_UPLINK
             </button>
@@ -269,11 +267,12 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
 };
 
 export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochureVisibility = {} }) => {
+  const { config } = useSiteConfig();
   const [selectedEvent, setSelectedEvent] = useState<EventConfig | null>(null);
 
   return (
-    <section id="events-section" className="py-12 md:py-16 px-6 max-w-7xl mx-auto relative bg-[#0c0a09]">
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/[0.03] blur-[150px] rounded-full -z-10 pointer-events-none"></div>
+    <section id="events-section" className="py-12 md:py-16 px-6 max-w-7xl mx-auto relative bg-[#0a0a12]">
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#06b6d4]/[0.03] blur-[150px] rounded-full -z-10 pointer-events-none"></div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -283,12 +282,12 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochure
       >
         <div className="space-y-5 text-left">
           <div className="flex items-center gap-4">
-            <div className="h-[2px] w-12 bg-amber-500"></div>
-            <h2 className="text-amber-500 font-futuristic text-[10px] tracking-[0.5em] font-black uppercase">Battleground Directory</h2>
+            <div className="h-[2px] w-12 bg-[#06b6d4]"></div>
+            <h2 className="text-[#06b6d4] font-futuristic text-[10px] tracking-[0.5em] font-black uppercase">Battleground Directory</h2>
           </div>
           <h3 className="text-4xl md:text-6xl lg:text-7xl font-futuristic font-black tracking-tighter uppercase leading-[0.85] italic text-white pr-4">
             SELECT YOUR <br />
-            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-white to-amber-200 py-1">ENVIRONMENT</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] via-white to-blue-400 py-1">ENVIRONMENT</span>
           </h3>
         </div>
       </motion.div>
@@ -300,7 +299,7 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochure
         viewport={{ once: true }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
       >
-        {EVENTS.map((event) => (
+        {config.events.map((event) => (
           <EventCard key={event.id} event={event} onRegister={onRegister} onOpenDetails={setSelectedEvent} />
         ))}
       </motion.div>

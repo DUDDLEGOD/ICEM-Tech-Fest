@@ -1,19 +1,26 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import '@fontsource/orbitron/400.css';
+import '@fontsource/orbitron/700.css';
+import '@fontsource/orbitron/900.css';
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/700.css';
+
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Marquee } from './components/Marquee';
-import { EventCatalog } from './components/EventCatalog';
-import { RegistrationForm } from './components/RegistrationForm';
-import { AboutPage } from './components/AboutPage';
 import { SocialFeed } from './components/SocialFeed';
 import { Footer } from './components/Footer';
 import { BackgroundEffect } from './components/BackgroundEffect';
 
 import { BackgroundMusic } from './components/BackgroundMusic';
-import { AdminDashboard } from './components/AdminDashboard';
 import { AppView, Registration } from './types';
-import { CheckCircle2, X } from 'lucide-react';
+import { CheckCircle2, X, Loader2 } from 'lucide-react';
+
+const EventCatalog = lazy(() => import('./components/EventCatalog').then(m => ({ default: m.EventCatalog })));
+const RegistrationForm = lazy(() => import('./components/RegistrationForm').then(m => ({ default: m.RegistrationForm })));
+const AboutPage = lazy(() => import('./components/AboutPage').then(m => ({ default: m.AboutPage })));
+const AdminDashboard = lazy(() => import('./components/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 import { motion, AnimatePresence } from 'framer-motion';
 
 const REGISTRATIONS_STORAGE_KEY = 'nexus_regs';
@@ -113,8 +120,20 @@ export default function App() {
     }
   };
 
+  const LoadingFallback = () => (
+    <div className="flex flex-col items-center justify-center min-h-[50vh] text-teal-400 gap-6">
+      <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-teal-500 to-purple-500 animate-pulse shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+        <img src="/icem-logo.png" alt="ICEM Logo" className="w-full h-full object-cover rounded-full bg-black" />
+      </div>
+      <div className="flex items-center gap-3">
+        <Loader2 className="animate-spin" size={20} />
+        <span className="font-futuristic tracking-[0.3em] uppercase text-[10px] md:text-xs">Initializing Uplink...</span>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="min-h-screen relative text-slate-50 selection:bg-amber-500 selection:text-white bg-[#0c0a09]">
+    <div className="min-h-screen relative text-slate-50 selection:bg-[#006466] selection:text-white bg-[#0a0a12]">
       <BackgroundEffect />
       
       <Navbar 
@@ -125,7 +144,9 @@ export default function App() {
       <BackgroundMusic />
 
       <main className="relative z-10 pt-20 md:pt-24 min-h-[80vh]">
-        {renderView()}
+        <Suspense fallback={<LoadingFallback />}>
+          {renderView()}
+        </Suspense>
       </main>
 
       <Footer setView={setView} />

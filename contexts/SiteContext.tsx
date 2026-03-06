@@ -1,29 +1,28 @@
-import { Department, EventConfig, EventID } from './types';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { EventConfig, EventID, Department } from '../types';
 
-/*
-How to add a new event:
-{
-  id: EventID.<ID>,
-  name: 'Event Name',
-  tagline: 'Short tagline',
-  description: 'Longer event description.',
-  department: Department.<DEPT>,
-  minTeam: 2,
-  maxTeam: 4,
-  fee: 0,
-  requiresUpload: true,
-  prizePool: '\u20B910,000',
-  eventDateLabel: 'March 14, 2026',
-  eventTimeLabel: '09:00 AM - 05:00 PM',
-  venueLabel: 'ICEM Main Auditorium',
-  coordinatorName: 'Coordinator Name',
-  coordinatorEmail: 'coordinator@indiraicem.ac.in',
-  coordinatorPhone: '+91 90000 00000',
-  rules: ['Rule 1', 'Rule 2'],
-  rounds: [{ title: 'Round 1', desc: 'Round description' }]
+export interface HeroConfig {
+  institution: string;
+  organizingLabel: string;
+  subLabel: string;
+  mainTitlePart1: string;
+  mainTitlePart2: string;
+  scrambleText: string;
+  buttonText: string;
+  countdownDate: string;
 }
-*/
-export const EVENTS: EventConfig[] = [
+
+export interface SiteConfig {
+  hero: HeroConfig;
+  events: EventConfig[];
+  socialLinks: {
+    instagram: string;
+    twitter: string;
+    linkedin: string;
+  };
+}
+
+const DEFAULT_EVENTS: EventConfig[] = [
   {
     id: EventID.VAC,
     name: 'Virtual Avatar Championship',
@@ -188,9 +187,93 @@ export const EVENTS: EventConfig[] = [
   }
 ];
 
-export const COLORS = {
-  stone: '#0c0a09',
-  amber: '#f59e0b',
-  blue: '#3b82f6',
-  slate: '#f8fafc'
+const DEFAULT_CONFIG: SiteConfig = {
+  hero: {
+    institution: 'INDIRA COLLEGE OF ENGINEERING & MANAGEMENT',
+    organizingLabel: 'Organizing',
+    subLabel: "The Largest Gathering of Pune's Tech Innovators",
+    mainTitlePart1: 'TECHNOFEST',
+    mainTitlePart2: '2026',
+    scrambleText: 'THE ULTIMATE TECH ARENA',
+    buttonText: 'INITIATE CONNECTION',
+    countdownDate: '2026-03-14T09:00:00'
+  },
+  events: DEFAULT_EVENTS,
+  socialLinks: {
+    instagram: '#',
+    twitter: '#',
+    linkedin: '#'
+  }
+};
+
+const SITE_CONFIG_STORAGE_KEY = 'nexus_site_config';
+
+interface SiteContextProps {
+  config: SiteConfig;
+  updateConfig: (newConfig: SiteConfig) => void;
+  resetToDefault: () => void;
+}
+
+const SiteContext = createContext<SiteContextProps | undefined>(undefined);
+
+export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [config, setConfig] = useState<SiteConfig>(() => {
+    try {
+      const stored = localStorage.getItem(SITE_CONFIG_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const mergedHero = {
+          ...DEFAULT_CONFIG.hero,
+          ...(parsed.hero || {})
+        };
+        // Remove deprecated key so it doesn't show up in Admin Dashboard
+        if ('mainTitle' in mergedHero) {
+          delete (mergedHero as any).mainTitle;
+        }
+
+        // Upgrade from older split "TECHNO" "FEST" or missing ones
+        if ((mergedHero.mainTitlePart1 === 'TECHNO' && mergedHero.mainTitlePart2 === 'FEST') || !mergedHero.mainTitlePart1) {
+            mergedHero.mainTitlePart1 = 'TECHNOFEST';
+            mergedHero.mainTitlePart2 = '2026';
+        }
+
+        return {
+          ...DEFAULT_CONFIG,
+          ...parsed,
+          hero: mergedHero,
+          socialLinks: {
+            ...DEFAULT_CONFIG.socialLinks,
+            ...(parsed.socialLinks || {})
+          }
+        };
+      }
+    } catch (e) {
+      console.error('Failed to parse Site Config from local storage:', e);
+    }
+    return DEFAULT_CONFIG;
+  });
+
+  const updateConfig = (newConfig: SiteConfig) => {
+    setConfig(newConfig);
+    localStorage.setItem(SITE_CONFIG_STORAGE_KEY, JSON.stringify(newConfig));
+  };
+
+  const resetToDefault = () => {
+    setConfig(DEFAULT_CONFIG);
+    localStorage.removeItem(SITE_CONFIG_STORAGE_KEY);
+  };
+
+  return (
+    <SiteContext.Provider value={{ config, updateConfig, resetToDefault }}>
+      {children}
+    </SiteContext.Provider>
+  );
+};
+
+export const useSiteConfig = () => {
+  const context = useContext(SiteContext);
+  if (!context) {
+    throw new Error('useSiteConfig must be used within a SiteProvider');
+  }
+  return context;
 };

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Github, Instagram, Linkedin, Mail, Phone, MapPin, ExternalLink, Globe, Zap, Home, ShieldCheck, Database } from 'lucide-react';
+import { Github, Instagram, Linkedin, Mail, Phone, MapPin, ExternalLink, Globe, Zap, Home, ShieldCheck } from 'lucide-react';
 import { AppView } from '../types';
+import { useSiteConfig } from '../contexts/SiteContext';
 
 interface FooterProps {
   setView: (view: AppView) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ setView }) => {
+  const { config } = useSiteConfig();
   const deptLinks = [
     { name: 'COMPUTER ENGINEERING', url: 'https://indiraicem.ac.in/programs/computer-engineering/' },
     { name: 'INFORMATION TECHNOLOGY', url: 'https://indiraicem.ac.in/programs/information-technology/' },
@@ -23,19 +25,19 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
   ];
 
   return (
-    <footer id="contact-section" className="relative z-10 pt-16 pb-8 px-6 bg-[#0c0a09] border-t border-white/5 text-left">
+    <footer id="contact-section" className="relative z-10 pt-16 pb-8 px-6 bg-[#0a0a12] border-t border-white/5 text-left">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           <div className="space-y-8">
-            <h2 className="font-futuristic text-2xl tracking-tighter leading-none font-black italic text-white">TECHNOFEST<span className="text-amber-500">2026</span></h2>
+            <h2 className="font-futuristic text-2xl tracking-tighter leading-none font-black italic text-white">TECHNOFEST<span className="text-teal-400">2026</span></h2>
             <div className="border-l-2 border-teal-500/40 pl-4 space-y-2">
               <p className="text-slate-300 text-[10px] font-bold uppercase tracking-tight">Indira College of Engineering and Management (ICEM)</p>
               <p className="text-slate-500 text-[9px] font-medium leading-relaxed">Official technical wing of SCES. Focusing on Engineering & Management excellence.</p>
             </div>
             <div className="flex items-center gap-4">
-              {[Instagram, Linkedin, Github].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 transition-all"><Icon size={16}/></a>
-              ))}
+              <a href={config.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 transition-all"><Instagram size={16}/></a>
+              <a href={config.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 transition-all"><Linkedin size={16}/></a>
+              <a href={config.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 transition-all"><Github size={16}/></a>
             </div>
           </div>
 
@@ -52,11 +54,11 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
           </div>
 
           <div className="space-y-8 lg:border-l lg:border-white/5 lg:pl-10">
-            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-amber-500 uppercase">Navigation</h5>
+            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-purple-400 uppercase">Navigation</h5>
             <div className="space-y-4">
               {quickLinks.map((link, i) => (
                 <button key={i} onClick={link.action ? link.action : () => window.open(link.url, '_blank')} className="flex items-center gap-4 group w-full text-left transition-all">
-                  <div className="p-2.5 rounded-xl bg-white/5 text-slate-600 group-hover:text-amber-500 transition-all border border-transparent group-hover:border-amber-500/20"><link.icon size={14}/></div>
+                  <div className="p-2.5 rounded-xl bg-white/5 text-slate-600 group-hover:text-purple-400 transition-all border border-transparent group-hover:border-purple-400/20"><link.icon size={14}/></div>
                   <span className="text-[10px] font-black text-slate-400 group-hover:text-white tracking-[0.2em] uppercase transition-colors">{link.name}</span>
                 </button>
               ))}
@@ -76,11 +78,11 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
         <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10 min-h-[50px]">
           <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left relative group">
             <span onDoubleClick={() => setView('admin')} className="cursor-pointer">&copy; 2026 ICEM TECHNOFEST &bull; OFFICIAL REGISTRATION PORTAL</span>
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-2 py-1 rounded text-[8px] text-amber-500 pointer-events-none w-max block">Double click to open Admin Dashboard</span>
+            <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-2 py-1 rounded text-[8px] text-teal-400 pointer-events-none w-max block">Double click to open Admin Dashboard</span>
           </p>
-          <div className="flex items-center gap-3 px-5 py-2.5 bg-blue-500/5 rounded-xl border border-blue-500/20">
-            <ShieldCheck size={14} className="text-blue-500" />
-            <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">SSL SECURE CONNECTION</span>
+          <div className="flex items-center gap-3 px-5 py-2.5 bg-purple-500/5 rounded-xl border border-purple-500/20">
+            <ShieldCheck size={14} className="text-purple-500" />
+            <span className="text-[10px] font-black text-purple-500 uppercase tracking-widest">SSL SECURE CONNECTION</span>
           </div>
         </div>
       </div>
