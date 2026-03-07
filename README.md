@@ -1,82 +1,97 @@
-# ICEM Tech Fest 2026 Website
+# 🌌 ICEM TechnoFest 2026: Nexus of Innovation
 
-A highly dynamic, single-page interactive portal built for **ICEM TechnoFest 2026**. Featuring a 3D network node visualizer, real-time event registration, dark neon theme aesthetics, and a fully functional admin Content Management System (CMS).
+A highly dynamic, single-page interactive event portal built for **ICEM TechnoFest 2026**. Featuring a WebGL 3D network node visualizer, real-time event registration synced to PostgreSQL, fluid glassmorphism aesthetics, and a fully functional Admin Command Center.
 
-## Tech Stack Overview
-
-### Frontend Core
-- **React 19** & **TypeScript**: High-performance typed component architecture.
-- **Vite & Bun**: Ultra-fast build toolchain and package management.
-- **Tailwind CSS**: Rapid utility-first styling with custom CSS property injection (`--stormy-teal`, `--deep-purple`).
-- **Framer Motion**: State-driven, fluid micro-animations across the UI.
-- **React Three Fiber (WebGL)**: Real-time 3D rendering of the background mesh particle system.
-
-### Backend & Communications
-- **Express.js (Node.js)**: Local backend (`server/server.ts`) running on port `3001` handling secure API routes.
-- **Nodemailer**: SMTP integration to securely fire automated confirmation emails to team leaders upon successful registration.
-- **Local Storage API**: Client-side caching of CMS Settings (`SiteContext`) and backup offline registrations.
+![ICEM TechnoFest](https://via.placeholder.com/1200x600/0a0a12/06b6d4?text=ICEM+TechnoFest+2026)
 
 ---
 
-## Getting Started
+## ⚡ Tech Stack Architecture
+
+### Frontend Core
+- **React 19** & **TypeScript**: High-performance typed component architecture.
+- **Vite**: Ultra-fast build toolchain.
+- **Tailwind CSS**: Rapid utility-first styling with custom CSS properties for dynamic theming (`--stormy-teal`, `--deep-purple`).
+- **Framer Motion**: State-driven, fluid micro-animations across the UI (Flip-clocks, Modal transitions).
+- **React Three Fiber (WebGL)**: Real-time 3D rendering of the background interconnected mesh particle system.
+
+### Backend & Cloud Sync
+- **Supabase (PostgreSQL)**: Cloud relational database handling real-time ingestion of all team registrations.
+- **Node.js / Express**: Serverless backend mapping (`server/server.ts`) handling secure API routes and database insertion middleware.
+- **Nodemailer**: SMTP integration to securely fire automated, encrypted confirmation HTML emails to team leaders upon successful row insertion.
+- **Local Storage API**: Client-side caching of CMS Settings (`SiteContext`), allowing live dynamic editing of the Hero and Events directly from the browser.
+
+---
+
+## 🚀 Local Development Setup
 
 ### 1. Installation
-Ensure you have Bun installed, then install dependencies:
+This project utilizes [Bun](https://bun.sh/) for blisteringly fast dependency resolution and execution.
 ```bash
 bun install
 ```
 
-### 2. Environment Configuration
-Create a `.env` file in the root directory and supply your secure credentials to enable the email service:
+### 2. Cloud Database Prep (Supabase)
+1. Create a free project on [Supabase](https://supabase.com).
+2. Navigate to the **SQL Editor** in your Supabase Dashboard.
+3. Open the `supabase_schema.sql` file located in the root of this repository.
+4. Copy the contents, paste it into the Supabase SQL Editor, and execute it to generate the required `registrations` and `team_members` tables.
+
+### 3. Environment Configuration
+Create a `.env` file in the root directory. You must supply your live Supabase keys and a Gmail App Password string for the automated email system to boot.
+
 ```env
+# --- Gmail SMTP Configuration ---
 SMTP_USER=your_email@gmail.com
 SMTP_PASS=your_16_digit_app_password
 SMTP_FROM_NAME="ICEM TechnoFest 2026"
-```
 
-### 3. Running the Stack
-The project is built to seamlessly boot the frontend Vite server and the Node backend concurrently:
+# --- Supabase Database Integration ---
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-long-anon-jwt-key
+```
+> *Note: Regular Gmail passwords will not work. You must generate an App Password via Google Account Settings -> 2-Step Verification.*
+
+### 4. Running the Stack
+The project is built to seamlessly run the frontend Vite server and the Node backend concurrently:
 ```bash
 bun run dev
 ```
-
-### 4. Build for Production
-```bash
-bun run build
-```
+Wait for the terminal to expose `http://localhost:3000`.
 
 ---
 
-## Core Features & Architecture
+## ☁️ Vercel Deployment Guide
 
-### 1. Dynamic Site CMS (`contexts/SiteContext.tsx`)
-The entire application relies on a React Context API provider that handles the site's state. Using the **Admin Dashboard**, organizers can globally edit:
-- **Hero Typography & Timing**: Update Event Titles, Scramble Texts, and the Countdown Target.
-- **Event Specifications**: Fully modify Event Names, Descriptions, Entry Fees (₹), Team Limitations, Venues, Timings, and Point of Contact details.
-- *Note*: Client-side configuration merges seamlessly with default configurations via deep merge logic to prevent UI breakage on returning clients.
+This project is custom-configured out of the box for free, serverless Edge deployment on Vercel via the included `vercel.json` routing matrix.
 
-### 2. Live Registration Engine (`RegistrationForm.tsx` & `server.ts`)
-Users progress through a multi-step form to register their squad for an arena.
-- **Data Capture**: Validation for Team Leader details, multiple squad members, and technical abstracts.
-- **Network Resilience**: Attempts a `POST` fetch to the local Node.js endpoint. 
-- **Auto-Email**: If successful, Node.js securely formats an HTML email using Nodemailer and fires it. 
-- **Offline Fallback**: If the server is down or the payload fails, the site smartly falls back to storing the registration safely inside HTML5 LocalStorage, tagging it as "Queued".
+1. **Commit to GitHub**: Push this repository to your personal GitHub account.
+2. **Connect Vercel**: Log into Vercel, click "Add New Project", and select your GitHub repository.
+3. **Inject Variables**: Before clicking deploy, expand the **Environment Variables** section. Copy and paste all 5 keys from your `.env` file into Vercel.
+4. **Deploy**: Vercel will automatically detect the Vite build, compile the static front end, and convert `server/server.ts` into a dynamic Serverless Function mapped to `/api/*`. 
 
-### 3. Admin Command Center (`AdminDashboard.tsx`)
-A protected dashboard area accessible via `<Ctrl>` + click on the footer or direct route.
+---
+
+## 🛡️ Admin Command Center
+
+The application features a built-in protective CMS overlay to manage the site without writing code.
+
+**How to access:** 
+Scroll to the absolute bottom of the page and **click on the Footer Copyright text** to open the Admin Gateway.
 - **Password**: `nexus2026admin`
-- Functions include:
-  1. Data Export: Download all captured registrations directly as a `.csv` file.
-  2. Hero Editor: Real-time manipulation of the landing page text and countdown timer.
-  3. Event Manager: Change pricing, limits, and visibility of event brochures.
+
+**Capabilities:**
+1. **Live Cloud DB Extraction**: View real-time database entries pulled from Supabase. Click the Download icon to instantly generate a comprehensive multi-column `.csv` file detailing every Team Leader, Member, and respective College for offline spreadsheet sorting.
+2. **Hero Editor**: Live edit headers, scrambler text, and the target end-date of the Flip-Clock.
+3. **Event Manager**: Dynamically alter Event Titles, Requirements, Entry Fees, Venues, and Timings.
 
 ---
 
-## Utility Tools
+## 🛠️ Utility Tools
 
 **Standalone Email Diagnostics**
-If your custom registration emails are failing, use the built-in diagnostic script rather than continuously filling out the registration form:
+If your custom registration emails are failing during local development, use the built-in diagnostic script rather than continuously filling out the registration form:
 ```bash
 bun run test:email
 ```
-This isolates the backend `.env` credentials and automatically pinpoints SMTP handshake failures or App Password expiration issues.
+This script isolates the backend `.env` variables and automatically pinpoints SMTP handshake failures or App Password expiration issues, returning a detailed trace.
