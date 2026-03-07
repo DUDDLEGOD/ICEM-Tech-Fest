@@ -16,11 +16,12 @@ import { BackgroundEffect } from './components/BackgroundEffect';
 import { BackgroundMusic } from './components/BackgroundMusic';
 import { AppView, Registration } from './types';
 import { CheckCircle2, X, Loader2 } from 'lucide-react';
+import { useSiteConfig } from './contexts/useSiteConfig';
+import { SiteAnnouncement } from './components/SiteAnnouncement';
 
 const EventCatalog = lazy(() => import('./components/EventCatalog').then(m => ({ default: m.EventCatalog })));
 const RegistrationForm = lazy(() => import('./components/RegistrationForm').then(m => ({ default: m.RegistrationForm })));
 const AboutPage = lazy(() => import('./components/AboutPage').then(m => ({ default: m.AboutPage })));
-const AdminDashboard = lazy(() => import('./components/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 import { motion, AnimatePresence } from 'framer-motion';
 
 const REGISTRATIONS_STORAGE_KEY = 'nexus_regs';
@@ -40,26 +41,13 @@ const loadStoredRegistrations = (): Registration[] => {
   }
 };
 
-const BROCHURES_STORAGE_KEY = 'nexus_brochures';
-
 export default function App() {
+  const { config } = useSiteConfig();
   const [view, setView] = useState<AppView>('home');
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [successToastMessage, setSuccessToastMessage] = useState(DEFAULT_SUCCESS_TOAST_MESSAGE);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [brochureVisibility, setBrochureVisibility] = useState<Record<string, boolean>>({});
   const successToastTimeoutRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    try {
-      const storedVisibility = localStorage.getItem(BROCHURES_STORAGE_KEY);
-      if (storedVisibility) {
-        setBrochureVisibility(JSON.parse(storedVisibility));
-      }
-    } catch (e) {
-      console.error('Failed to parse brochure settings:', e);
-    }
-  }, [view]);
 
   const handleRegister = (eventId: string) => {
     setSelectedEventId(eventId);
@@ -104,13 +92,11 @@ export default function App() {
         );
       case 'about':
         return <AboutPage onNavigateBack={() => setView('home')} />;
-      case 'admin':
-        return <AdminDashboard onNavigateBack={() => setView('home')} />;
       default:
         return (
           <>
             <Hero />
-            <EventCatalog onRegister={handleRegister} brochureVisibility={brochureVisibility} />
+            <EventCatalog onRegister={handleRegister} brochureVisibility={config.brochureVisibility} />
             <Marquee />
             <div id="social-section">
               <SocialFeed />
@@ -144,12 +130,13 @@ export default function App() {
       <BackgroundMusic />
 
       <main className="relative z-10 pt-20 md:pt-24 min-h-[80vh]">
+        <SiteAnnouncement />
         <Suspense fallback={<LoadingFallback />}>
           {renderView()}
         </Suspense>
       </main>
 
-      <Footer setView={setView} />
+      <Footer />
 
       <AnimatePresence>
         {showSuccessToast && (

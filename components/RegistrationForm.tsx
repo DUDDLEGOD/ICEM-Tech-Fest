@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { EventID, Registration, RegistrationApiResult } from '../types';
-import { useSiteConfig } from '../contexts/SiteContext';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 import {
   AlertTriangle,
   ShieldCheck,
@@ -71,12 +71,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   });
   const [members, setMembers] = useState<{ name: string; email: string; college: string }[]>([]);
   const [abstractText, setAbstractText] = useState('');
-  const [attachment, setAttachment] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
 
   const currentEvent = config.events.find((event) => event.id === selectedEventId) ?? config.events[0];
+  const fallbackOpenEvent = config.events.find((event) => event.isRegistrationOpen);
+  const isRegistrationClosed = !config.registration.isOpen || !currentEvent.isRegistrationOpen;
 
   const addMember = () => {
     if (members.length + 1 < currentEvent.maxTeam) {
@@ -159,8 +160,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
         eventName: currentEvent.name,
         eventDateLabel: currentEvent.eventDateLabel,
         eventTimeLabel: currentEvent.eventTimeLabel,
-        venueLabel: currentEvent.venueLabel,
-        attachment: attachment || undefined
+        venueLabel: currentEvent.venueLabel
       });
 
       if (result.status === 'duplicate') {
@@ -200,6 +200,42 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     { id: 'members', label: 'Squad' },
     { id: 'confirm', label: 'Review' }
   ];
+
+  if (isRegistrationClosed) {
+    const closedMessage = config.registration.isOpen
+      ? `${currentEvent.name} registrations are currently paused. Please select another live event or contact the organizers.`
+      : config.registration.closedMessage;
+
+    return (
+      <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+        <div className="glass p-8 md:p-12 rounded-[2.5rem] border border-red-500/20 bg-red-500/5 space-y-8">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+              <AlertTriangle size={26} />
+            </div>
+            <div>
+              <h2 className="text-3xl font-futuristic font-black uppercase tracking-tighter text-white">Registration Closed</h2>
+              <p className="text-[10px] font-black uppercase tracking-[0.35em] text-red-300 mt-2">Live status update from the command center</p>
+            </div>
+          </div>
+
+          <p className="text-sm md:text-base text-slate-300 leading-relaxed">{closedMessage}</p>
+
+          {config.registration.isOpen && fallbackOpenEvent && fallbackOpenEvent.id !== currentEvent.id && (
+            <button
+              onClick={() => {
+                setSelectedEventId(fallbackOpenEvent.id);
+                setError('');
+              }}
+              className="w-full py-4 bg-white text-black font-black uppercase tracking-[0.3em] text-xs rounded-2xl transition-all shadow-xl shadow-white/5 hover:scale-[1.01] active:scale-95"
+            >
+              Switch to {fallbackOpenEvent.name}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 md:py-20">

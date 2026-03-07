@@ -4,6 +4,7 @@ import { Home, Zap, Info, Menu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Sidebar } from './Sidebar';
 import { AppView } from '../types';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 
 const TechnoLogo = () => {
   return (
@@ -64,6 +65,7 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
+  const { config } = useSiteConfig();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -81,7 +83,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
   };
 
   const handleRegisterClick = () => {
-    handleSidebarNavigate('home', 'events-section');
+    handleSidebarNavigate('home', config.registration.isOpen ? 'events-section' : 'site-notice');
   };
 
   const handleAboutClick = () => {
@@ -155,11 +157,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
 
           <button 
             onClick={handleRegisterClick}
-            className="flex items-center gap-3 bg-white hover:bg-teal-500 text-black hover:text-white px-5 md:px-7 py-3 rounded-2xl transition-all font-black text-[11px] shadow-[0_10px_30px_rgba(0,0,0,0.3)] active:scale-95 group"
+            className={`flex items-center gap-3 px-5 md:px-7 py-3 rounded-2xl transition-all font-black text-[11px] shadow-[0_10px_30px_rgba(0,0,0,0.3)] active:scale-95 group ${
+              config.registration.isOpen
+                ? 'bg-white hover:bg-teal-500 text-black hover:text-white'
+                : 'bg-red-500/15 text-red-200 hover:bg-red-500/25'
+            }`}
           >
             <Zap size={16} className="group-hover:animate-pulse" /> 
-            <span className="hidden md:inline">REGISTER</span>
-            <span className="md:hidden">JOIN</span>
+            <span className="hidden md:inline">{config.registration.isOpen ? 'REGISTER' : 'REG CLOSED'}</span>
+            <span className="md:hidden">{config.registration.isOpen ? 'JOIN' : 'NOTICE'}</span>
           </button>
         </div>
       </nav>

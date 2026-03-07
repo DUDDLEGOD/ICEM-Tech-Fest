@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSiteConfig } from '../contexts/SiteContext';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 import { EventConfig } from '../types';
 import {
   Trophy,
@@ -48,6 +48,7 @@ interface EventCardProps {
   event: EventConfig;
   onRegister: (id: string) => void;
   onOpenDetails: (event: EventConfig) => void;
+  registrationEnabled: boolean;
 }
 
 interface EventModalProps {
@@ -55,6 +56,8 @@ interface EventModalProps {
   onClose: () => void;
   onRegister: (id: string) => void;
   showBrochure?: boolean;
+  registrationEnabled: boolean;
+  closedMessage: string;
 }
 
 const EventRulesList: React.FC<{ rules: string[] }> = ({ rules }) => (
@@ -84,7 +87,7 @@ const EventRoundsTimeline: React.FC<{ rounds: EventConfig['rounds'] }> = ({ roun
   </div>
 );
 
-const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails }) => (
+const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails, registrationEnabled }) => (
   <motion.div key={event.id} variants={cardVariants} whileHover="hover" className="group relative h-[440px]">
     <div className="absolute -inset-[1px] bg-gradient-to-br from-white/10 to-transparent rounded-[2.5rem] group-hover:from-teal-500/40 transition-all duration-500 -z-10"></div>
 
@@ -126,9 +129,14 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails 
           </button>
           <button
             onClick={() => onRegister(event.id)}
-            className="flex-[1.8] py-4 bg-[#06b6d4] hover:bg-white text-black font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all shadow-xl shadow-[#06b6d4]/5 flex items-center justify-center gap-2"
+            disabled={!registrationEnabled}
+            className={`flex-[1.8] py-4 font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all shadow-xl flex items-center justify-center gap-2 ${
+              registrationEnabled
+                ? 'bg-[#06b6d4] hover:bg-white text-black shadow-[#06b6d4]/5'
+                : 'bg-white/10 text-slate-500 cursor-not-allowed shadow-transparent'
+            }`}
           >
-            JOIN_ARENA <ChevronRight size={14} />
+            {registrationEnabled ? 'JOIN_ARENA' : 'ARENA_CLOSED'} <ChevronRight size={14} />
           </button>
         </div>
       </div>
@@ -136,7 +144,14 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onOpenDetails 
   </motion.div>
 );
 
-const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, showBrochure }) => {
+const EventModal: React.FC<EventModalProps> = ({
+  event,
+  onClose,
+  onRegister,
+  showBrochure,
+  registrationEnabled,
+  closedMessage
+}) => {
   const handleDownloadBrochure = () => {
     const content = `TECHNQFEST 2026 - EVENT BROCHURE\n\nEvent: ${event.name}\nDepartment: ${event.department}\nDetails: ${event.description}\n\nRules:\n${event.rules.join('\n')}`;
     const blob = new Blob([content], { type: 'text/plain' });
@@ -207,6 +222,12 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
         </div>
 
         <div className="pt-10 border-t border-white/5 flex flex-col gap-8">
+          {!registrationEnabled && (
+            <div className="rounded-[2rem] border border-red-500/20 bg-red-500/10 px-6 py-5 text-[11px] font-black uppercase tracking-[0.2em] text-red-300">
+              {closedMessage}
+            </div>
+          )}
+
           <div className="flex flex-wrap justify-center md:justify-start gap-10">
             <div className="flex items-center gap-3">
               <Calendar size={16} className="text-[#06b6d4]" />
@@ -254,9 +275,14 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose, onRegister, sho
 
             <button
               onClick={() => onRegister(event.id)}
-              className="w-full md:w-auto px-16 py-6 bg-white hover:bg-[#06b6d4] text-black font-black uppercase tracking-[0.5em] text-[11px] rounded-2xl transition-all shadow-2xl active:scale-95 flex items-center justify-center gap-4"
+              disabled={!registrationEnabled}
+              className={`w-full md:w-auto px-16 py-6 font-black uppercase tracking-[0.5em] text-[11px] rounded-2xl transition-all shadow-2xl flex items-center justify-center gap-4 ${
+                registrationEnabled
+                  ? 'bg-white hover:bg-[#06b6d4] text-black active:scale-95'
+                  : 'bg-white/10 text-slate-500 cursor-not-allowed shadow-transparent'
+              }`}
             >
-              <Zap size={18} /> INITIALIZE_UPLINK
+              <Zap size={18} /> {registrationEnabled ? 'INITIALIZE_UPLINK' : 'ARENA_CLOSED'}
             </button>
           </div>
         </div>
@@ -300,7 +326,13 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochure
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
       >
         {config.events.map((event) => (
-          <EventCard key={event.id} event={event} onRegister={onRegister} onOpenDetails={setSelectedEvent} />
+          <EventCard
+            key={event.id}
+            event={event}
+            onRegister={onRegister}
+            onOpenDetails={setSelectedEvent}
+            registrationEnabled={config.registration.isOpen && event.isRegistrationOpen}
+          />
         ))}
       </motion.div>
 
@@ -311,6 +343,12 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({ onRegister, brochure
             onClose={() => setSelectedEvent(null)} 
             onRegister={onRegister} 
             showBrochure={brochureVisibility[selectedEvent.id]}
+            registrationEnabled={config.registration.isOpen && selectedEvent.isRegistrationOpen}
+            closedMessage={
+              config.registration.isOpen
+                ? `${selectedEvent.name} registrations are currently paused.`
+                : config.registration.closedMessage
+            }
           />
         )}
       </AnimatePresence>

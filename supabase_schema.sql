@@ -33,7 +33,7 @@ ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public inserts" ON registrations FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public inserts" ON team_members FOR INSERT WITH CHECK (true);
 
--- Allow public reads (Admin Dashboard currently uses anon key, so we allow reads for now)
--- In a strict production environment, you would restrict SELECT to authenticated admins only.
+-- Allow public reads for the current static site flow.
+-- If you later add privileged dashboards or APIs, tighten these policies accordingly.
 CREATE POLICY "Allow public SELECT" ON registrations FOR SELECT USING (true);
 CREATE POLICY "Allow public SELECT" ON team_members FOR SELECT USING (true);

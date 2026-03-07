@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useSiteConfig } from '../contexts/SiteContext';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 import { ChevronDown } from 'lucide-react';
 
 const ThreeScene = lazy(() => import('./ThreeScene'));
@@ -67,6 +67,7 @@ export const Hero: React.FC = () => {
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
   const scale = useTransform(scrollY, [0, 400], [1, 0.95]);
+  const isRegistrationOpen = config.registration.isOpen;
 
   return (
     <section id="hero-section" className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-[#0a0a12]">
@@ -102,13 +103,29 @@ export const Hero: React.FC = () => {
 
         <Countdown targetDate={config.hero.countdownDate} />
 
+        {!isRegistrationOpen && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="max-w-2xl rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-3 text-[11px] font-black uppercase tracking-[0.2em] text-red-300"
+          >
+            {config.registration.closedMessage}
+          </motion.p>
+        )}
+
         <motion.button
           initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }}
-          onClick={() => document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' })}
-          className="mt-4 group relative px-10 py-4 border font-bold uppercase tracking-[0.3em] text-[11px] rounded-full overflow-hidden transition-colors duration-300"
+          onClick={() => {
+            const targetId = isRegistrationOpen ? 'events-section' : 'site-notice';
+            document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className={`mt-4 group relative px-10 py-4 border font-bold uppercase tracking-[0.3em] text-[11px] rounded-full overflow-hidden transition-colors duration-300 ${!isRegistrationOpen ? 'cursor-pointer' : ''}`}
           style={{ borderColor: 'rgba(6,100,102,0.5)', color: '#06b6d4' }}>
           <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" style={{ background: '#006466' }} />
-          <span className="relative z-10 group-hover:text-white">{config.hero.buttonText}</span>
+          <span className="relative z-10 group-hover:text-white">
+            {isRegistrationOpen ? config.hero.buttonText : 'VIEW UPDATE'}
+          </span>
         </motion.button>
       </motion.div>
 

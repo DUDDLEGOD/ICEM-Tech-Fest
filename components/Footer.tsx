@@ -1,13 +1,8 @@
 import React from 'react';
 import { Github, Instagram, Linkedin, Mail, Phone, MapPin, ExternalLink, Globe, Zap, Home, ShieldCheck } from 'lucide-react';
-import { AppView } from '../types';
-import { useSiteConfig } from '../contexts/SiteContext';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 
-interface FooterProps {
-  setView: (view: AppView) => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ setView }) => {
+export const Footer: React.FC = () => {
   const { config } = useSiteConfig();
   const deptLinks = [
     { name: 'COMPUTER ENGINEERING', url: 'https://indiraicem.ac.in/programs/computer-engineering/' },
@@ -21,7 +16,7 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
   const quickLinks = [
     { name: 'HOME PORTAL', icon: Home, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
     { name: 'EVENT CATALOG', icon: Zap, action: () => document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' }) },
-    { name: 'INSTITUTIONAL HQ', icon: Globe, url: 'https://indiraicem.ac.in/' },
+    { name: 'INSTITUTIONAL HQ', icon: Globe, url: config.contact.institutionSiteUrl },
   ];
 
   return (
@@ -32,7 +27,7 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
             <h2 className="font-futuristic text-2xl tracking-tighter leading-none font-black italic text-white">TECHNOFEST<span className="text-teal-400">2026</span></h2>
             <div className="border-l-2 border-teal-500/40 pl-4 space-y-2">
               <p className="text-slate-300 text-[10px] font-bold uppercase tracking-tight">Indira College of Engineering and Management (ICEM)</p>
-              <p className="text-slate-500 text-[9px] font-medium leading-relaxed">Official technical wing of SCES. Focusing on Engineering & Management excellence.</p>
+              <p className="text-slate-500 text-[9px] font-medium leading-relaxed">{config.contact.footerBlurb}</p>
             </div>
             <div className="flex items-center gap-4">
               <a href={config.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 transition-all"><Instagram size={16}/></a>
@@ -68,17 +63,16 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
           <div className="space-y-8 lg:border-l lg:border-white/5 lg:pl-10">
             <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-teal-400 uppercase">Connect</h5>
             <ul className="space-y-6">
-              <li className="flex gap-4"><MapPin size={16} className="text-teal-400"/><span className="text-[11px] font-bold text-slate-300 uppercase">Parandwadi, Pune, MH 410506</span></li>
-              <li className="flex gap-4"><Mail size={16} className="text-teal-400"/><a href="mailto:icem@indiraicem.ac.in" className="text-[11px] font-bold text-slate-300 hover:text-teal-400 transition-colors">icem@indiraicem.ac.in</a></li>
-              <li className="flex gap-4"><Phone size={16} className="text-teal-400"/><a href="tel:+918855977815" className="text-[11px] font-bold text-white hover:text-teal-400 transition-colors">+91 88559 77815</a></li>
+              <li className="flex gap-4"><MapPin size={16} className="text-teal-400"/><span className="text-[11px] font-bold text-slate-300 uppercase">{config.contact.address}</span></li>
+              <li className="flex gap-4"><Mail size={16} className="text-teal-400"/><a href={`mailto:${config.contact.email}`} className="text-[11px] font-bold text-slate-300 hover:text-teal-400 transition-colors">{config.contact.email}</a></li>
+              <li className="flex gap-4"><Phone size={16} className="text-teal-400"/><a href={`tel:${config.contact.phone.replace(/\s+/g, '')}`} className="text-[11px] font-bold text-white hover:text-teal-400 transition-colors">{config.contact.phone}</a></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-12 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10 min-h-[50px]">
-          <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left relative group">
-            <span onDoubleClick={() => setView('admin')} className="cursor-pointer">&copy; 2026 ICEM TECHNOFEST &bull; OFFICIAL REGISTRATION PORTAL</span>
-            <span className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 px-2 py-1 rounded text-[8px] text-teal-400 pointer-events-none w-max block">Double click to open Admin Dashboard</span>
+          <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left">
+            &copy; 2026 ICEM TECHNOFEST &bull; OFFICIAL REGISTRATION PORTAL
           </p>
           <div className="flex items-center gap-3 px-5 py-2.5 bg-purple-500/5 rounded-xl border border-purple-500/20">
             <ShieldCheck size={14} className="text-purple-500" />

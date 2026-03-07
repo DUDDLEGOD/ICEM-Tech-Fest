@@ -17,7 +17,7 @@ export enum EventID {
   VIBE = 'VIBE'
 }
 
-export type AppView = 'home' | 'register' | 'about' | 'admin';
+export type AppView = 'home' | 'register' | 'about';
 
 export interface EventRound {
   title: string;
@@ -41,18 +41,10 @@ export interface EventConfig {
   coordinatorName: string;
   coordinatorEmail: string;
   coordinatorPhone: string;
+  isRegistrationOpen: boolean;
   rules: string[];
   rounds: EventRound[];
 }
-
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-  college: string;
-  phone: string;
-}
-
 
 export interface User {
   id: string;
@@ -77,10 +69,88 @@ export interface Registration {
   qrHash: string;
   timestamp: number;
   feePaid: number;
+  verifiedAt?: number;
 }
 
 export interface RegistrationApiResult {
   status: 'confirmed' | 'duplicate' | 'queued' | 'failed';
   registrationId?: string;
   message?: string;
+}
+
+export interface HeroConfig {
+  institution: string;
+  organizingLabel: string;
+  subLabel: string;
+  mainTitlePart1: string;
+  mainTitlePart2: string;
+  scrambleText: string;
+  buttonText: string;
+  countdownDate: string;
+}
+
+export interface SocialLinksConfig {
+  instagram: string;
+  twitter: string;
+  linkedin: string;
+}
+
+export interface ContactConfig {
+  address: string;
+  email: string;
+  phone: string;
+  institutionSiteUrl: string;
+  footerBlurb: string;
+}
+
+export interface AnnouncementConfig {
+  enabled: boolean;
+  label: string;
+  message: string;
+  ctaText: string;
+  ctaHref: string;
+}
+
+export interface RegistrationSettings {
+  isOpen: boolean;
+  closedMessage: string;
+}
+
+export interface AboutStatConfig {
+  label: string;
+  value: string;
+  sub: string;
+}
+
+export interface AboutPageConfig {
+  eventBadge: string;
+  eventHeadline: string;
+  eventHighlight: string;
+  eventQuote: string;
+  technicalFrameworkText: string;
+  industryLinkageText: string;
+  eventImageUrl: string;
+  institutionBadge: string;
+  institutionTitle: string;
+  institutionHighlight: string;
+  institutionDescription: string;
+  visionText: string;
+  missionText: string;
+  campusImageUrl: string;
+  campusLocationLabel: string;
+  campusSiteUrl: string;
+  stats: AboutStatConfig[];
+}
+
+export type BrochureVisibility = Record<EventID, boolean>;
+
+export interface SiteConfig {
+  hero: HeroConfig;
+  events: EventConfig[];
+  socialLinks: SocialLinksConfig;
+  contact: ContactConfig;
+  announcement: AnnouncementConfig;
+  registration: RegistrationSettings;
+  brochureVisibility: BrochureVisibility;
+  about: AboutPageConfig;
 }
