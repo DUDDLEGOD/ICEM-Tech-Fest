@@ -64,7 +64,8 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "AGENTS": false,
   "ROBO": false,
   "BRIDGE": false,
-  "VIBE": false
+  "VIBE": false,
+  "LAUNCHPAD": false
 }
 ```
 
@@ -125,7 +126,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 0,
     "requiresUpload": true,
-    "prizePool": "₹25,000",
+    "prizePool": "₹40,000",
     "eventDateLabel": "March 14, 2026",
     "eventTimeLabel": "10:00 AM - 04:00 PM",
     "venueLabel": "Digital Design Lab, ICEM",
@@ -136,7 +137,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Character must be original",
       "Idea abstract must be submitted in text",
-      "Real-time rendering required in Final Round"
+      "Real-time rendering required in Final Round",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -159,7 +162,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 0,
     "requiresUpload": true,
-    "prizePool": "₹30,000",
+    "prizePool": "₹40,000",
     "eventDateLabel": "March 14, 2026",
     "eventTimeLabel": "09:00 AM - 06:00 PM",
     "venueLabel": "Seminar Hall 2, ICEM",
@@ -170,7 +173,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Exact team size protocols active",
       "No internet access during rounds",
-      "Languages: C++, Java, Python"
+      "Languages: C++, Java, Python",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -193,7 +198,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 0,
     "requiresUpload": true,
-    "prizePool": "₹20,000",
+    "prizePool": "₹40,000",
     "eventDateLabel": "March 14, 2026",
     "eventTimeLabel": "11:00 AM - 05:00 PM",
     "venueLabel": "AI Center, ICEM",
@@ -204,7 +209,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Use of any LLM allowed",
       "Must build a functional agentic workflow",
-      "Focus on automation and problem solving"
+      "Focus on automation and problem solving",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -227,7 +234,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 0,
     "requiresUpload": true,
-    "prizePool": "₹50,000",
+    "prizePool": "₹40,000",
     "eventDateLabel": "March 14, 2026",
     "eventTimeLabel": "10:30 AM - 06:30 PM",
     "venueLabel": "Mechanical Workshop Arena, ICEM",
@@ -238,7 +245,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Robot weight limit: 15kg",
       "Combat and Racing categories",
-      "Remote control only (No wired)"
+      "Remote control only (No wired)",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -255,7 +264,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "id": "BRIDGE",
     "name": "The Gravity Game....Bridge Making",
     "tagline": "Structural Elegance & Strength",
-    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition designed to test participants’ understanding of structural design, load distribution, and material efficiency. Teams will design and construct a model bridge using limited materials within a fixed time[cite: 57]. The bridges will then be tested for maximum load carrying capacity and structural efficiency.",
+    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition designed to test participants’ understanding of structural design, load distribution, and material efficiency. Teams will design and construct a model bridge using limited materials within a fixed time. The bridges will then be tested for maximum load carrying capacity and structural efficiency.",
     "department": "Civil Engineering",
     "minTeam": 2,
     "maxTeam": 5,
@@ -273,7 +282,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
       "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
       "Participant-Supplied: Members must bring their own Hot Glue Gun",
       "Span Length: 30 cm - 40 cm, Bridge Width: 10 cm - 15 cm, Bridge Height: 15 cm - 20 cm",
-      "No electronic devices are allowed during the competition"
+      "No electronic devices are allowed during the competition",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -296,7 +307,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 0,
     "requiresUpload": true,
-    "prizePool": "₹10,000",
+    "prizePool": "₹40,000",
     "eventDateLabel": "March 14, 2026",
     "eventTimeLabel": "12:00 PM - 05:00 PM",
     "venueLabel": "Innovation Studio, ICEM",
@@ -307,7 +318,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Test participants’ analytical thinking, problem-solving ability, and adaptability",
       "Application of UI/UX principles, ease of use, and intuitive design",
-      "Ability to extend features or modify the system dynamically"
+      "Ability to extend features or modify the system dynamically",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
@@ -321,6 +334,36 @@ This keeps all site content static and removes the runtime CMS/server-config fet
       {
         "title": "Round 3: Backend & Feature Expansion",
         "desc": "Demonstrate skill in prompting AI tools to generate or modify backend logic."
+      }
+    ]
+  },
+  {
+    "id": "LAUNCHPAD",
+    "name": "LaunchPad – Business Plan Challenge",
+    "tagline": "Present your innovative startup idea",
+    "description": "Develop a feasible business model and showcase the market potential and financial viability of your startup. Open to all undergraduate students (BBA, B.Com, B.Tech, BA, etc.).",
+    "department": "MBA Department (IGSB & ICEM)",
+    "minTeam": 1,
+    "maxTeam": 5,
+    "fee": 500,
+    "requiresUpload": true,
+    "prizePool": "₹40,000",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "Indira Global School of Business",
+    "coordinatorName": "Organizing Team",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 88559 77815",
+    "isRegistrationOpen": true,
+    "rules": [
+      "Last Date of Registration: 23rd March 2026",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
+    ],
+    "rounds": [
+      {
+        "title": "Business Model Pitch",
+        "desc": "Present your innovative startup idea, feasible business model, and financial viability."
       }
     ]
   }
