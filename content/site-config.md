@@ -271,9 +271,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "isRegistrationOpen": true,
     "rules": [
       "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
-      "Participant-Supplied: Members must bring their own Hot Glue Gun [cite: 69]",
+      "Participant-Supplied: Members must bring their own Hot Glue Gun",
       "Span Length: 30 cm - 40 cm, Bridge Width: 10 cm - 15 cm, Bridge Height: 15 cm - 20 cm",
-      "No electronic devices are allowed during the competition [cite: 71]"
+      "No electronic devices are allowed during the competition"
     ],
     "rounds": [
       {
