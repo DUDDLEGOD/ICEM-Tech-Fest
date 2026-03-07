@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { EventID, Registration, RegistrationApiResult } from '../types';
+import { EventConfig, Registration, RegistrationApiResult } from '../types';
 import { useSiteConfig } from '../contexts/useSiteConfig';
 import {
   AlertTriangle,
@@ -33,8 +33,11 @@ interface LeaderInfo {
   college: string;
 }
 
-const isEventId = (value: string | null): value is EventID => {
-  return value !== null && Object.values(EventID).includes(value as EventID);
+const resolveInitialEventId = (value: string | null, events: EventConfig[]): string => {
+  if (value && events.some((event) => event.id === value)) {
+    return value;
+  }
+  return events[0]?.id ?? '';
 };
 
 const createToken = (size: number) => Math.random().toString(36).slice(2, 2 + size).toUpperCase();
@@ -61,7 +64,9 @@ const leaderInputs: Array<{ label: string; key: LeaderField; type: string; place
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, initialEventId }) => {
   const { config } = useSiteConfig();
-  const [selectedEventId, setSelectedEventId] = useState<EventID>(isEventId(initialEventId) ? initialEventId : EventID.VAC);
+  const [selectedEventId, setSelectedEventId] = useState<string>(() =>
+    resolveInitialEventId(initialEventId, config.events),
+  );
   const [teamName, setTeamName] = useState('');
   const [leaderInfo, setLeaderInfo] = useState<LeaderInfo>({
     name: '',
@@ -342,7 +347,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   <select
                     value={selectedEventId}
                     onChange={(e) => {
-                      setSelectedEventId(e.target.value as EventID);
+                      setSelectedEventId(e.target.value);
                       setError('');
                     }}
                     className="w-full bg-stone-950 border border-white/10 p-5 rounded-2xl outline-none focus:border-amber-500 transition-all font-bold appearance-none cursor-pointer text-white"

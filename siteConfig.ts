@@ -32,8 +32,8 @@ const getStringArray = (value: unknown, fallback: string[]) => {
   return next.length > 0 ? next : fallback;
 };
 
-const getDepartment = (value: unknown, fallback: Department) =>
-  Object.values(Department).includes(value as Department) ? (value as Department) : fallback;
+const getDepartment = (value: unknown, fallback: string) =>
+  typeof value === 'string' && value.trim().length > 0 ? value : fallback;
 
 const createDefaultBrochureVisibility = (): BrochureVisibility => ({
   [EventID.VAC]: false,
@@ -357,6 +357,42 @@ const normalizeEvent = (value: unknown, fallback: EventConfig): EventConfig => {
   };
 };
 
+const createFallbackEvent = (eventId: string, index: number): EventConfig => {
+  const template = DEFAULT_SITE_CONFIG.events[index] ?? DEFAULT_SITE_CONFIG.events[0];
+  return {
+    ...template,
+    id: eventId,
+  };
+};
+
+const normalizeEvents = (value: unknown): EventConfig[] => {
+  const fallbackEvents = DEFAULT_SITE_CONFIG.events;
+  if (!Array.isArray(value)) {
+    return fallbackEvents.map((fallbackEvent) => normalizeEvent(undefined, fallbackEvent));
+  }
+
+  const seenIds = new Set<string>();
+  const normalized = value
+    .map((event, index) => {
+      if (!isRecord(event)) return null;
+
+      const eventId = getString(event.id, '').trim();
+      if (!eventId || seenIds.has(eventId)) return null;
+      seenIds.add(eventId);
+
+      const fallback =
+        fallbackEvents.find((fallbackEvent) => fallbackEvent.id === eventId) ??
+        createFallbackEvent(eventId, index);
+
+      return normalizeEvent(event, fallback);
+    })
+    .filter((event): event is EventConfig => event !== null);
+
+  return normalized.length > 0
+    ? normalized
+    : fallbackEvents.map((fallbackEvent) => normalizeEvent(undefined, fallbackEvent));
+};
+
 const normalizeHero = (value: unknown): HeroConfig => {
   const fallback = DEFAULT_SITE_CONFIG.hero;
   if (!isRecord(value)) return { ...fallback };
@@ -429,14 +465,12 @@ const normalizeBrochureVisibility = (value: unknown): BrochureVisibility => {
   const fallback = createDefaultBrochureVisibility();
   if (!isRecord(value)) return fallback;
 
-  return {
-    [EventID.VAC]: getBoolean(value[EventID.VAC], fallback[EventID.VAC]),
-    [EventID.CODEVERSE]: getBoolean(value[EventID.CODEVERSE], fallback[EventID.CODEVERSE]),
-    [EventID.AGENTS]: getBoolean(value[EventID.AGENTS], fallback[EventID.AGENTS]),
-    [EventID.ROBO]: getBoolean(value[EventID.ROBO], fallback[EventID.ROBO]),
-    [EventID.BRIDGE]: getBoolean(value[EventID.BRIDGE], fallback[EventID.BRIDGE]),
-    [EventID.VIBE]: getBoolean(value[EventID.VIBE], fallback[EventID.VIBE]),
-  };
+  const normalized: BrochureVisibility = { ...fallback };
+  Object.keys(value).forEach((key) => {
+    normalized[key] = getBoolean(value[key], normalized[key] ?? false);
+  });
+
+  return normalized;
 };
 
 const normalizeAbout = (value: unknown): AboutPageConfig => {
@@ -489,16 +523,9 @@ export const normalizeSiteConfig = (value: unknown): SiteConfig => {
     return cloneSiteConfig(DEFAULT_SITE_CONFIG);
   }
 
-  const eventsSource = Array.isArray(value.events) ? value.events : [];
-
   return {
     hero: normalizeHero(value.hero),
-    events: DEFAULT_SITE_CONFIG.events.map((fallbackEvent) => {
-      const match = eventsSource.find(
-        (event) => isRecord(event) && getString(event.id, fallbackEvent.id) === fallbackEvent.id,
-      );
-      return normalizeEvent(match, fallbackEvent);
-    }),
+    events: normalizeEvents(value.events),
     socialLinks: normalizeSocialLinks(value.socialLinks),
     contact: normalizeContact(value.contact),
     announcement: normalizeAnnouncement(value.announcement),

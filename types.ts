@@ -25,11 +25,11 @@ export interface EventRound {
 }
 
 export interface EventConfig {
-  id: EventID;
+  id: string;
   name: string;
   tagline: string;
   description: string;
-  department: Department;
+  department: string;
   minTeam: number;
   maxTeam: number;
   fee: number | string;
@@ -57,7 +57,7 @@ export interface User {
 export interface Registration {
   id: string;
   teamName: string;
-  eventId: EventID;
+  eventId: string;
   leaderId: string;
   leaderName: string;
   leaderEmail: string;
@@ -142,7 +142,7 @@ export interface AboutPageConfig {
   stats: AboutStatConfig[];
 }
 
-export type BrochureVisibility = Record<EventID, boolean>;
+export type BrochureVisibility = Record<string, boolean>;
 
 export interface SiteConfig {
   hero: HeroConfig;
