@@ -255,13 +255,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "id": "BRIDGE",
     "name": "The Gravity Game....Bridge Making",
     "tagline": "Structural Elegance & Strength",
-    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition
-designed to test participants’ understanding of structural design, load distribution, and
-material efficiency.
-Teams will design and construct a model bridge using limited materials within a fixed time.
-The bridges will then be tested for maximum load carrying capacity and structural efficiency.
-The competition encourages innovation, teamwork, and practical application of civil engineering
-concepts.",
+    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition designed to test participants’ understanding of structural design, load distribution, and material efficiency. Teams will design and construct a model bridge using limited materials within a fixed time[cite: 57]. The bridges will then be tested for maximum load carrying capacity and structural efficiency.",
     "department": "Civil Engineering",
     "minTeam": 2,
     "maxTeam": 5,
@@ -276,26 +270,27 @@ concepts.",
     "coordinatorPhone": "+91 99228 11456",
     "isRegistrationOpen": true,
     "rules": [
-      "Only popsicles and glue allowed",
-      "Maximum span: 40 cm",
-      "Aesthetics carry 30% weightage"
+      "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
+      "Participant-Supplied: Members must bring their own Hot Glue Gun [cite: 69]",
+      "Span Length: 30 cm - 40 cm, Bridge Width: 10 cm - 15 cm, Bridge Height: 15 cm - 20 cm",
+      "No electronic devices are allowed during the competition [cite: 71]"
     ],
     "rounds": [
       {
         "title": "Construction Phase",
-        "desc": "On-site bridge building (2 hours)."
+        "desc": "On-site bridge building for approximately 2 hours."
       },
       {
         "title": "Load Test",
-        "desc": "Point load application until structural failure."
+        "desc": "A concentrated point load will be applied vertically at the exact geometric center (mid-span) of the bridge."
       }
     ]
   },
   {
     "id": "VIBE",
-    "name": "Vibe Coding",
-    "tagline": "Code with Aesthetic & Rhythm",
-    "description": "Where UI design meets creative rhythm. Build stunning visual experiences with live interactive logic.",
+    "name": "VibeCode: The Tech Escape Challenge",
+    "tagline": "Decode clues, think like developers, and use innovative ideas to move forward",
+    "description": "The event combines problem-solving, creativity, and technical thinking through a gamified escape-room format.",
     "department": "BCA / BCS",
     "minTeam": 4,
     "maxTeam": 5,
@@ -310,18 +305,22 @@ concepts.",
     "coordinatorPhone": "+91 98344 77120",
     "isRegistrationOpen": true,
     "rules": [
-      "Creative synergy required",
-      "Creativity > Complexity",
-      "Live 'Vibing' while coding is encouraged"
+      "Test participants’ analytical thinking, problem-solving ability, and adaptability",
+      "Application of UI/UX principles, ease of use, and intuitive design",
+      "Ability to extend features or modify the system dynamically"
     ],
     "rounds": [
       {
-        "title": "Visual Symphony",
-        "desc": "Build the most visually stunning UI."
+        "title": "Round 1: Tech Escape Room (Logic & Puzzle Round)",
+        "desc": "Solve tech-themed puzzles and logical problems within a limited time."
       },
       {
-        "title": "Creative Logic",
-        "desc": "Add interactivity that wows the judges."
+        "title": "Round 2: Idea & Frontend Creation",
+        "desc": "Translate a creative idea into a user-friendly and visually clear frontend experience."
+      },
+      {
+        "title": "Round 3: Backend & Feature Expansion",
+        "desc": "Demonstrate skill in prompting AI tools to generate or modify backend logic."
       }
     ]
   }
