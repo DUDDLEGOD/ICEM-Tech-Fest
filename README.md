@@ -78,7 +78,6 @@ The application features a built-in protective CMS overlay to manage the site wi
 
 **How to access:** 
 Scroll to the absolute bottom of the page and **click on the Footer Copyright text** to open the Admin Gateway.
-- **Password**: `nexus2026admin`
 
 **Capabilities:**
 1. **Live Cloud DB Extraction**: View real-time database entries pulled from Supabase. Click the Download icon to instantly generate a comprehensive multi-column `.csv` file detailing every Team Leader, Member, and respective College for offline spreadsheet sorting.
