@@ -53,6 +53,15 @@ export interface User {
   phone: string;
 }
 
+
+export interface User {
+  id: string;
+  email: string;
+  fullName: string;
+  college: string;
+  phone: string;
+}
+
 export interface Registration {
   id: string;
   teamName: string;
@@ -61,7 +70,8 @@ export interface Registration {
   leaderName: string;
   leaderEmail: string;
   leaderPhone: string;
-  members: { name: string; email: string }[];
+  leaderCollege: string;
+  members: { name: string; email: string; college: string }[];
   abstractText?: string;
   status: 'Pending' | 'Confirmed';
   qrHash: string;

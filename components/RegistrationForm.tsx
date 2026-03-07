@@ -2,18 +2,18 @@
 import React, { useState } from 'react';
 import { EventID, Registration, RegistrationApiResult } from '../types';
 import { useSiteConfig } from '../contexts/SiteContext';
-import { 
-  AlertTriangle, 
-  ShieldCheck, 
-  ChevronLeft, 
-  ChevronRight, 
-  Trash2, 
-  PlusCircle, 
-  Database, 
-  User as UserIcon, 
-  Lightbulb, 
-  Users as UsersIcon, 
-  Send 
+import {
+  AlertTriangle,
+  ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
+  PlusCircle,
+  Database,
+  User as UserIcon,
+  Lightbulb,
+  Users as UsersIcon,
+  Send
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { submitRegistration } from '../services/registrationApi';
@@ -69,8 +69,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     phone: '',
     college: 'Indira College of Engineering and Management'
   });
-  const [members, setMembers] = useState<{ name: string; email: string }[]>([]);
+  const [members, setMembers] = useState<{ name: string; email: string; college: string }[]>([]);
   const [abstractText, setAbstractText] = useState('');
+  const [attachment, setAttachment] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
@@ -79,7 +80,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
 
   const addMember = () => {
     if (members.length + 1 < currentEvent.maxTeam) {
-      setMembers([...members, { name: '', email: '' }]);
+      setMembers([...members, { name: '', email: '', college: '' }]);
     } else {
       setError(`Maximum team size for ${currentEvent.name} is ${currentEvent.maxTeam} (including leader).`);
     }
@@ -90,7 +91,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     setError('');
   };
 
-  const updateMember = (index: number, field: 'name' | 'email', value: string) => {
+  const updateMember = (index: number, field: 'name' | 'email' | 'college', value: string) => {
     setMembers((previousMembers) =>
       previousMembers.map((member, memberIndex) => {
         if (memberIndex !== index) return member;
@@ -125,7 +126,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       return setError(`This event requires at least ${currentEvent.minTeam} members. Add ${currentEvent.minTeam - totalMembers} more.`);
     }
     for (const m of members) {
-      if (!m.name || !m.email) return setError('All member names and emails must be provided.');
+      if (!m.name || !m.email || !m.college) return setError('All member names, emails, and colleges must be provided.');
     }
     setError('');
     setStep('confirm');
@@ -134,7 +135,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   const handleFinalSubmission = async () => {
     setIsSubmitting(true);
     setError('');
-    
+
     const registration: Registration = {
       id: createToken(9),
       teamName,
@@ -143,6 +144,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       leaderName: leaderInfo.name,
       leaderEmail: leaderInfo.email,
       leaderPhone: leaderInfo.phone,
+      leaderCollege: leaderInfo.college,
       members,
       abstractText,
       status: 'Confirmed',
@@ -157,7 +159,8 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
         eventName: currentEvent.name,
         eventDateLabel: currentEvent.eventDateLabel,
         eventTimeLabel: currentEvent.eventTimeLabel,
-        venueLabel: currentEvent.venueLabel
+        venueLabel: currentEvent.venueLabel,
+        attachment: attachment || undefined
       });
 
       if (result.status === 'duplicate') {
@@ -207,11 +210,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
         </div>
         <div className="flex gap-2">
           {steps.map((s, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               title={s.label}
               className={`w-3 h-3 rounded-full transition-all duration-500 ${
-                (step === s.id) ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)] scale-125' : 
+                (step === s.id) ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.8)] scale-125' :
                 steps.findIndex(x => x.id === step) > i ? 'bg-teal-500' : 'bg-white/10'
               }`}
             />
@@ -226,13 +229,13 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
 
         <AnimatePresence mode="wait">
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               className="mb-8 bg-red-500/10 border border-red-500/20 p-4 rounded-2xl text-red-500 flex items-center gap-3"
             >
-              <AlertTriangle size={20} className="shrink-0" /> 
+              <AlertTriangle size={20} className="shrink-0" />
               <span className="text-[10px] md:text-xs font-black uppercase tracking-widest leading-none">{error}</span>
             </motion.div>
           )}
@@ -240,7 +243,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
 
         <AnimatePresence mode="wait">
           {step === 'leader' && (
-            <motion.div 
+            <motion.div
               key="leader"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -260,7 +263,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 {leaderInputs.map((input) => (
                   <div key={input.key} className="space-y-2">
                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 ml-1">{input.label}</label>
-                    <input 
+                    <input
                       type={input.type}
                       placeholder={input.placeholder}
                       value={leaderInfo[input.key]}
@@ -270,7 +273,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   </div>
                 ))}
               </div>
-              <button 
+              <button
                 type="button"
                 onClick={validateLeader}
                 className="w-full py-5 bg-white text-black font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all shadow-xl shadow-white/5 hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-4"
@@ -281,7 +284,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
           )}
 
           {step === 'team' && (
-            <motion.div 
+            <motion.div
               key="team"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -300,7 +303,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
               <div className="grid gap-8">
                 <div className="space-y-3">
                   <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Target Battleground</label>
-                  <select 
+                  <select
                     value={selectedEventId}
                     onChange={(e) => {
                       setSelectedEventId(e.target.value as EventID);
@@ -313,7 +316,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Squad Designation (Team Name)</label>
-                  <input 
+                  <input
                     type="text"
                     placeholder="e.g. ALPHA_OMEGA"
                     value={teamName}
@@ -326,7 +329,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 <button onClick={() => setStep('leader')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                   <ChevronLeft size={16} /> BACK
                 </button>
-                <button 
+                <button
                   onClick={validateTeam}
                   className="flex-[2] py-5 bg-amber-500 text-black font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
                 >
@@ -337,7 +340,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
           )}
 
           {step === 'abstract' && (
-            <motion.div 
+            <motion.div
               key="abstract"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -368,6 +371,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   className="w-full bg-white/5 border border-white/10 p-6 rounded-3xl outline-none focus:border-amber-500 transition-all font-medium text-white text-sm leading-relaxed resize-none"
                 />
               </div>
+
               <div className="flex gap-4">
                 <button onClick={() => setStep('team')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                   <ChevronLeft size={16} /> BACK
@@ -447,6 +451,16 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                         className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-purple-500 transition-all text-sm font-bold"
                       />
                     </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-[9px] uppercase tracking-widest font-black text-slate-600">Member {idx + 2} Institution</label>
+                      <input 
+                        type="text"
+                        value={member.college}
+                        onChange={(e) => updateMember(idx, 'college', e.target.value)}
+                        placeholder="College Name"
+                        className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-purple-500 transition-all text-sm font-bold"
+                      />
+                    </div>
                   </motion.div>
                 ))}
 
@@ -476,7 +490,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
           )}
 
           {step === 'confirm' && (
-            <motion.div 
+            <motion.div
               key="confirm"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -524,14 +538,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
               </div>
 
               <div className="flex gap-4">
-                <button 
-                  onClick={() => setStep('members')} 
+                <button
+                  onClick={() => setStep('members')}
                   disabled={isSubmitting}
                   className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <ChevronLeft size={16} /> REVISE
                 </button>
-                <button 
+                <button
                   onClick={handleFinalSubmission}
                   disabled={isSubmitting}
                   className="flex-[2] py-5 bg-green-500 text-black font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all shadow-xl shadow-green-500/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"

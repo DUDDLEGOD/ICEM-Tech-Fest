@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Registration, EventID } from '../types';
-import { Database, Download, Eye, EyeOff, ShieldAlert, Trash2, Settings, Edit3, LayoutDashboard } from 'lucide-react';
+import { Database, Download, Eye, EyeOff, ShieldAlert, Trash2, Settings, Edit3, LayoutDashboard, RefreshCw } from 'lucide-react';
 import { useSiteConfig } from '../contexts/SiteContext';
+import { fetchRegistrations } from '../services/registrationApi';
 
-const REGISTRATIONS_STORAGE_KEY = 'nexus_regs';
 const BROCHURES_STORAGE_KEY = 'nexus_brochures';
 
 interface AdminDashboardProps {
@@ -13,6 +13,7 @@ interface AdminDashboardProps {
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateBack }) => {
   const { config, updateConfig } = useSiteConfig();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'data' | 'hero' | 'events'>('data');
   const [brochureVisibility, setBrochureVisibility] = useState<Record<EventID, boolean>>({
     [EventID.VAC]: false,
@@ -27,14 +28,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateBack }
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
-      if (stored) {
-        setRegistrations(JSON.parse(stored));
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchRegistrations();
+        setRegistrations(data);
+      } catch (e) {
+        console.error('Failed to load cloud registrations', e);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (e) {
-      console.error('Failed to load registrations', e);
-    }
+    };
+    loadData();
 
     try {
       const storedVisibility = localStorage.getItem(BROCHURES_STORAGE_KEY);
@@ -62,10 +67,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateBack }
   };
 
   const clearAllRegistrations = () => {
-    if (window.confirm("Are you sure you want to delete ALL registrations? This cannot be undone.")) {
-      localStorage.removeItem(REGISTRATIONS_STORAGE_KEY);
-      setRegistrations([]);
-    }
+    alert("Bulk deletion is disabled in Cloud Mode. Please manage records directly via the Supabase Dashboard.");
   };
 
   const handleEventChange = (index: number, field: string, value: any) => {
@@ -77,19 +79,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigateBack }
   const downloadCSV = () => {
     if (registrations.length === 0) return;
     
-    const headers = ['Registration ID', 'Event ID', 'Team Name', 'Leader Name', 'Leader Email', 'Leader Phone', 'Total Members', 'Timestamp', 'Status'];
+    const headers = ['Registration ID', 'Event ID', 'Team Name', 'Leader Name', 'Leader Email', 'Leader Phone', 'Leader College', 'Total Members', 'Squad Breakdown', 'Timestamp', 'Status'];
     
-    const rows = registrations.map(reg => [
-      reg.id,
-      reg.eventId,
-      `"${reg.teamName}"`,
-      `"${reg.leaderName}"`,
-      reg.leaderEmail,
-      reg.leaderPhone,
-      reg.members.length + 1,
-      new Date(reg.timestamp).toLocaleString(),
-      reg.status
-    ]);
+    const rows = registrations.map(reg => {
+      const membersStr = reg.members.map(m => `${m.name} (${m.email}) [${m.college}]`).join(' | ');
+      return [
+        reg.id,
+        reg.eventId,
+        `"${reg.teamName}"`,
+        `"${reg.leaderName}"`,
+        reg.leaderEmail,
+        reg.leaderPhone,
+        `"${reg.leaderCollege}"`,
+        reg.members.length + 1,
+        `"${membersStr}"`,
+        new Date(reg.timestamp).toLocaleString(),
+        reg.status
+      ];
+    });
     
     const csvContent = "data:text/csv;charset=utf-8," 
       + [headers.join(','), ...rows.map(e => e.join(','))].join("\n");
