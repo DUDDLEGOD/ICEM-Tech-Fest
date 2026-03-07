@@ -2,7 +2,7 @@
 
 A highly dynamic, single-page interactive event portal built for **ICEM TechnoFest 2026**. Featuring a WebGL 3D network node visualizer, real-time event registration synced to PostgreSQL, fluid glassmorphism aesthetics, and a fully functional Admin Command Center.
 
-![ICEM TechnoFest](https://via.placeholder.com/1200x600/0a0a12/06b6d4?text=ICEM+TechnoFest+2026)
+![ICEM TechnoFest](https://icem-tech-fest.vercel.app)
 
 ---
 
