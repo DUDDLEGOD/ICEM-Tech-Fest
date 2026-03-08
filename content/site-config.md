@@ -13,7 +13,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "mainTitlePart2": "2026",
   "scrambleText": "THE ULTIMATE TECH ARENA",
   "buttonText": "INITIATE CONNECTION",
-  "countdownDate": "2026-03-14T09:00:00"
+  "countdownDate": "2026-03-27T09:00:00"
 }
 ```
 
