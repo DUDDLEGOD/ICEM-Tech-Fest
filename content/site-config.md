@@ -152,7 +152,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "name": "Chakravyuh",
     "tagline": "Break through the challenge, innovate, and conquer the core!",
     "description": "Chakravyuh 2026 is a multistage technical challenge inspired by breaking through layers of complexity. Participants must demonstrate teamwork, logic, creativity, and innovation to advance through three rounds.",
-    "department": "First Year",
+    "department": "FY",
     "minTeam": 3,
     "maxTeam": 5,
     "fee": 250,

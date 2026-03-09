@@ -1,95 +1,143 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-const NODE_COUNT = 350;
-const CONNECTION_DISTANCE = 1.8;
-const SPREAD = 5;
+const DRONE_COUNT = 1500;
 
-function NetworkMesh() {
+function DroneShow() {
   const groupRef = useRef<THREE.Group>(null);
-  const linesRef = useRef<THREE.LineSegments>(null);
-  const pointsRef = useRef<THREE.Points>(null);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
   const { mouse, viewport } = useThree();
-  const target = useRef({ x: 0, y: 0 });
 
-  const nodes = useMemo(() => {
-    const arr = new Float32Array(NODE_COUNT * 3);
-    for (let i = 0; i < NODE_COUNT; i++) {
-      arr[i * 3] = (Math.random() - 0.5) * SPREAD;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * SPREAD;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * SPREAD;
+  // Pre-calculate positions for different formations
+  const { scatterPositions, globePositions, shipPositions } = useMemo(() => {
+    const scatter = new Float32Array(DRONE_COUNT * 3);
+    const globe = new Float32Array(DRONE_COUNT * 3);
+    const ship = new Float32Array(DRONE_COUNT * 3);
+
+    // Golden angle for sphere distribution
+    const phi = Math.PI * (3 - Math.sqrt(5));
+
+    for (let i = 0; i < DRONE_COUNT; i++) {
+        // 1. Scatter (Nebula)
+        const thetaScat = Math.random() * Math.PI * 2;
+        const radiusScat = 5 + Math.random() * 8;
+        const yScat = (Math.random() - 0.5) * 15;
+        scatter[i * 3] = Math.cos(thetaScat) * radiusScat;
+        scatter[i * 3 + 1] = yScat;
+        scatter[i * 3 + 2] = Math.sin(thetaScat) * radiusScat;
+
+        // 2. Globe
+        const yGlobe = 1 - (i / (DRONE_COUNT - 1)) * 2;
+        const radiusGlobe = Math.sqrt(1 - yGlobe * yGlobe);
+        const thetaGlobe = phi * i;
+        const scaleGlobe = 3;
+        globe[i * 3] = Math.cos(thetaGlobe) * radiusGlobe * scaleGlobe;
+        globe[i * 3 + 1] = yGlobe * scaleGlobe;
+        globe[i * 3 + 2] = Math.sin(thetaGlobe) * radiusGlobe * scaleGlobe;
+
+        // 3. Saturn Ring
+        const thetaRing = Math.random() * Math.PI * 2;
+        const radiusRing = 3.5 + (Math.random() * Math.random()) * 2; // Bias towards inner ring
+        const yRing = (Math.random() - 0.5) * 0.4;
+
+        ship[i * 3] = Math.cos(thetaRing) * radiusRing;
+        ship[i * 3 + 1] = yRing;
+        ship[i * 3 + 2] = Math.sin(thetaRing) * radiusRing;
     }
-    return arr;
+    return { scatterPositions: scatter, globePositions: globe, shipPositions: ship };
   }, []);
 
-  const { linePositions, lineColors, maxLines } = useMemo(() => {
-    const max = NODE_COUNT * 12;
-    return { linePositions: new Float32Array(max * 6), lineColors: new Float32Array(max * 6), maxLines: max };
+  // 0: Globe, 1: Ship, 2: Scatter
+  const [formation, setFormation] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFormation((prev) => (prev + 1) % 3);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  const pointsGeo = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(nodes, 3));
-    return geo;
-  }, [nodes]);
+  // Active positions state tracker
+  const currentPositions = useRef(new Float32Array(DRONE_COUNT * 3));
+  useEffect(() => {
+    for (let i = 0; i < DRONE_COUNT * 3; i++) currentPositions.current[i] = scatterPositions[i];
+  }, [scatterPositions]);
 
-  useFrame((_, delta) => {
-    if (!groupRef.current || !linesRef.current) return;
-    groupRef.current.rotation.y += delta * 0.03;
-    target.current.x = (mouse.y * viewport.height) / 80;
-    target.current.y = (mouse.x * viewport.width) / 80;
-    groupRef.current.rotation.x += (target.current.x - groupRef.current.rotation.x) * 0.02;
-    groupRef.current.rotation.y += (target.current.y - groupRef.current.rotation.y) * 0.02;
+  const scratchObject3D = useMemo(() => new THREE.Object3D(), []);
 
-    let lineIdx = 0;
-    for (let i = 0; i < NODE_COUNT; i++) {
-      const ax = nodes[i * 3], ay = nodes[i * 3 + 1], az = nodes[i * 3 + 2];
-      for (let j = i + 1; j < NODE_COUNT; j++) {
-        const bx = nodes[j * 3], by = nodes[j * 3 + 1], bz = nodes[j * 3 + 2];
-        const dx = ax - bx, dy = ay - by, dz = az - bz;
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (dist < CONNECTION_DISTANCE && lineIdx < maxLines) {
-          const alpha = 1 - dist / CONNECTION_DISTANCE;
-          const o = lineIdx * 6;
-          // Gradient from stormy-teal (#006466) to deep-purple (#4d194d)
-          linePositions[o] = ax; linePositions[o+1] = ay; linePositions[o+2] = az;
-          linePositions[o+3] = bx; linePositions[o+4] = by; linePositions[o+5] = bz;
-          lineColors[o] = 0.0 * alpha; lineColors[o+1] = 0.39 * alpha; lineColors[o+2] = 0.40 * alpha;
-          lineColors[o+3] = 0.30 * alpha; lineColors[o+4] = 0.10 * alpha; lineColors[o+5] = 0.30 * alpha;
-          lineIdx++;
-        }
-      }
+  useFrame((state, delta) => {
+    if (!groupRef.current || !meshRef.current) return;
+
+    // Choose target array based on formation
+    let targetPositions = globePositions;
+    if (formation === 1) targetPositions = shipPositions;
+    if (formation === 2) targetPositions = scatterPositions;
+
+    // Smooth position interpolation
+    for (let i = 0; i < DRONE_COUNT; i++) {
+        const i3 = i * 3;
+        currentPositions.current[i3] = THREE.MathUtils.lerp(currentPositions.current[i3], targetPositions[i3], delta * 1.5);
+        currentPositions.current[i3+1] = THREE.MathUtils.lerp(currentPositions.current[i3+1], targetPositions[i3+1], delta * 1.5);
+        currentPositions.current[i3+2] = THREE.MathUtils.lerp(currentPositions.current[i3+2], targetPositions[i3+2], delta * 1.5);
+
+        scratchObject3D.position.set(
+            currentPositions.current[i3],
+            currentPositions.current[i3+1],
+            currentPositions.current[i3+2]
+        );
+
+        // Add subtle hovering / wiggling
+        scratchObject3D.position.y += Math.sin(state.clock.elapsedTime * 2 + i) * 0.02;
+        scratchObject3D.position.x += Math.cos(state.clock.elapsedTime * 2 + i) * 0.02;
+
+        scratchObject3D.updateMatrix();
+        meshRef.current.setMatrixAt(i, scratchObject3D.matrix);
     }
+    meshRef.current.instanceMatrix.needsUpdate = true;
 
-    const geo = linesRef.current.geometry;
-    geo.setAttribute('position', new THREE.BufferAttribute(linePositions.slice(0, lineIdx * 6), 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(lineColors.slice(0, lineIdx * 6), 3));
-    geo.attributes.position.needsUpdate = true;
-    geo.attributes.color.needsUpdate = true;
-    geo.setDrawRange(0, lineIdx * 2);
+    // Responsive Parallax Follows Mouse gracefully without viewport multiplier explosions (Edge bug)
+    const targetX = mouse.x * 1.5;
+    const targetY = mouse.y * 1.5;
+    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, delta * 2);
+    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, delta * 2);
+
+    // Global Rotation
+    if (formation === 0) { // Globe spins nicely
+      groupRef.current.rotation.y += delta * 0.3;
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, delta);
+    } else if (formation === 1) { // Ring tilts and spins
+      groupRef.current.rotation.y += delta * 0.2;
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0.4 + mouse.y * 0.2, delta * 2);
+    } else { // Scatter slow rotation
+      groupRef.current.rotation.y += delta * 0.05;
+      groupRef.current.rotation.x += delta * 0.02;
+    }
   });
 
   return (
     <group ref={groupRef}>
-      <points ref={pointsRef} geometry={pointsGeo}>
-        <pointsMaterial color="#006466" size={0.04} sizeAttenuation transparent opacity={0.7} depthWrite={false} blending={THREE.AdditiveBlending} />
-      </points>
-      <lineSegments ref={linesRef}>
-        <bufferGeometry />
-        <lineBasicMaterial vertexColors transparent opacity={0.45} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </lineSegments>
+      <instancedMesh ref={meshRef} args={[undefined, undefined, DRONE_COUNT]}>
+        {/* Diamond shaped drones */}
+        <octahedronGeometry args={[0.04, 0]} />
+        <meshBasicMaterial
+          color="#06b6d4"
+          transparent={true}
+          opacity={0.8}
+          blending={THREE.AdditiveBlending}
+        />
+      </instancedMesh>
     </group>
   );
 }
 
 export default function ThreeScene() {
   return (
-    <div className="absolute inset-0 pointer-events-auto">
-      <Canvas camera={{ position: [0, 0, 5], fov: 55 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+    <div className="absolute inset-0 pointer-events-auto overflow-hidden">
+      <Canvas camera={{ position: [0, 0, 9], fov: 60 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
         <color attach="background" args={['#0a0a12']} />
-        <fog attach="fog" args={['#0a0a12', 4, 10]} />
-        <NetworkMesh />
+        <fog attach="fog" args={['#0a0a12', 4, 15]} />
+        <DroneShow />
       </Canvas>
       <style>{`canvas{opacity:0;animation:fi 2s ease-in forwards .3s}@keyframes fi{to{opacity:1}}`}</style>
     </div>
