@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-import path from 'path';
 import { createClient } from '@supabase/supabase-js';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Request, Response } from 'express';
+import nodemailer from 'nodemailer';
+import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -62,6 +62,9 @@ app.post('/api/register', async (req: Request, res: Response): Promise<void> => 
         leader_college: registration.leaderCollege,
         abstract_text: registration.abstractText || '',
         status: 'Confirmed',
+        fee_paid: registration.feePaid || 0,
+        has_paid: registration.hasPaid || false,
+        transaction_id: registration.transactionId || null,
       })
       .select('id')
       .single();

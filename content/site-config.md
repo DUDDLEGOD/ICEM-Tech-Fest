@@ -32,8 +32,37 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```json registration
 {
   "isOpen": true,
-  "closedMessage": "Registrations are currently paused. Please check back later or contact the organizing team."
+  "closedMessage": "Registrations are currently paused. Please check back later or contact the organizing team.",
+  "paymentUpiIds": [
+    "ashishpdng@okicici"
+  ]
 }
+```
+
+## Sponsors
+```json sponsors
+[
+  {
+    "name": "Cognizant",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg"
+  },
+  {
+    "name": "TCS",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg"
+  },
+  {
+    "name": "Reliance",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/9/99/Reliance_Industries_Logo.svg"
+  },
+  {
+    "name": "Infosys",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg"
+  },
+  {
+    "name": "Wipro",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg"
+  }
+]
 ```
 
 ## Social Links

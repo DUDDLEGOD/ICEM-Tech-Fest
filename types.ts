@@ -65,10 +65,12 @@ export interface Registration {
   leaderCollege: string;
   members: { name: string; email: string; college: string }[];
   abstractText?: string;
-  status: 'Pending' | 'Confirmed';
+  status: 'Pending' | 'Confirmed' | 'Rejected';
   qrHash: string;
   timestamp: number;
-  feePaid: number;
+  feePaid?: number;
+  hasPaid?: boolean;
+  transactionId?: string;
   verifiedAt?: number;
 }
 
@@ -114,6 +116,13 @@ export interface AnnouncementConfig {
 export interface RegistrationSettings {
   isOpen: boolean;
   closedMessage: string;
+  paymentUpiIds?: string[];
+  payeeName?: string;
+}
+
+export interface SponsorConfig {
+  name: string;
+  logo: string;
 }
 
 export interface AboutStatConfig {
@@ -151,6 +160,7 @@ export interface SiteConfig {
   contact: ContactConfig;
   announcement: AnnouncementConfig;
   registration: RegistrationSettings;
+  sponsors: SponsorConfig[];
   brochureVisibility: BrochureVisibility;
   about: AboutPageConfig;
 }

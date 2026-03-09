@@ -1,29 +1,30 @@
 
-import React, { useState } from 'react';
-import { EventConfig, Registration, RegistrationApiResult } from '../types';
-import { useSiteConfig } from '../contexts/useSiteConfig';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertTriangle,
-  ShieldCheck,
   ChevronLeft,
   ChevronRight,
-  Trash2,
-  PlusCircle,
   Database,
-  User as UserIcon,
   Lightbulb,
-  Users as UsersIcon,
-  Send
+  PlusCircle,
+  Send,
+  ShieldCheck,
+  Trash2,
+  User as UserIcon,
+  Users as UsersIcon
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { QRCodeSVG } from 'qrcode.react';
+import React, { useEffect, useState } from 'react';
+import { useSiteConfig } from '../contexts/useSiteConfig';
 import { submitRegistration } from '../services/registrationApi';
+import { EventConfig, Registration, RegistrationApiResult } from '../types';
 
 interface RegistrationFormProps {
   onSuccess: (reg: Registration, toastMessage?: string) => void;
   initialEventId: string | null;
 }
 
-type Step = 'leader' | 'team' | 'abstract' | 'members' | 'confirm';
+type Step = 'leader' | 'team' | 'abstract' | 'members' | 'payment' | 'confirm';
 type LeaderField = 'name' | 'email' | 'phone' | 'college';
 
 interface LeaderInfo {
@@ -79,8 +80,20 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
+  const [hasPaid, setHasPaid] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
 
   const currentEvent = config.events.find((event) => event.id === selectedEventId) ?? config.events[0];
+
+  const [paymentUpiId, setPaymentUpiId] = useState('technofest@okhdfcbank');
+
+  useEffect(() => {
+    const ids = config.registration.paymentUpiIds || ['technofest@okhdfcbank'];
+    if (ids.length > 0) {
+      setPaymentUpiId(ids[Math.floor(Math.random() * ids.length)]);
+    }
+  }, [config.registration.paymentUpiIds]);
+
   const fallbackOpenEvent = config.events.find((event) => event.isRegistrationOpen);
   const isRegistrationClosed = !config.registration.isOpen || !currentEvent.isRegistrationOpen;
 
@@ -135,7 +148,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       if (!m.name || !m.email || !m.college) return setError('All member names, emails, and colleges must be provided.');
     }
     setError('');
-    setStep('confirm');
+
+    const numericFee = typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0;
+    if (numericFee > 0) {
+      setStep('payment');
+    } else {
+      setHasPaid(true);
+      setStep('confirm');
+    }
   };
 
   const handleFinalSubmission = async () => {
@@ -156,7 +176,9 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       status: 'Confirmed',
       qrHash: btoa(JSON.stringify({ team: teamName, event: selectedEventId, leader: leaderInfo.name })),
       timestamp: Date.now(),
-      feePaid: 0
+      feePaid: typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0,
+      hasPaid,
+      transactionId
     };
 
     try {
@@ -203,6 +225,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     { id: 'team', label: 'Arena' },
     { id: 'abstract', label: 'Intel' },
     { id: 'members', label: 'Squad' },
+    { id: 'payment', label: 'Payment' },
     { id: 'confirm', label: 'Review' }
   ];
 
@@ -404,7 +427,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                     {abstractText.length} / 50 MIN
                   </span>
                 </div>
-                <textarea 
+                <textarea
                   rows={8}
                   placeholder="Provide a detailed overview of your project, implementation stack, and core objectives..."
                   value={abstractText}
@@ -417,7 +440,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 <button onClick={() => setStep('team')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                   <ChevronLeft size={16} /> BACK
                 </button>
-                <button 
+                <button
                   onClick={validateAbstract}
                   className="flex-[2] py-5 bg-white text-black font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
                 >
@@ -428,7 +451,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
           )}
 
           {step === 'members' && (
-            <motion.div 
+            <motion.div
               key="members"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -459,14 +482,14 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 </div>
 
                 {members.map((member, idx) => (
-                  <motion.div 
+                  <motion.div
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    key={idx} 
+                    key={idx}
                     className="grid grid-cols-1 md:grid-cols-2 gap-4 relative p-6 bg-white/[0.02] border border-white/5 rounded-3xl"
                   >
-                    <button 
+                    <button
                       onClick={() => removeMember(idx)}
                       className="absolute -top-3 -right-3 w-8 h-8 bg-stone-900 border border-red-500/30 text-red-500 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all z-20"
                     >
@@ -474,7 +497,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                     </button>
                     <div className="space-y-2">
                       <label className="text-[9px] uppercase tracking-widest font-black text-slate-600">Member {idx + 2} Name</label>
-                      <input 
+                      <input
                         type="text"
                         value={member.name}
                         onChange={(e) => updateMember(idx, 'name', e.target.value)}
@@ -484,7 +507,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                     </div>
                     <div className="space-y-2">
                       <label className="text-[9px] uppercase tracking-widest font-black text-slate-600">Member {idx + 2} Email</label>
-                      <input 
+                      <input
                         type="email"
                         value={member.email}
                         onChange={(e) => updateMember(idx, 'email', e.target.value)}
@@ -494,7 +517,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <label className="text-[9px] uppercase tracking-widest font-black text-slate-600">Member {idx + 2} Institution</label>
-                      <input 
+                      <input
                         type="text"
                         value={member.college}
                         onChange={(e) => updateMember(idx, 'college', e.target.value)}
@@ -506,7 +529,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 ))}
 
                 {members.length + 1 < currentEvent.maxTeam && (
-                  <button 
+                  <button
                     onClick={addMember}
                     className="w-full py-4 border-2 border-dashed border-white/10 hover:border-amber-500/50 rounded-2xl flex items-center justify-center gap-3 text-slate-500 hover:text-amber-500 transition-all group"
                   >
@@ -520,7 +543,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                 <button onClick={() => setStep('abstract')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                   <ChevronLeft size={16} /> BACK
                 </button>
-                <button 
+                <button
                   onClick={validateMembers}
                   className="flex-[2] py-5 bg-purple-500 text-white font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all flex items-center justify-center gap-2"
                 >
@@ -529,6 +552,91 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
               </div>
             </motion.div>
           )}
+
+          {step === 'payment' && (() => {
+            const numericFee = typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0;
+            const encodedPayeeAddress = encodeURIComponent(paymentUpiId);
+            const encodedPayeeName = encodeURIComponent(config.registration.payeeName || 'TechnoFest 2026');
+            const upiUrl = `upi://pay?pa=${encodedPayeeAddress}&pn=${encodedPayeeName}&am=${numericFee}&cu=INR`;
+
+            return (
+              <motion.div
+                key="payment"
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -20, opacity: 0 }}
+                className="space-y-8"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-pink-500/10 rounded-2xl flex items-center justify-center text-pink-400 border border-pink-500/20">
+                    <ShieldCheck size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-futuristic text-xl text-white uppercase tracking-tighter">Registration Fee</h4>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Complete payment via UPI</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center justify-center space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10">
+                  <div className="p-4 bg-white rounded-2xl">
+                    <QRCodeSVG value={upiUrl} size={160} />
+                  </div>
+                  <p className="text-sm font-bold text-white uppercase tracking-widest">
+                    Amount Due: <span className="text-pink-500">₹{numericFee}</span>
+                  </p>
+                  <p className="text-[10px] text-slate-400 text-center max-w-sm leading-relaxed">
+                    Scan the QR code with any UPI app (GPay, PhonePe, Paytm) to complete the payment. Organizers will manually verify your transaction.
+                  </p>
+
+                  <label className="flex items-center gap-3 mt-4 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      checked={hasPaid}
+                      onChange={(e) => setHasPaid(e.target.checked)}
+                      className="w-5 h-5 accent-pink-500"
+                    />
+                    <span className="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">
+                      I confirm that I have transferred ₹{numericFee}.
+                    </span>
+                  </label>
+
+                  <div className="w-full mt-2">
+                    <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 mb-2 block text-left">12-Digit Transaction ID (UTR)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 312345678901"
+                      value={transactionId}
+                      onChange={(e) => setTransactionId(e.target.value)}
+                      className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-pink-500 transition-all font-bold text-white text-sm tracking-widest text-center"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <button onClick={() => setStep('members')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
+                    <ChevronLeft size={16} /> BACK
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!hasPaid) {
+                        setError('Please confirm your payment to proceed.');
+                        return;
+                      }
+                      if (transactionId.length < 5) {
+                         setError('Please provide a valid Transaction ID/UTR.');
+                         return;
+                      }
+                      setError('');
+                      setStep('confirm');
+                    }}
+                    className="flex-[2] py-5 bg-pink-500 text-white font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all shadow-xl shadow-pink-500/20 flex items-center justify-center gap-2 active:scale-95"
+                  >
+                    VERIFY PAYMENT <ChevronRight size={16} />
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })()}
 
           {step === 'confirm' && (
             <motion.div
@@ -580,7 +688,10 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
 
               <div className="flex gap-4">
                 <button
-                  onClick={() => setStep('members')}
+                  onClick={() => {
+                    const numericFee = typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0;
+                    setStep(numericFee > 0 ? 'payment' : 'members');
+                  }}
                   disabled={isSubmitting}
                   className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 disabled:opacity-50"
                 >

@@ -12,6 +12,7 @@ import {
   RegistrationSettings,
   SiteConfig,
   SocialLinksConfig,
+  SponsorConfig,
 } from './types';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -260,7 +261,20 @@ const DEFAULT_ANNOUNCEMENT_CONFIG: AnnouncementConfig = {
 const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
   isOpen: true,
   closedMessage: 'Registrations are currently paused. Please check back later or contact the organizing team.',
+  paymentUpiIds: ['technofest@okhdfcbank'],
+  payeeName: 'TechnoFest 2026',
 };
+
+const DEFAULT_SPONSORS: SponsorConfig[] = [
+  { name: 'Cyberdyne Systems', logo: 'https://picsum.photos/seed/cyber/200/200' },
+  { name: 'Stark Industries', logo: 'https://picsum.photos/seed/stark/200/200' },
+  { name: 'Wayne Enterprises', logo: 'https://picsum.photos/seed/wayne/200/200' },
+  { name: 'Oscorp', logo: 'https://picsum.photos/seed/oscorp/200/200' },
+  { name: 'Umbrella Corp', logo: 'https://picsum.photos/seed/umbrella/200/200' },
+  { name: 'Aperture Science', logo: 'https://picsum.photos/seed/aperture/200/200' },
+  { name: 'Weyland-Yutani', logo: 'https://picsum.photos/seed/weyland/200/200' },
+  { name: 'Tyrell Corp', logo: 'https://picsum.photos/seed/tyrell/200/200' },
+];
 
 const DEFAULT_ABOUT_STATS: AboutStatConfig[] = [
   { label: 'Uplink Est.', value: '2007', sub: 'EST. YEAR' },
@@ -298,6 +312,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   contact: DEFAULT_CONTACT_CONFIG,
   announcement: DEFAULT_ANNOUNCEMENT_CONFIG,
   registration: DEFAULT_REGISTRATION_SETTINGS,
+  sponsors: DEFAULT_SPONSORS,
   brochureVisibility: createDefaultBrochureVisibility(),
   about: DEFAULT_ABOUT_CONFIG,
 };
@@ -453,11 +468,19 @@ const normalizeAnnouncement = (value: unknown): AnnouncementConfig => {
 
 const normalizeRegistrationSettings = (value: unknown): RegistrationSettings => {
   const fallback = DEFAULT_SITE_CONFIG.registration;
-  if (!isRecord(value)) return { ...fallback };
+  if (!isRecord(value)) return { ...fallback, paymentUpiIds: [...(fallback.paymentUpiIds || [])] };
+
+  let paymentUpiIds = fallback.paymentUpiIds;
+  if (Array.isArray(value.paymentUpiIds)) {
+    const ids = value.paymentUpiIds.map(v => String(v).trim()).filter(Boolean);
+    if (ids.length > 0) paymentUpiIds = ids;
+  }
 
   return {
     isOpen: getBoolean(value.isOpen, fallback.isOpen),
     closedMessage: getString(value.closedMessage, fallback.closedMessage),
+    paymentUpiIds,
+    payeeName: getString(value.payeeName, fallback.payeeName),
   };
 };
 
@@ -471,6 +494,21 @@ const normalizeBrochureVisibility = (value: unknown): BrochureVisibility => {
   });
 
   return normalized;
+};
+
+const normalizeSponsors = (value: unknown): SponsorConfig[] => {
+  const fallback = DEFAULT_SPONSORS;
+  if (!Array.isArray(value)) return fallback;
+
+  const valid = value
+    .filter(isRecord)
+    .map((s) => ({
+      name: getString(s.name, ''),
+      logo: getString(s.logo, ''),
+    }))
+    .filter((s) => s.name && s.logo);
+
+  return valid.length > 0 ? valid : fallback;
 };
 
 const normalizeAbout = (value: unknown): AboutPageConfig => {
@@ -513,7 +551,11 @@ export const cloneSiteConfig = (config: SiteConfig): SiteConfig => ({
   socialLinks: { ...config.socialLinks },
   contact: { ...config.contact },
   announcement: { ...config.announcement },
-  registration: { ...config.registration },
+  registration: {
+    ...config.registration,
+    paymentUpiIds: config.registration.paymentUpiIds ? [...config.registration.paymentUpiIds] : undefined
+  },
+  sponsors: config.sponsors.map(s => ({ ...s })),
   brochureVisibility: { ...config.brochureVisibility },
   about: cloneAboutConfig(config.about),
 });
@@ -530,17 +572,18 @@ export const normalizeSiteConfig = (value: unknown): SiteConfig => {
     contact: normalizeContact(value.contact),
     announcement: normalizeAnnouncement(value.announcement),
     registration: normalizeRegistrationSettings(value.registration),
+    sponsors: normalizeSponsors(value.sponsors),
     brochureVisibility: normalizeBrochureVisibility(value.brochureVisibility),
     about: normalizeAbout(value.about),
   };
 };
 
-const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
 
 const parseJsonBlock = (markdown: string, blockName: string) => {
   const pattern = new RegExp(
-    '^```json\\s+' + escapeRegex(blockName) + '\\s*$\\r?\\n([\\s\\S]*?)\\r?\\n^```',
-    'm',
+    '^```json[ \\t]+' + escapeRegex(blockName) + '[ \\t]*\\r?\\n([\\s\\S]*?)\\n```',
+    'im'
   );
   const match = markdown.match(pattern);
 
@@ -553,7 +596,7 @@ const parseJsonBlock = (markdown: string, blockName: string) => {
   } catch (error) {
     throw new Error(
       `Invalid JSON in "${blockName}" block inside content/site-config.md. ` +
-        `If you use multiline text, keep it inside quotes and the parser will convert line breaks automatically.`,
+        `If you use multiline text, keep it inside quotes and the parser will convert line breaks automatically.`
     );
   }
 };
@@ -566,17 +609,17 @@ const sanitizeJsonBlock = (block: string) => {
   for (let index = 0; index < block.length; index += 1) {
     const character = block[index];
 
-    if (inString && character === '\r') {
-      if (block[index + 1] === '\n') {
+    if (inString && character === '\\r') {
+      if (block[index + 1] === '\\n') {
         index += 1;
       }
-      result += '\\n';
+      result += '\\\\n';
       isEscaped = false;
       continue;
     }
 
-    if (inString && character === '\n') {
-      result += '\\n';
+    if (inString && character === '\\n') {
+      result += '\\\\n';
       isEscaped = false;
       continue;
     }
@@ -587,7 +630,7 @@ const sanitizeJsonBlock = (block: string) => {
       inString = !inString;
     }
 
-    if (character === '\\' && !isEscaped) {
+    if (character === '\\\\' && !isEscaped) {
       isEscaped = true;
     } else {
       isEscaped = false;
@@ -602,6 +645,7 @@ export const buildSiteConfigFromMarkdown = (markdown: string): SiteConfig => {
     hero: parseJsonBlock(markdown, 'hero'),
     announcement: parseJsonBlock(markdown, 'announcement'),
     registration: parseJsonBlock(markdown, 'registration'),
+    sponsors: parseJsonBlock(markdown, 'sponsors'),
     socialLinks: parseJsonBlock(markdown, 'socialLinks'),
     contact: parseJsonBlock(markdown, 'contact'),
     brochureVisibility: parseJsonBlock(markdown, 'brochureVisibility'),

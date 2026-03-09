@@ -1,7 +1,8 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useSiteConfig } from '../contexts/useSiteConfig';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
+import { useSiteConfig } from '../contexts/useSiteConfig';
+import { SponsorLogos } from './SponsorLogos';
 
 const ThreeScene = lazy(() => import('./ThreeScene'));
 
@@ -83,16 +84,16 @@ export const Hero: React.FC = () => {
           <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-full p-1 bg-gradient-to-tr from-teal-500 to-purple-500 shadow-[0_0_40px_rgba(6,182,212,0.2)]">
             <img src="/icem-logo.png" alt="ICEM Logo" className="w-full h-full object-cover rounded-full bg-black" />
           </div>
-          
+
           <div className="flex flex-col justify-center items-center text-center">
-            <h1 className="font-futuristic text-5xl md:text-6xl lg:text-7xl tracking-tighter leading-none font-black italic text-white drop-shadow-2xl">
-              {config.hero.mainTitlePart1}<span className="text-[#ff5400] drop-shadow-[0_0_15px_rgba(255,84,0,0.5)]">{config.hero.mainTitlePart2}</span>
-            </h1>
-            <div className="flex flex-col mt-4">
-              <span className="text-[9px] md:text-[11px] font-black text-teal-500/90 uppercase tracking-[0.4em] leading-none italic">
+            <div className="flex flex-col mt-2 mb-3">
+              <span className="text-[12px] md:text-[14px] font-black text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] uppercase tracking-[0.4em] leading-none italic transition-colors">
                 {config.hero.institution} — {config.hero.organizingLabel}
               </span>
             </div>
+            <h1 className="font-futuristic text-5xl md:text-6xl lg:text-7xl tracking-tighter leading-none font-black italic text-white drop-shadow-2xl">
+              {config.hero.mainTitlePart1}<span className="text-[#ff5400] drop-shadow-[0_0_15px_rgba(255,84,0,0.5)]">{config.hero.mainTitlePart2}</span>
+            </h1>
           </div>
         </motion.div>
 
@@ -127,6 +128,10 @@ export const Hero: React.FC = () => {
             {isRegistrationOpen ? config.hero.buttonText : 'VIEW UPDATE'}
           </span>
         </motion.button>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.0, duration: 1 }} className="w-full mt-4 max-w-4xl max-h-[140px]">
+          <SponsorLogos />
+        </motion.div>
       </motion.div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">

@@ -13,6 +13,8 @@ CREATE TABLE registrations (
     abstract_text TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'Pending',
     fee_paid INTEGER DEFAULT 0,
+    has_paid BOOLEAN DEFAULT false,
+    transaction_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
