@@ -7,7 +7,17 @@ const DRONE_COUNT = 1500;
 function DroneShow() {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.InstancedMesh>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
   const { mouse, viewport } = useThree();
+
+  const MAX_LINES = 3000;
+  const CHECK_COUNT = 800; // Check connections among a subset of drones for performance
+  const CONNECTION_DISTANCE = 2.5;
+
+  const { linePosArr, lineColArr } = useMemo(() => ({
+    linePosArr: new Float32Array(MAX_LINES * 6),
+    lineColArr: new Float32Array(MAX_LINES * 6)
+  }), []);
 
   // Pre-calculate positions for different formations
   const { scatterPositions, globePositions, shipPositions } = useMemo(() => {
@@ -66,6 +76,16 @@ function DroneShow() {
 
   const scratchObject3D = useMemo(() => new THREE.Object3D(), []);
 
+  // To prevent the wireframe from only appearing on drones 0-300, we maintain a randomized index list
+  const randomIndices = useMemo(() => {
+    const indices = Array.from({ length: DRONE_COUNT }, (_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return indices;
+  }, []);
+
   useFrame((state, delta) => {
     if (!groupRef.current || !meshRef.current) return;
 
@@ -96,19 +116,64 @@ function DroneShow() {
     }
     meshRef.current.instanceMatrix.needsUpdate = true;
 
-    // Responsive Parallax Follows Mouse gracefully without viewport multiplier explosions (Edge bug)
-    const targetX = mouse.x * 1.5;
-    const targetY = mouse.y * 1.5;
-    groupRef.current.position.x = THREE.MathUtils.lerp(groupRef.current.position.x, targetX, delta * 2);
-    groupRef.current.position.y = THREE.MathUtils.lerp(groupRef.current.position.y, targetY, delta * 2);
+    // --- Wireframe Connections ---
+    let lineIdx = 0;
+    // We cycle through the randomized indices based on time so the lines organically dance around the whole show
+    const frameOffset = Math.floor(state.clock.elapsedTime * 10) % DRONE_COUNT;
+
+    for (let i = 0; i < CHECK_COUNT; i++) {
+        // Pick a pseudo-random drone from our shuffled list
+        const rIndex1 = randomIndices[(i + frameOffset) % DRONE_COUNT];
+        const i3 = rIndex1 * 3;
+        const ax = currentPositions.current[i3];
+        const ay = currentPositions.current[i3+1];
+        const az = currentPositions.current[i3+2];
+
+        // Only check connections against a larger window of other random drones for denser wireframes
+        for (let j = 1; j < 60; j++) {
+            const rIndex2 = randomIndices[(i + j + frameOffset) % DRONE_COUNT];
+            const j3 = rIndex2 * 3;
+            const bx = currentPositions.current[j3];
+            const by = currentPositions.current[j3+1];
+            const bz = currentPositions.current[j3+2];
+
+            const dx = ax - bx;
+            const dy = ay - by;
+            const dz = az - bz;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            if (dist < CONNECTION_DISTANCE && lineIdx < MAX_LINES) {
+              const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.8;
+              const o = lineIdx * 6;
+              linePosArr[o] = ax; linePosArr[o+1] = ay; linePosArr[o+2] = az;
+              linePosArr[o+3] = bx; linePosArr[o+4] = by; linePosArr[o+5] = bz;
+
+              // Cyan color scaling with alpha
+              const colorValue = 0.8 * alpha;
+              lineColArr[o] = 0.0; lineColArr[o+1] = colorValue; lineColArr[o+2] = colorValue;
+              lineColArr[o+3] = 0.0; lineColArr[o+4] = colorValue; lineColArr[o+5] = colorValue;
+
+              lineIdx++;
+            }
+        }
+    }
+
+    if (linesRef.current) {
+        const geo = linesRef.current.geometry;
+        geo.setAttribute('position', new THREE.BufferAttribute(linePosArr.slice(0, lineIdx * 6), 3));
+        geo.setAttribute('color', new THREE.BufferAttribute(lineColArr.slice(0, lineIdx * 6), 3));
+        geo.attributes.position.needsUpdate = true;
+        geo.attributes.color.needsUpdate = true;
+        geo.setDrawRange(0, lineIdx * 2);
+    }
 
     // Global Rotation
     if (formation === 0) { // Globe spins nicely
       groupRef.current.rotation.y += delta * 0.3;
       groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0, delta);
-    } else if (formation === 1) { // Ring tilts and spins
+    } else if (formation === 1) { // Ring tilts and spins organically
       groupRef.current.rotation.y += delta * 0.2;
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0.4 + mouse.y * 0.2, delta * 2);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, 0.4 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1, delta * 2);
     } else { // Scatter slow rotation
       groupRef.current.rotation.y += delta * 0.05;
       groupRef.current.rotation.x += delta * 0.02;
@@ -127,6 +192,10 @@ function DroneShow() {
           blending={THREE.AdditiveBlending}
         />
       </instancedMesh>
+      <lineSegments ref={linesRef}>
+        <bufferGeometry />
+        <lineBasicMaterial vertexColors transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </lineSegments>
     </group>
   );
 }
