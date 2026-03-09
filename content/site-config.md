@@ -88,12 +88,14 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ## Brochure Visibility
 ```json brochureVisibility
 {
-  "VAC": false,
-  "CODEVERSE": false,
-  "AGENTS": false,
-  "ROBO": false,
+  "CHAKRAVYUH": false,
+  "NEUROAVATAR": false,
+  "DATA_DASH": false,
+  "CYBER_SHIELD": false,
   "BRIDGE": false,
-  "VIBE": false,
+  "FAST_FURIOUS": false,
+  "CIRCUIT_CRAFTERS": false,
+  "WEB_WIZARDS": false,
   "LAUNCHPAD": false
 }
 ```
@@ -146,155 +148,138 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```json events
 [
   {
-    "id": "VAC",
-    "name": "Virtual Avatar Championship",
-    "tagline": "Unleash your digital alter ego",
-    "description": "Design and render high-fidelity 3D avatars. Compete in the ultimate digital fashion and lore showdown.",
-    "department": "Computer Engineering",
-    "minTeam": 4,
+    "id": "CHAKRAVYUH",
+    "name": "Chakravyuh [cite: 267]",
+    "tagline": "Break through the challenge, innovate, and conquer the core!",
+    "description": "Chakravyuh 2026 is a multistage technical challenge inspired by breaking through layers of complexity. Participants must demonstrate teamwork, logic, creativity, and innovation to advance through three rounds[cite: 267].",
+    "department": "First Year [cite: 267]",
+    "minTeam": 3,
     "maxTeam": 5,
-    "fee": 0,
+    "fee": 250,
+    "requiresUpload": false,
+    "prizePool": "₹40,000",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Prof. Trupti Kethale [cite: 278]",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 7841994889 [cite: 278]",
+    "isRegistrationOpen": true,
+    "rules": [
+      "Team size: 3-5 MEMBERS [cite: 267]",
+      "Registration: 250 per team [cite: 267]",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
+    ],
+    "rounds": [
+      {
+        "title": "Round 1: The Drona Gate",
+        "desc": "Physical + mental challenge including short physical activity and solving logical, programming, and debugging questions."
+      },
+      {
+        "title": "Round 2: The Archer Wall",
+        "desc": "A technical treasure hunt challenge where teams solve technology-based puzzles hidden within programming, cybersecurity, and logical clues."
+      },
+      {
+        "title": "Final Round: The Core",
+        "desc": "The Rapid Prototyping Challenge is the final stage of the competition where teams transform their ideas into a working technological solution."
+      }
+    ]
+  },
+  {
+    "id": "NEUROAVATAR",
+    "name": "NeuroAvatar Arena [cite: 267]",
+    "tagline": "The 4-Hour Challenge [cite: 267]",
+    "description": "An exclusive, fast-paced project showcase and refinement competition. Focused on the theme of \"Digital Avatar, Virtual Avatar, and Virtual Persona,\" this event requires teams to arrive with a ready-to-demonstrate MVP (Minimum Viable Product.) [cite: 267]",
+    "department": "Computer Dept. [cite: 267]",
+    "minTeam": 3,
+    "maxTeam": 5,
+    "fee": 300,
     "requiresUpload": true,
     "prizePool": "₹40,000",
-    "eventDateLabel": "March 14, 2026",
-    "eventTimeLabel": "10:00 AM - 04:00 PM",
-    "venueLabel": "Digital Design Lab, ICEM",
-    "coordinatorName": "Prof. Aditi Patil",
-    "coordinatorEmail": "vac@indiraicem.ac.in",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Prof. Minal Patil [cite: 278]",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 9145616101 [cite: 278]",
+    "isRegistrationOpen": true,
+    "rules": [
+      "Teams must arrive with a ready-to-demonstrate MVP [cite: 267]",
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
+    ],
+    "rounds": [
+      {
+        "title": "Project Showcase",
+        "desc": "Demonstrate your MVP and refine it based on the theme."
+      }
+    ]
+  },
+  {
+    "id": "DATA_DASH",
+    "name": "Data Dash [cite: 267]",
+    "tagline": "Data analysis and visualization contest [cite: 267]",
+    "description": "Data analysis and visualization contest. [cite: 267]",
+    "department": "AIDS Dept. [cite: 267]",
+    "minTeam": 3,
+    "maxTeam": 5,
+    "fee": 250,
+    "requiresUpload": true,
+    "prizePool": "₹40,000",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Organizing Team",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 88559 77815",
     "isRegistrationOpen": true,
     "rules": [
-      "Character must be original",
-      "Idea abstract must be submitted in text",
-      "Real-time rendering required in Final Round",
       "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
       "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
-        "title": "Conceptualization",
-        "desc": "Submit your character design abstract and lore."
-      },
-      {
-        "title": "The Nexus Arena",
-        "desc": "Live presentation of your 3D avatar."
+        "title": "Data Challenge",
+        "desc": "Analyze provided datasets and build comprehensive visualizations."
       }
     ]
   },
   {
-    "id": "CODEVERSE",
-    "name": "CodeVerse",
-    "tagline": "Survival of the Fittest Code",
-    "description": "Battle through algorithmic gauntlets and full-stack architecture challenges in a high-pressure environment.",
-    "department": "Information Technology",
-    "minTeam": 4,
+    "id": "CYBER_SHIELD",
+    "name": "Cyber Shield Challenge [cite: 267]",
+    "tagline": "A competition focused on cybersecurity and ethical hacking [cite: 267]",
+    "description": "A competition focused on cybersecurity and ethical hacking. [cite: 267]",
+    "department": "IT Dept [cite: 267]",
+    "minTeam": 3,
     "maxTeam": 5,
-    "fee": 0,
+    "fee": 250,
     "requiresUpload": true,
     "prizePool": "₹40,000",
-    "eventDateLabel": "March 14, 2026",
-    "eventTimeLabel": "09:00 AM - 06:00 PM",
-    "venueLabel": "Seminar Hall 2, ICEM",
-    "coordinatorName": "Prof. Rohan Kulkarni",
-    "coordinatorEmail": "codeverse@indiraicem.ac.in",
-    "coordinatorPhone": "+91 90211 33445",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Organizing Team",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 88559 77815",
     "isRegistrationOpen": true,
     "rules": [
-      "Exact team size protocols active",
-      "No internet access during rounds",
-      "Languages: C++, Java, Python",
       "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
       "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
-        "title": "The Matrix",
-        "desc": "Rapid fire algorithmic challenges."
-      },
-      {
-        "title": "Project Architect",
-        "desc": "Full-stack module development."
-      }
-    ]
-  },
-  {
-    "id": "AGENTS",
-    "name": "Agentic AI",
-    "tagline": "Prompt, Deploy, Dominate",
-    "description": "Master LLM orchestration. Build autonomous agents capable of solving multi-step real-world workflows.",
-    "department": "AI & Data Science",
-    "minTeam": 4,
-    "maxTeam": 5,
-    "fee": 0,
-    "requiresUpload": true,
-    "prizePool": "₹40,000",
-    "eventDateLabel": "March 14, 2026",
-    "eventTimeLabel": "11:00 AM - 05:00 PM",
-    "venueLabel": "AI Center, ICEM",
-    "coordinatorName": "Prof. Snehal Joshi",
-    "coordinatorEmail": "agenticai@indiraicem.ac.in",
-    "coordinatorPhone": "+91 97662 14789",
-    "isRegistrationOpen": true,
-    "rules": [
-      "Use of any LLM allowed",
-      "Must build a functional agentic workflow",
-      "Focus on automation and problem solving",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "The Prompt Engineering",
-        "desc": "Optimizing AI outputs for complex tasks."
-      },
-      {
-        "title": "Agent Deployment",
-        "desc": "Solving real-world scenarios with autonomous agents."
-      }
-    ]
-  },
-  {
-    "id": "ROBO",
-    "name": "RoboVerse",
-    "tagline": "The Ultimate Metal Clash",
-    "description": "Engineered for destruction. Enter the arena for high-octane robot combat and precision obstacle racing.",
-    "department": "Mechanical / E&TC",
-    "minTeam": 4,
-    "maxTeam": 5,
-    "fee": 0,
-    "requiresUpload": true,
-    "prizePool": "₹40,000",
-    "eventDateLabel": "March 14, 2026",
-    "eventTimeLabel": "10:30 AM - 06:30 PM",
-    "venueLabel": "Mechanical Workshop Arena, ICEM",
-    "coordinatorName": "Prof. Pratik More",
-    "coordinatorEmail": "roboverse@indiraicem.ac.in",
-    "coordinatorPhone": "+91 91588 00124",
-    "isRegistrationOpen": true,
-    "rules": [
-      "Robot weight limit: 15kg",
-      "Combat and Racing categories",
-      "Remote control only (No wired)",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Circuit Race",
-        "desc": "Navigate the obstacle-filled track."
-      },
-      {
-        "title": "Death Match",
-        "desc": "The last bot standing wins."
+        "title": "Security Challenge",
+        "desc": "Solve ethical hacking tasks and bypass security challenges."
       }
     ]
   },
   {
     "id": "BRIDGE",
-    "name": "The Gravity Game....Bridge Making",
+    "name": "The Gravity Game.... Bridge Making [cite: 267]",
     "tagline": "Structural Elegance & Strength",
-    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition designed to test participants’ understanding of structural design, load distribution, and material efficiency. Teams will design and construct a model bridge using limited materials within a fixed time. The bridges will then be tested for maximum load carrying capacity and structural efficiency.",
-    "department": "Civil Engineering",
+    "description": "Welcome to “The Gravity Game....Bridge Making”, a hands-on engineering competition designed to test participants’ understanding of structural design, load distribution, and material efficiency. Teams will design and construct a model bridge using limited materials within a fixed time[cite: 267].",
+    "department": "Civil Dept. [cite: 267]",
     "minTeam": 2,
     "maxTeam": 5,
     "fee": 500,
@@ -302,15 +287,14 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "prizePool": "₹40,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "09:30 AM - 03:30 PM",
-    "venueLabel": "Civil Structure Lab, ICEM",
-    "coordinatorName": "Prof. Shruti Deshmukh",
-    "coordinatorEmail": "bridgeit@indiraicem.ac.in",
-    "coordinatorPhone": "+91 99228 11456",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Prof. Vijay Kumar Saini [cite: 278]",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 9819298069 [cite: 278]",
     "isRegistrationOpen": true,
     "rules": [
       "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
       "Participant-Supplied: Members must bring their own Hot Glue Gun",
-      "Span Length: 30 cm - 40 cm, Bridge Width: 10 cm - 15 cm, Bridge Height: 15 cm - 20 cm",
       "No electronic devices are allowed during the competition",
       "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
       "Trophy for winner and runner-up; certificates for all participants"
@@ -327,51 +311,108 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     ]
   },
   {
-    "id": "VIBE",
-    "name": "VibeCode: The Tech Escape Challenge",
-    "tagline": "Decode clues, think like developers, and use innovative ideas to move forward",
-    "description": "The event combines problem-solving, creativity, and technical thinking through a gamified escape-room format.",
-    "department": "BCA / BCS",
-    "minTeam": 4,
-    "maxTeam": 5,
+    "id": "FAST_FURIOUS",
+    "name": "Fast & Furious [cite: 274]",
+    "tagline": "Navigate mechanical systems using your memory [cite: 274]",
+    "description": "High Octane Competition designed to see who truly navigate mechanical systems using their memory[cite: 274].",
+    "department": "Mech Dept. [cite: 274]",
+    "minTeam": 2,
+    "maxTeam": 2,
     "fee": 0,
-    "requiresUpload": true,
+    "requiresUpload": false,
     "prizePool": "₹40,000",
-    "eventDateLabel": "March 14, 2026",
-    "eventTimeLabel": "12:00 PM - 05:00 PM",
-    "venueLabel": "Innovation Studio, ICEM",
-    "coordinatorName": "Prof. Neha Pawar",
-    "coordinatorEmail": "vibecoding@indiraicem.ac.in",
-    "coordinatorPhone": "+91 98344 77120",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Prof. Pranali Knatake [cite: 278]",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 7083597073 [cite: 278]",
     "isRegistrationOpen": true,
     "rules": [
-      "Test participants’ analytical thinking, problem-solving ability, and adaptability",
-      "Application of UI/UX principles, ease of use, and intuitive design",
-      "Ability to extend features or modify the system dynamically",
+      "Blindfold Protocol: Participants are blindfolded before the start; removing the blindfold results in instant disqualification.",
+      "Hands-Only: Participants must identify and assemble parts using only their hands.",
       "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
       "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
       {
-        "title": "Round 1: Tech Escape Room (Logic & Puzzle Round)",
-        "desc": "Solve tech-themed puzzles and logical problems within a limited time."
+        "title": "Round 1: Qualification",
+        "desc": "Initial heat to filter top performers."
       },
       {
-        "title": "Round 2: Idea & Frontend Creation",
-        "desc": "Translate a creative idea into a user-friendly and visually clear frontend experience."
+        "title": "Round 2: Semi-Final",
+        "desc": "Advanced assembly tasks for qualifiers."
       },
       {
-        "title": "Round 3: Backend & Feature Expansion",
-        "desc": "Demonstrate skill in prompting AI tools to generate or modify backend logic."
+        "title": "Round 3: Final",
+        "desc": "The fastest and most accurate participants compete for the win."
+      }
+    ]
+  },
+  {
+    "id": "CIRCUIT_CRAFTERS",
+    "name": "Circuit Crafters [cite: 274]",
+    "tagline": "Designing and implementing electronic circuits [cite: 274]",
+    "description": "Designing and implementing electronic circuits. [cite: 274]",
+    "department": "ENTC Dept. [cite: 274]",
+    "minTeam": 3,
+    "maxTeam": 5,
+    "fee": 250,
+    "requiresUpload": false,
+    "prizePool": "₹40,000",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Prof. Balu Tandale [cite: 278]",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 8805048185 [cite: 278]",
+    "isRegistrationOpen": true,
+    "rules": [
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
+    ],
+    "rounds": [
+      {
+        "title": "Circuit Implementation",
+        "desc": "Design, build, and test the provided electronic circuit challenges."
+      }
+    ]
+  },
+  {
+    "id": "WEB_WIZARDS",
+    "name": "Web Wizards Challenge [cite: 274]",
+    "tagline": "Website development and design competition [cite: 274]",
+    "description": "Website development and design competition. [cite: 274]",
+    "department": "MCA/BCA Dept. [cite: 274]",
+    "minTeam": 3,
+    "maxTeam": 5,
+    "fee": 250,
+    "requiresUpload": true,
+    "prizePool": "₹40,000",
+    "eventDateLabel": "March 27, 2026",
+    "eventTimeLabel": "To Be Announced",
+    "venueLabel": "ICEM Campus [cite: 279]",
+    "coordinatorName": "Organizing Team",
+    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorPhone": "+91 88559 77815",
+    "isRegistrationOpen": true,
+    "rules": [
+      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Trophy for winner and runner-up; certificates for all participants"
+    ],
+    "rounds": [
+      {
+        "title": "Web Development",
+        "desc": "Develop and design a website based on the given prompt or theme."
       }
     ]
   },
   {
     "id": "LAUNCHPAD",
-    "name": "LaunchPad – Business Plan Challenge",
+    "name": "LaunchPad Business Plan Challenge [cite: 274]",
     "tagline": "Present your innovative startup idea",
-    "description": "Develop a feasible business model and showcase the market potential and financial viability of your startup. Open to all undergraduate students (BBA, B.Com, B.Tech, BA, etc.).",
-    "department": "MBA Department (IGSB & ICEM)",
+    "description": "Present your innovative startup idea Develop a feasible business model Showcase market potential and financial viability. [cite: 274]",
+    "department": "MBA Dept. (IGSB+ICEM) [cite: 274]",
     "minTeam": 1,
     "maxTeam": 5,
     "fee": 500,
@@ -380,9 +421,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "Indira Global School of Business",
-    "coordinatorName": "Organizing Team",
+    "coordinatorName": "Prof. Aditee Huparikar & Anirudha Thuse [cite: 278]",
     "coordinatorEmail": "icem@indiraicem.ac.in",
-    "coordinatorPhone": "+91 88559 77815",
+    "coordinatorPhone": "+91 9823459833 / 9850901315 [cite: 278]",
     "isRegistrationOpen": true,
     "rules": [
       "Last Date of Registration: 23rd March 2026",
