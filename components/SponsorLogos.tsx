@@ -17,7 +17,7 @@ export const SponsorLogos: React.FC = () => {
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#0c0a09] to-transparent z-10" />
 
       <div className="flex flex-col items-center mb-4 md:mb-6">
-        <span className="text-[10px] md:text-[12px] font-black tracking-[0.4em] uppercase text-white/70 italic text-center w-full">
+        <span className="text-[10px] md:text-[16px] font-black tracking-[0.4em] drop-shadow-[0_0_8px_rgba(255,255,255,1)] uppercase text-white italic text-center w-full">
           Strategic Partners & Sponsors
         </span>
       </div>

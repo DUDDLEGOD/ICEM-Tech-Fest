@@ -71,7 +71,7 @@ export const Hero: React.FC = () => {
   const isRegistrationOpen = config.registration.isOpen;
 
   return (
-    <section id="hero-section" className="relative w-full min-h-screen pt-20 md:pt-24 flex flex-col items-center justify-start overflow-hidden bg-[#0a0a12]">
+    <section id="hero-section" className="relative w-full min-h-screen pt-20 md:pt-8 flex flex-col items-center justify-start overflow-hidden bg-[#0a0a12]">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'linear-gradient(to top, #0a0a12, transparent 40%, rgba(10,10,18,0.5))' }} />
         <Suspense fallback={<div className="w-full h-full bg-[#0a0a12]" />}>
@@ -79,7 +79,7 @@ export const Hero: React.FC = () => {
         </Suspense>
       </div>
 
-      <motion.div style={{ opacity, scale }} className="relative z-20 w-full flex flex-col items-center justify-start text-center px-4 md:px-6 gap-3 md:gap-5 pb-12">
+      <motion.div style={{ opacity, scale }} className="relative z-20 w-full flex flex-col items-center justify-start text-center px-4 md:px-6 pb-12">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="flex flex-col items-center gap-4 md:gap-5 mb-1 md:mb-2">
           <div className="relative w-20 h-20 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-teal-500 to-purple-500 shadow-[0_0_40px_rgba(6,182,212,0.2)]">
             <img src="/icem-logo.png" alt="ICEM Logo" className="w-full h-full object-cover rounded-full bg-black" />
@@ -121,8 +121,8 @@ export const Hero: React.FC = () => {
             const targetId = isRegistrationOpen ? 'events-section' : 'site-notice';
             document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
           }}
-          className={`mt-2 group relative px-8 py-3 md:px-10 md:py-4 border font-bold uppercase tracking-[0.3em] text-[10px] md:text-[11px] rounded-full overflow-hidden transition-colors duration-300 ${!isRegistrationOpen ? 'cursor-pointer' : ''}`}
-          style={{ borderColor: 'rgba(6,100,102,0.5)', color: '#06b6d4' }}>
+          className={`mt-2 group relative px-8 py-3 md:px-10 md:py-4 border font-bold uppercase tracking-[0.3em] text-[10px] md:text-[11px] rounded-full overflow-hidden transition-colors duration-300 backdrop-blur-md ${!isRegistrationOpen ? 'cursor-pointer' : ''}`}
+          style={{ borderColor: 'rgba(0, 251, 255, 0.5)', color: '#ffffff' }}>
           <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" style={{ background: '#006466' }} />
           <span className="relative z-10 group-hover:text-white">
             {isRegistrationOpen ? config.hero.buttonText : 'VIEW UPDATE'}
