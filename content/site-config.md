@@ -400,7 +400,6 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "minTeam": 1,
     "maxTeam": 5,
     "fee": 500,
-    "logo": "https://brandfetch.com/lemmamedia.com?view=library&library=default&collection=logos&asset=id-oVav2pr&utm_source=https%253A%252F%252Fbrandfetch.com%252Flemmamedia.com&utm_medium=copyAction&utm_campaign=brandPageReferral"
     "requiresUpload": true,
     "prizePool": "₹40,000",
     "eventDateLabel": "March 27, 2026",
@@ -409,7 +408,6 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Aditee Huparikar & Anirudha Thuse",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9823459833 / 9850901315",
-    "logo": "https://brandfetch.com/lemmamedia.com?view=library&library=default&collection=logos&asset=id-oVav2pr&utm_source=https%253A%252F%252Fbrandfetch.com%252Flemmamedia.com&utm_medium=copyAction&utm_campaign=brandPageReferral"
     "isRegistrationOpen": true,
     "rules": [
       "Registration deadline: 23rd March 2026",
