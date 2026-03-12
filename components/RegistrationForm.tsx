@@ -14,7 +14,7 @@ import {
   Users as UsersIcon
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSiteConfig } from '../contexts/useSiteConfig';
 import { submitRegistration } from '../services/registrationApi';
 import { EventConfig, Registration, RegistrationApiResult } from '../types';
@@ -47,7 +47,6 @@ const DEFAULT_QUEUED_TOAST = 'Registration submitted successfully. Confirmation 
 
 const resolveFailureMessage = (result: RegistrationApiResult) =>
   result.message ?? 'Submission failed. Please verify your network and try again.';
-
 const resolveDuplicateMessage = (result: RegistrationApiResult) => {
   if (result.message) return result.message;
   if (result.registrationId) {
@@ -65,6 +64,7 @@ const leaderInputs: Array<{ label: string; key: LeaderField; type: string; place
 
 export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, initialEventId }) => {
   const { config } = useSiteConfig();
+  const formRef = useRef<HTMLDivElement>(null);
   const [selectedEventId, setSelectedEventId] = useState<string>(() =>
     resolveInitialEventId(initialEventId, config.events),
   );
@@ -93,10 +93,33 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       setPaymentUpiId(ids[Math.floor(Math.random() * ids.length)]);
     }
   }, [config.registration.paymentUpiIds]);
+  useEffect(() => {
 
+  const scrollToForm = () => {
+
+    if (!formRef.current) return;
+
+    formRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    const firstInput =
+      formRef.current.querySelector("input");
+
+    (firstInput as HTMLInputElement | null)?.focus();
+
+  };
+
+  // wait for DOM + layout to finish
+  requestAnimationFrame(() => {
+    setTimeout(scrollToForm, 100);
+  });
+
+}, []);
   const fallbackOpenEvent = config.events.find((event) => event.isRegistrationOpen);
   const isRegistrationClosed = !config.registration.isOpen || !currentEvent.isRegistrationOpen;
-
+  
   const addMember = () => {
     if (members.length + 1 < currentEvent.maxTeam) {
       setMembers([...members, { name: '', email: '', college: '' }]);
@@ -119,13 +142,23 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     );
   };
 
-  const validateLeader = () => {
-    if (!leaderInfo.name || !leaderInfo.email || !leaderInfo.phone) return setError('All leader fields are required');
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(leaderInfo.email)) return setError('Invalid email address');
-    setError('');
-    setStep('team');
-  };
+const validateLeader = () => {
+
+  if (!leaderInfo.name || !leaderInfo.email || !leaderInfo.phone)
+    return setError('All leader fields are required');
+
+  if (!emailRegex.test(leaderInfo.email))
+    return setError('Invalid email address');
+
+  const cleanPhone = leaderInfo.phone.replace(/\s/g,'');
+
+  if (!phoneRegex.test(cleanPhone))
+    return setError('Enter a valid Indian phone number');
+
+  setError('');
+  setStep('team');
+
+};
 
   const validateTeam = () => {
     if (!teamName) return setError('Team name is required');
@@ -139,25 +172,52 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     setStep('members');
   };
 
-  const validateMembers = () => {
-    const totalMembers = members.length + 1;
-    if (totalMembers < currentEvent.minTeam) {
-      return setError(`This event requires at least ${currentEvent.minTeam} members. Add ${currentEvent.minTeam - totalMembers} more.`);
-    }
-    for (const m of members) {
-      if (!m.name || !m.email || !m.college) return setError('All member names, emails, and colleges must be provided.');
-    }
-    setError('');
+const validateMembers = () => {
 
-    const numericFee = typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0;
-    if (numericFee > 0) {
-      setStep('payment');
-    } else {
-      setHasPaid(true);
-      setStep('confirm');
-    }
-  };
+  const totalMembers = members.length + 1;
 
+  if (totalMembers < currentEvent.minTeam) {
+    return setError(
+      `This event requires at least ${currentEvent.minTeam} members.`
+    );
+  }
+
+  for (const m of members) {
+    if (!m.name || !m.email || !m.college)
+      return setError('All member details must be provided.');
+  }
+
+  const emails = [leaderInfo.email, ...members.map(m => m.email)];
+
+  const duplicates = emails.filter(
+    (email, index) => emails.indexOf(email) !== index
+  );
+
+  if (duplicates.length > 0) {
+    return setError('Each member must use a unique email.');
+  }
+
+  setError('');
+
+  const numericFee =
+    typeof currentEvent.fee === 'number'
+      ? currentEvent.fee
+      : parseInt(
+          String(currentEvent.fee).replace(/[^0-9]/g, ''),
+          10
+        ) || 0;
+
+  if (numericFee > 0) {
+    setStep('payment');
+  } else {
+    setHasPaid(true);
+    setStep('confirm');
+  }
+
+};
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const phoneRegex = /^[6-9]\d{9}$/;
+  const utrRegex = /^(?=.*\d)(?!([0-9])\1{11,})[A-Za-z0-9]{12,22}$/;
   const handleFinalSubmission = async () => {
     setIsSubmitting(true);
     setError('');
@@ -219,7 +279,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       setIsSubmitting(false);
     }
   };
-
+  
   const steps: { id: Step; label: string }[] = [
     { id: 'leader', label: 'Identity' },
     { id: 'team', label: 'Arena' },
@@ -235,7 +295,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
       : config.registration.closedMessage;
 
     return (
-      <div className="max-w-3xl mx-auto px-6 py-12 md:py-20">
+      <div
+  ref={formRef}
+  id="registration-form"
+  className="max-w-4xl mx-auto px-6 py-12 md:py-20 scroll-mt-32"
+>
         <div className="glass p-8 md:p-12 rounded-[2.5rem] border border-red-500/20 bg-red-500/5 space-y-8">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
@@ -428,14 +492,27 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   </span>
                 </div>
                 <textarea
-                  rows={8}
-                  placeholder="Provide a detailed overview of your project, implementation stack, and core objectives..."
-                  value={abstractText}
-                  onChange={(e) => setAbstractText(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 p-6 rounded-3xl outline-none focus:border-amber-500 transition-all font-medium text-white text-sm leading-relaxed resize-none"
-                />
-              </div>
+  rows={8}
+  maxLength={300}
+  placeholder="Provide a detailed overview of your project..."
+  value={abstractText}
+  onChange={(e) => setAbstractText(e.target.value)}
+  className="w-full bg-white/5 border border-white/10 p-6 rounded-3xl outline-none focus:border-amber-500 transition-all font-medium text-white text-sm leading-relaxed resize-none"
+/>
+                <div className="h-[3px] bg-white/10 rounded-full overflow-hidden mt-2">
+  <motion.div
+    className="h-full bg-teal-500"
+    animate={{
+      width: `${Math.min((abstractText.length / 300) * 100, 100)}%`
+    }}
+  />
+</div>
 
+<p className="text-[9px] text-slate-500 font-black uppercase tracking-widest">
+  {abstractText.length} / 300
+</p>
+              </div>
+	
               <div className="flex gap-4">
                 <button onClick={() => setStep('team')} className="flex-1 py-5 border border-white/10 text-slate-500 hover:text-white rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2">
                   <ChevronLeft size={16} /> BACK
@@ -581,6 +658,12 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   <div className="p-4 bg-white rounded-2xl">
                     <QRCodeSVG value={upiUrl} size={160} />
                   </div>
+                  <a
+  href={upiUrl}
+  className="px-6 py-3 bg-pink-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-pink-400 transition"
+>
+  OPEN UPI APP
+</a>
                   <p className="text-sm font-bold text-white uppercase tracking-widest">
                     Amount Due: <span className="text-pink-500">₹{numericFee}</span>
                   </p>
@@ -618,17 +701,23 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
                   </button>
                   <button
                     onClick={() => {
-                      if (!hasPaid) {
-                        setError('Please confirm your payment to proceed.');
-                        return;
-                      }
-                      if (transactionId.length < 5) {
-                         setError('Please provide a valid Transaction ID/UTR.');
-                         return;
-                      }
-                      setError('');
-                      setStep('confirm');
-                    }}
+
+			  if (!hasPaid) {
+			    setError('Please confirm payment before continuing.');
+			    return;
+			  }
+
+			  if (!utrRegex.test(transactionId.trim())) {
+			    setError(
+			      'Invalid UTR. Enter the real transaction ID from your UPI app.'
+			    );
+			    return;
+			  }
+
+			  setError('');
+			  setStep('confirm');
+
+			}}
                     className="flex-[2] py-5 bg-pink-500 text-white font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all shadow-xl shadow-pink-500/20 flex items-center justify-center gap-2 active:scale-95"
                   >
                     VERIFY PAYMENT <ChevronRight size={16} />

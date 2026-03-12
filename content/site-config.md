@@ -43,24 +43,8 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```json sponsors
 [
   {
-    "name": "Cognizant",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg"
-  },
-  {
-    "name": "TCS",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg"
-  },
-  {
-    "name": "Reliance",
-    "logo": "https://upload.wikimedia.org/wikipedia/en/9/99/Reliance_Industries_Logo.svg"
-  },
-  {
-    "name": "Infosys",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg"
-  },
-  {
-    "name": "Wipro",
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg"
+    "name": "LEMMA",
+    "logo": "https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774"
   }
 ]
 ```
@@ -152,7 +136,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "name": "Chakravyuh",
     "tagline": "Break through the challenge, innovate, and conquer the core!",
     "description": "Chakravyuh 2026 is a multistage technical challenge inspired by breaking through layers of complexity. Participants must demonstrate teamwork, logic, creativity, and innovation to advance through three rounds.",
-    "department": "FY",
+    "department": "First-Year",
     "minTeam": 3,
     "maxTeam": 5,
     "fee": 250,
@@ -416,6 +400,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "minTeam": 1,
     "maxTeam": 5,
     "fee": 500,
+    "logo": "https://brandfetch.com/lemmamedia.com?view=library&library=default&collection=logos&asset=id-oVav2pr&utm_source=https%253A%252F%252Fbrandfetch.com%252Flemmamedia.com&utm_medium=copyAction&utm_campaign=brandPageReferral"
     "requiresUpload": true,
     "prizePool": "₹40,000",
     "eventDateLabel": "March 27, 2026",
@@ -424,6 +409,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Aditee Huparikar & Anirudha Thuse",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9823459833 / 9850901315",
+    "logo": "https://brandfetch.com/lemmamedia.com?view=library&library=default&collection=logos&asset=id-oVav2pr&utm_source=https%253A%252F%252Fbrandfetch.com%252Flemmamedia.com&utm_medium=copyAction&utm_campaign=brandPageReferral"
     "isRegistrationOpen": true,
     "rules": [
       "Registration deadline: 23rd March 2026",
