@@ -251,7 +251,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
 
       </motion.div>
 
-      {/* MODAL — Enriched with full event details */}
+      {/* MODAL — Compact two-column layout */}
 
       <AnimatePresence>
         {selectedEvent && (
@@ -260,131 +260,142 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedEvent(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-4 md:p-8"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-4 md:p-6"
           >
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 140, damping: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass max-w-4xl w-full rounded-[3rem] border border-white/10 p-6 md:p-10 relative max-h-[90vh] overflow-y-auto scrollbar-hide"
+              className="glass max-w-5xl w-full rounded-[2rem] border border-white/10 p-5 md:p-8 relative"
             >
 
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="absolute top-6 right-6 md:top-8 md:right-8 p-3 text-slate-500 hover:text-white z-10"
+                className="absolute top-4 right-4 md:top-6 md:right-6 p-2 text-slate-500 hover:text-white z-10"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
 
-              {/* Event Title & Badge */}
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 bg-cyan-400/10 border border-cyan-400/30 rounded-full text-[10px] font-black text-cyan-400 uppercase tracking-widest">
+              {/* Header */}
+              <div className="mb-5">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="px-2.5 py-0.5 bg-cyan-400/10 border border-cyan-400/30 rounded-full text-[9px] font-black text-cyan-400 uppercase tracking-widest">
                     {selectedEvent.department}
                   </span>
-                  <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em]">
+                  <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.3em]">
                     SECTOR_{selectedEvent.id}
                   </span>
                 </div>
-                <h2 className="text-3xl md:text-5xl font-futuristic font-black uppercase text-white leading-tight">
+                <h2 className="text-2xl md:text-3xl font-futuristic font-black uppercase text-white leading-tight">
                   {selectedEvent.name}
                 </h2>
-                <p className="text-amber-400 font-bold text-sm mt-2 tracking-wide">
+                <p className="text-amber-400 font-bold text-xs mt-1 tracking-wide">
                   {selectedEvent.tagline}
                 </p>
               </div>
 
-              <p className="text-slate-400 mb-8 leading-relaxed">{selectedEvent.description}</p>
+              <p className="text-slate-400 text-sm mb-5 leading-relaxed line-clamp-2">{selectedEvent.description}</p>
 
-              {/* Key Info Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-cyan-400">
-                    <Trophy size={14} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Prize Pool</span>
+              {/* Key Info Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+                {[
+                  { icon: <Trophy size={12} />, label: 'Prize', value: selectedEvent.prizePool },
+                  { icon: <Users size={12} />, label: 'Team', value: `${selectedEvent.minTeam}–${selectedEvent.maxTeam}` },
+                  { icon: <Zap size={12} />, label: 'Fee', value: selectedEvent.fee === 0 ? 'FREE' : `₹${selectedEvent.fee}` },
+                  { icon: <Calendar size={12} />, label: 'Date', value: selectedEvent.eventDateLabel.replace('March ', 'Mar ') },
+                ].map((item, i) => (
+                  <div key={i} className="bg-white/[0.03] border border-white/5 rounded-xl p-3 space-y-1">
+                    <div className="flex items-center gap-1.5 text-cyan-400">
+                      {item.icon}
+                      <span className="text-[8px] font-black uppercase tracking-widest">{item.label}</span>
+                    </div>
+                    <p className="text-white font-black text-sm">{item.value}</p>
                   </div>
-                  <p className="text-white font-black text-lg">{selectedEvent.prizePool}</p>
-                </div>
-                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-cyan-400">
-                    <Users size={14} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Team Size</span>
-                  </div>
-                  <p className="text-white font-black text-lg">{selectedEvent.minTeam}–{selectedEvent.maxTeam}</p>
-                </div>
-                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-cyan-400">
-                    <Zap size={14} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Entry Fee</span>
-                  </div>
-                  <p className="text-white font-black text-lg">{selectedEvent.fee === 0 ? 'FREE' : `₹${selectedEvent.fee}`}</p>
-                </div>
-                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-cyan-400">
-                    <Calendar size={14} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Date</span>
-                  </div>
-                  <p className="text-white font-black text-sm">{selectedEvent.eventDateLabel}</p>
-                </div>
+                ))}
               </div>
 
-              {/* Venue & Time */}
-              <div className="flex flex-wrap gap-6 mb-8 text-slate-400 text-sm">
-                <div className="flex items-center gap-2">
-                  <MapPin size={14} className="text-cyan-400" />
-                  <span className="font-medium">{selectedEvent.venueLabel}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock size={14} className="text-cyan-400" />
-                  <span className="font-medium">{selectedEvent.eventTimeLabel}</span>
-                </div>
-              </div>
+              {/* Two-Column Body */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-              {/* Rules */}
-              <div className="mb-8">
-                <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4">Protocols & Rules</h4>
-                <EventRulesList rules={selectedEvent.rules} />
-              </div>
-
-              {/* Rounds Timeline */}
-              {selectedEvent.rounds.length > 0 && (
-                <div className="mb-8">
-                  <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-6">Competition Rounds</h4>
-                  <EventRoundsTimeline rounds={selectedEvent.rounds} />
-                </div>
-              )}
-
-              {/* Coordinator */}
-              <div className="mb-8 p-5 bg-white/[0.03] border border-white/5 rounded-2xl">
-                <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4">Coordinator</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <User size={14} className="text-slate-500" />
-                    <span className="text-white font-bold text-sm">{selectedEvent.coordinatorName}</span>
+                {/* Left Column — Rules + Venue */}
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-3">Rules</h4>
+                    <ul className="space-y-2">
+                      {selectedEvent.rules.map((rule, i) => (
+                        <li key={i} className="flex gap-3 text-slate-300 text-[12px] font-medium items-start leading-relaxed">
+                          <span className="w-1 h-1 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0 shadow-[0_0_6px_rgba(6,182,212,1)]"></span>
+                          {rule}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Mail size={14} className="text-slate-500" />
-                    <a href={`mailto:${selectedEvent.coordinatorEmail}`} className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
-                      {selectedEvent.coordinatorEmail}
-                    </a>
+
+                  <div className="flex flex-wrap gap-4 text-slate-400 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin size={12} className="text-cyan-400" />
+                      <span className="font-medium">{selectedEvent.venueLabel}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Clock size={12} className="text-cyan-400" />
+                      <span className="font-medium">{selectedEvent.eventTimeLabel}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Phone size={14} className="text-slate-500" />
-                    <a href={`tel:${selectedEvent.coordinatorPhone.replace(/\s+/g, '')}`} className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
-                      {selectedEvent.coordinatorPhone}
-                    </a>
+                </div>
+
+                {/* Right Column — Rounds + Coordinator */}
+                <div className="space-y-4">
+                  {selectedEvent.rounds.length > 0 && (
+                    <div>
+                      <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-3">Rounds</h4>
+                      <div className="relative space-y-4 pl-7 border-l border-white/10 ml-1">
+                        {selectedEvent.rounds.map((round, i) => (
+                          <div key={i} className="relative">
+                            <div className="absolute -left-[33px] top-0 w-5 h-5 rounded-full bg-stone-900 border-2 border-cyan-400/60 flex items-center justify-center text-[8px] font-black text-cyan-400 z-10">
+                              {i + 1}
+                            </div>
+                            <div>
+                              <h5 className="font-black text-white text-xs tracking-wider uppercase">{round.title}</h5>
+                              <p className="text-[11px] text-slate-500 leading-relaxed font-medium">{round.desc}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="p-3 bg-white/[0.03] border border-white/5 rounded-xl">
+                    <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-2">Coordinator</h4>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <User size={12} className="text-slate-500" />
+                        <span className="text-white font-bold text-xs">{selectedEvent.coordinatorName}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Mail size={12} className="text-slate-500" />
+                        <a href={`mailto:${selectedEvent.coordinatorEmail}`} className="text-slate-400 text-xs hover:text-cyan-400 transition-colors">
+                          {selectedEvent.coordinatorEmail}
+                        </a>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Phone size={12} className="text-slate-500" />
+                        <a href={`tel:${selectedEvent.coordinatorPhone.replace(/\s+/g, '')}`} className="text-slate-400 text-xs hover:text-cyan-400 transition-colors">
+                          {selectedEvent.coordinatorPhone}
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 mt-5">
                 {brochureVisibility[selectedEvent.id] && (
-                  <button className="flex items-center justify-center gap-2 px-6 py-4 bg-white/5 border border-white/10 hover:border-cyan-400/40 text-white font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all">
-                    <Download size={14} />
+                  <button className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 border border-white/10 hover:border-cyan-400/40 text-white font-black text-[10px] tracking-widest uppercase rounded-xl transition-all">
+                    <Download size={13} />
                     BROCHURE
                   </button>
                 )}
@@ -394,14 +405,14 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
                     onRegister(selectedEvent.id);
                   }}
                   disabled={!(config.registration.isOpen && selectedEvent.isRegistrationOpen)}
-                  className={`flex-1 py-4 font-black text-[11px] tracking-widest uppercase rounded-2xl transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-3 font-black text-[10px] tracking-widest uppercase rounded-xl transition-all flex items-center justify-center gap-2 ${
                     config.registration.isOpen && selectedEvent.isRegistrationOpen
-                      ? 'bg-[#06b6d4] hover:bg-white text-black shadow-xl shadow-[#06b6d4]/10'
+                      ? 'bg-[#06b6d4] hover:bg-white text-black shadow-lg shadow-[#06b6d4]/10'
                       : 'bg-white/10 text-slate-500 cursor-not-allowed'
                   }`}
                 >
                   {config.registration.isOpen && selectedEvent.isRegistrationOpen ? 'REGISTER NOW' : 'REGISTRATION CLOSED'}
-                  <ChevronRight size={14} />
+                  <ChevronRight size={13} />
                 </button>
               </div>
 
