@@ -161,7 +161,7 @@ export const Hero: React.FC = () => {
               {config.hero.institution} — {config.hero.organizingLabel}
             </span>
 
-            <h1 className="font-futuristic text-5xl md:text-6xl lg:text-7xl tracking-tight leading-none font-black italic text-white drop-shadow-2xl whitespace-nowrap px-4">
+            <h1 className="font-futuristic text-3xl md:text-6xl lg:text-7xl tracking-tight leading-none font-black italic text-white drop-shadow-2xl whitespace-nowrap px-4">
 
               {config.hero.mainTitlePart1}
 
@@ -190,35 +190,36 @@ export const Hero: React.FC = () => {
         </motion.p>
 
         {/* Countdown */}
-        <Countdown targetDate={config.hero.countdownDate} />
+        <div className="mt-5 mb-4 px-4 py-3 rounded-lg">
+          <Countdown targetDate={config.hero.countdownDate} />
+        </div>
 
-        {/* Button */}
+        {/* Action Button - Scaled Up */}
         <motion.button
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
           onClick={() => {
-            const targetId = isRegistrationOpen
-              ? "events-section"
-              : "site-notice";
-
-            document.getElementById(targetId)?.scrollIntoView({
-              behavior: "smooth",
-            });
+            const targetId = isRegistrationOpen ? "events-section" : "site-notice";
+            document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="mt-4 group relative px-10 py-3 md:px-12 md:py-4 border font-bold uppercase tracking-[0.3em] text-[10px] md:text-[11px] rounded-full overflow-hidden transition-all duration-300 backdrop-blur-md"
+          className="mt-6 group relative px-12 py-4 md:px-16 md:py-6 border-2 font-black uppercase tracking-[0.4em] text-[11px] md:text-[14px] rounded-full overflow-hidden transition-all duration-300 backdrop-blur-xl"
           style={{
-            borderColor: "rgba(0,251,255,0.6)",
+            borderColor: "rgba(0,251,255,0.7)",
             color: "#ffffff",
-            boxShadow: "0 0 28px rgba(0,251,255,0.28)",
+            boxShadow: "0 0 35px rgba(0,251,255,0.3)",
           }}
         >
+          {/* Animated Background Fill */}
           <div
-            className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-            style={{ background: "#006466" }}
+            className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+            style={{ background: "linear-gradient(90deg, #006466, #0b3d3e)" }}
           />
 
-          <span className="relative z-10 group-hover:text-white">
+          {/* Button Shine Effect */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:translate-x-full" />
+
+          <span className="relative z-10 group-hover:text-white drop-shadow-md">
             {isRegistrationOpen ? config.hero.buttonText : "VIEW UPDATE"}
           </span>
         </motion.button>
