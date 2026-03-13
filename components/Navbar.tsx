@@ -8,7 +8,7 @@ import { Sidebar } from "./Sidebar";
 const TechnoLogo = () => {
   return (
     <motion.div
-      className="relative w-10 h-10 md:w-12 md:h-12 flex items-center justify-center"
+      className="relative w-8 h-8 md:w-12 md:h-12 flex items-center justify-center"
       whileHover="hover"
       initial="initial"
     >
@@ -40,9 +40,7 @@ const TechnoLogo = () => {
           strokeWidth="10"
           strokeLinecap="round"
           className="text-amber-500"
-          variants={{
-            hover: { scale: 1.1 },
-          }}
+          variants={{ hover: { scale: 1.1 } }}
         />
 
         <motion.circle
@@ -88,26 +86,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
   };
 
   const handleRegisterClick = () => {
-    if (!config.registration.isOpen) {
-      if (currentView !== 'home') {
-        setView('home');
-        setTimeout(() => {
-          document.getElementById('site-notice')?.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
-      } else {
-        document.getElementById('site-notice')?.scrollIntoView({ behavior: 'smooth' });
-      }
-      return;
-    }
+    const target = config.registration.isOpen
+      ? "events-section"
+      : "site-notice";
 
-    if (currentView !== 'home') {
-      setView('home');
-      setTimeout(() => {
-        document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
-      }, 150);
-    } else {
-      document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleSidebarNavigate = (view: AppView, section?: string) => {
@@ -137,40 +120,40 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 px-4 md:px-10 flex justify-between items-center transition-all duration-500 ${
           scrolled
-            ? "h-16 md:h-20 bg-black/50 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.7)]"
-            : "h-20 md:h-24 bg-transparent"
+            ? "h-14 md:h-20 bg-black/50 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.7)]"
+            : "h-16 md:h-24 bg-transparent"
         }`}
       >
         {/* LEFT SIDE */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
 
+          {/* MOBILE MENU BUTTON */}
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="md:hidden p-2 text-slate-400 hover:text-white"
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition"
           >
-            <Menu size={24} />
+            <Menu size={22} />
           </button>
 
+          {/* LOGO + TITLE */}
           <motion.div
-            className="flex items-center gap-4 cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group"
             onClick={handleHomeClick}
-            whileHover="hover"
+            whileHover={{ scale: 1.03 }}
           >
             <TechnoLogo />
 
             <div className="flex flex-col">
 
-              <span className="font-futuristic text-lg md:text-3xl tracking-tight font-black italic text-white group-hover:text-amber-400 transition-colors">
-                {config.hero.mainTitlePart1}
+              <span className="font-futuristic whitespace-nowrap text-base md:text-3xl tracking-tight font-black italic text-white group-hover:text-amber-400 transition-colors">
+                TECHNOFEST
                 <span className="ml-1 text-amber-400 group-hover:text-white">
-                  {config.hero.mainTitlePart2}
+                  2026
                 </span>
               </span>
 
-              <span className="text-[7px] md:text-[9px] font-black text-amber-400/90 uppercase tracking-[0.25em] italic">
-                {config.hero.institution.length > 30
-                  ? config.hero.institution.split(' ').slice(0, 4).join(' ')
-                  : config.hero.institution}
+              <span className="hidden md:block text-[9px] font-black text-amber-400/90 uppercase tracking-[0.25em] italic">
+                ICEM TECHNOLOGICAL FEST
               </span>
 
             </div>
@@ -178,8 +161,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex gap-6 md:gap-10 items-center text-[10px] font-black tracking-[0.2em]">
+        <div className="flex gap-3 md:gap-10 items-center text-[10px] font-black tracking-[0.2em]">
 
+          {/* HOME */}
           <button
             onClick={handleHomeClick}
             className={`hidden md:flex items-center gap-2 transition-colors ${
@@ -192,6 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             HOME
           </button>
 
+          {/* ABOUT */}
           <button
             onClick={handleAboutClick}
             className={`hidden md:flex items-center gap-2 transition-colors ${
@@ -209,13 +194,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRegisterClick}
-            className={`flex items-center gap-3 px-6 md:px-8 py-3 rounded-xl font-black text-[11px] transition-all border ${
+            className={`flex items-center gap-2 px-3 md:px-8 py-2 md:py-3 rounded-xl font-black text-[11px] transition-all border ${
               config.registration.isOpen
                 ? "border-cyan-400/40 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/25 shadow-[0_0_25px_rgba(0,255,255,0.25)]"
                 : "border-red-400/40 bg-red-500/10 text-red-300"
             }`}
           >
-            <Zap size={16} className="group-hover:animate-pulse" />
+            <Zap size={14} />
 
             <span className="hidden md:inline">
               {config.registration.isOpen ? "REGISTER" : "REG CLOSED"}
