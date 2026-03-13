@@ -1,20 +1,26 @@
 
 export enum Department {
-  COMPS = 'Computer Engineering',
-  IT = 'Information Technology',
-  AIDS = 'AI & Data Science',
-  MECH = 'Mechanical / E&TC',
-  CIVIL = 'Civil Engineering',
-  BCA = 'BCA / BCS'
+  FIRST_YEAR = 'First-Year',
+  COMPS = 'Computer Dept.',
+  AIDS = 'AIDS Dept.',
+  IT = 'IT Dept.',
+  CIVIL = 'Civil Dept.',
+  MECH = 'Mech Dept.',
+  ENTC = 'ENTC Dept.',
+  MCA_BCA = 'MCA/BCA Dept.',
+  MBA = 'MBA Dept. (IGSB+ICEM)'
 }
 
 export enum EventID {
-  VAC = 'VAC',
-  CODEVERSE = 'CODEVERSE',
-  AGENTS = 'AGENTS',
-  ROBO = 'ROBO',
+  CHAKRAVYUH = 'CHAKRAVYUH',
+  NEUROAVATAR = 'NEUROAVATAR',
+  DATA_DASH = 'DATA_DASH',
+  CYBER_SHIELD = 'CYBER_SHIELD',
   BRIDGE = 'BRIDGE',
-  VIBE = 'VIBE'
+  FAST_FURIOUS = 'FAST_FURIOUS',
+  CIRCUIT_CRAFTERS = 'CIRCUIT_CRAFTERS',
+  WEB_WIZARDS = 'WEB_WIZARDS',
+  LAUNCHPAD = 'LAUNCHPAD'
 }
 
 export type AppView = 'home' | 'register' | 'about';

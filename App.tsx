@@ -1,28 +1,28 @@
 
+import '@fontsource/manrope/400.css';
+import '@fontsource/manrope/700.css';
 import '@fontsource/orbitron/400.css';
 import '@fontsource/orbitron/700.css';
 import '@fontsource/orbitron/900.css';
-import '@fontsource/manrope/400.css';
-import '@fontsource/manrope/700.css';
 
-import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
-import { Navbar } from './components/Navbar';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
+import { BackgroundEffect } from './components/BackgroundEffect';
+import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { Marquee } from './components/Marquee';
+import { Navbar } from './components/Navbar';
 import { SocialFeed } from './components/SocialFeed';
-import { Footer } from './components/Footer';
-import { BackgroundEffect } from './components/BackgroundEffect';
 
-import { BackgroundMusic } from './components/BackgroundMusic';
-import { AppView, Registration } from './types';
-import { CheckCircle2, X, Loader2 } from 'lucide-react';
-import { useSiteConfig } from './contexts/useSiteConfig';
+
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle2, Loader2, X } from 'lucide-react';
 import { SiteAnnouncement } from './components/SiteAnnouncement';
+import { useSiteConfig } from './contexts/useSiteConfig';
+import { AppView, Registration } from './types';
 
 const EventCatalog = lazy(() => import('./components/EventCatalog').then(m => ({ default: m.EventCatalog })));
 const RegistrationForm = lazy(() => import('./components/RegistrationForm').then(m => ({ default: m.RegistrationForm })));
 const AboutPage = lazy(() => import('./components/AboutPage').then(m => ({ default: m.AboutPage })));
-import { motion, AnimatePresence } from 'framer-motion';
 
 const REGISTRATIONS_STORAGE_KEY = 'nexus_regs';
 const SUCCESS_TOAST_TIMEOUT_MS = 5000;
@@ -58,7 +58,7 @@ export default function App() {
   const onRegistrationSuccess = (reg: Registration, toastMessage?: string) => {
     const nextRegistrations = [...loadStoredRegistrations(), reg];
     localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(nextRegistrations));
-    
+
     setView('home');
     setSuccessToastMessage(toastMessage ?? DEFAULT_SUCCESS_TOAST_MESSAGE);
     setShowSuccessToast(true);
@@ -85,8 +85,8 @@ export default function App() {
     switch (view) {
       case 'register':
         return (
-          <RegistrationForm 
-            onSuccess={onRegistrationSuccess} 
+          <RegistrationForm
+            onSuccess={onRegistrationSuccess}
             initialEventId={selectedEventId}
           />
         );
@@ -121,13 +121,13 @@ export default function App() {
   return (
     <div className="min-h-screen relative text-slate-50 selection:bg-[#006466] selection:text-white bg-[#0a0a12]">
       <BackgroundEffect />
-      
-      <Navbar 
-        currentView={view} 
-        setView={setView} 
+
+      <Navbar
+        currentView={view}
+        setView={setView}
       />
 
-      <BackgroundMusic />
+
 
       <main className="relative z-10 pt-20 md:pt-24 min-h-[80vh]">
         <SiteAnnouncement />
@@ -140,7 +140,7 @@ export default function App() {
 
       <AnimatePresence>
         {showSuccessToast && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}

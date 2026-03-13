@@ -1,22 +1,21 @@
+import { AnimatePresence, motion, Variants } from "framer-motion";
+import {
+    Calendar,
+    ChevronRight,
+    Clock,
+    Download,
+    Mail,
+    MapPin,
+    Phone,
+    Trophy,
+    User,
+    Users,
+    X,
+    Zap
+} from "lucide-react";
 import React, { useState } from "react";
 import { useSiteConfig } from "../contexts/useSiteConfig";
 import { EventConfig } from "../types";
-import {
-  Trophy,
-  Users,
-  X,
-  Zap,
-  Calendar,
-  Target,
-  Shield,
-  Clock,
-  MapPin,
-  ChevronRight,
-  Mail,
-  Phone,
-  Download
-} from "lucide-react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
 
 /* ---------------- ANIMATIONS ---------------- */
 
@@ -252,7 +251,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
 
       </motion.div>
 
-      {/* MODAL */}
+      {/* MODAL — Enriched with full event details */}
 
       <AnimatePresence>
         {selectedEvent && (
@@ -260,7 +259,8 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-8"
+            onClick={() => setSelectedEvent(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-4 md:p-8"
           >
 
             <motion.div
@@ -268,23 +268,142 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 140, damping: 20 }}
-              className="glass max-w-4xl w-full rounded-[3rem] border border-white/10 p-10 relative"
+              onClick={(e) => e.stopPropagation()}
+              className="glass max-w-4xl w-full rounded-[3rem] border border-white/10 p-6 md:p-10 relative max-h-[90vh] overflow-y-auto scrollbar-hide"
             >
 
               <button
                 onClick={() => setSelectedEvent(null)}
-                className="absolute top-8 right-8 p-3 text-slate-500 hover:text-white"
+                className="absolute top-6 right-6 md:top-8 md:right-8 p-3 text-slate-500 hover:text-white z-10"
               >
                 <X size={24} />
               </button>
 
-              <h2 className="text-5xl font-futuristic font-black uppercase text-white mb-6">
-                {selectedEvent.name}
-              </h2>
+              {/* Event Title & Badge */}
+              <div className="mb-8">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="px-3 py-1 bg-cyan-400/10 border border-cyan-400/30 rounded-full text-[10px] font-black text-cyan-400 uppercase tracking-widest">
+                    {selectedEvent.department}
+                  </span>
+                  <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em]">
+                    SECTOR_{selectedEvent.id}
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-5xl font-futuristic font-black uppercase text-white leading-tight">
+                  {selectedEvent.name}
+                </h2>
+                <p className="text-amber-400 font-bold text-sm mt-2 tracking-wide">
+                  {selectedEvent.tagline}
+                </p>
+              </div>
 
-              <p className="text-slate-400 mb-6">{selectedEvent.description}</p>
+              <p className="text-slate-400 mb-8 leading-relaxed">{selectedEvent.description}</p>
 
-              <EventRulesList rules={selectedEvent.rules} />
+              {/* Key Info Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-cyan-400">
+                    <Trophy size={14} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Prize Pool</span>
+                  </div>
+                  <p className="text-white font-black text-lg">{selectedEvent.prizePool}</p>
+                </div>
+                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-cyan-400">
+                    <Users size={14} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Team Size</span>
+                  </div>
+                  <p className="text-white font-black text-lg">{selectedEvent.minTeam}–{selectedEvent.maxTeam}</p>
+                </div>
+                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-cyan-400">
+                    <Zap size={14} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Entry Fee</span>
+                  </div>
+                  <p className="text-white font-black text-lg">{selectedEvent.fee === 0 ? 'FREE' : `₹${selectedEvent.fee}`}</p>
+                </div>
+                <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-cyan-400">
+                    <Calendar size={14} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">Date</span>
+                  </div>
+                  <p className="text-white font-black text-sm">{selectedEvent.eventDateLabel}</p>
+                </div>
+              </div>
+
+              {/* Venue & Time */}
+              <div className="flex flex-wrap gap-6 mb-8 text-slate-400 text-sm">
+                <div className="flex items-center gap-2">
+                  <MapPin size={14} className="text-cyan-400" />
+                  <span className="font-medium">{selectedEvent.venueLabel}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock size={14} className="text-cyan-400" />
+                  <span className="font-medium">{selectedEvent.eventTimeLabel}</span>
+                </div>
+              </div>
+
+              {/* Rules */}
+              <div className="mb-8">
+                <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4">Protocols & Rules</h4>
+                <EventRulesList rules={selectedEvent.rules} />
+              </div>
+
+              {/* Rounds Timeline */}
+              {selectedEvent.rounds.length > 0 && (
+                <div className="mb-8">
+                  <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-6">Competition Rounds</h4>
+                  <EventRoundsTimeline rounds={selectedEvent.rounds} />
+                </div>
+              )}
+
+              {/* Coordinator */}
+              <div className="mb-8 p-5 bg-white/[0.03] border border-white/5 rounded-2xl">
+                <h4 className="text-[11px] font-black text-cyan-400 uppercase tracking-[0.4em] mb-4">Coordinator</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <User size={14} className="text-slate-500" />
+                    <span className="text-white font-bold text-sm">{selectedEvent.coordinatorName}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Mail size={14} className="text-slate-500" />
+                    <a href={`mailto:${selectedEvent.coordinatorEmail}`} className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
+                      {selectedEvent.coordinatorEmail}
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone size={14} className="text-slate-500" />
+                    <a href={`tel:${selectedEvent.coordinatorPhone.replace(/\s+/g, '')}`} className="text-slate-400 text-sm hover:text-cyan-400 transition-colors">
+                      {selectedEvent.coordinatorPhone}
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                {brochureVisibility[selectedEvent.id] && (
+                  <button className="flex items-center justify-center gap-2 px-6 py-4 bg-white/5 border border-white/10 hover:border-cyan-400/40 text-white font-black text-[10px] tracking-widest uppercase rounded-2xl transition-all">
+                    <Download size={14} />
+                    BROCHURE
+                  </button>
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedEvent(null);
+                    onRegister(selectedEvent.id);
+                  }}
+                  disabled={!(config.registration.isOpen && selectedEvent.isRegistrationOpen)}
+                  className={`flex-1 py-4 font-black text-[11px] tracking-widest uppercase rounded-2xl transition-all flex items-center justify-center gap-2 ${
+                    config.registration.isOpen && selectedEvent.isRegistrationOpen
+                      ? 'bg-[#06b6d4] hover:bg-white text-black shadow-xl shadow-[#06b6d4]/10'
+                      : 'bg-white/10 text-slate-500 cursor-not-allowed'
+                  }`}
+                >
+                  {config.registration.isOpen && selectedEvent.isRegistrationOpen ? 'REGISTER NOW' : 'REGISTRATION CLOSED'}
+                  <ChevronRight size={14} />
+                </button>
+              </div>
 
             </motion.div>
 

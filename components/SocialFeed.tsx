@@ -1,12 +1,12 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Heart, MessageCircle, Share2 } from 'lucide-react';
+import { Heart, Instagram, MessageCircle, Share2, Twitter } from 'lucide-react';
+import React from 'react';
 
 const POSTS = [
   {
     id: 1,
-    user: '@cyber_kavi',
-    msg: 'Just registered for #CodeVerse at #TechnoFest2026! \uD83D\uDE80 The logic problems look insane. Team Matrix ready for battle!',
+    user: '@tech_insider',
+    msg: 'Just registered our team for #Chakravyuh at #TechnoFest2026! 🚀 Three rounds of pure problem-solving action. Team Drona Gate, ready to conquer!',
     type: 'Twitter',
     likes: 124,
     comments: 12,
@@ -14,8 +14,8 @@ const POSTS = [
   },
   {
     id: 2,
-    user: 'tech_aura',
-    msg: 'Bridge-It prep is in full swing! \uD83C\uDF09 Testing structural integrity with 10kg loads. See you at ICEM on March 14th!',
+    user: 'circuit_vibes',
+    msg: 'Bridge Making event prep is in full swing! 🌉 Testing structural integrity with ice cream sticks. See you at ICEM on March 27th!',
     type: 'Instagram',
     likes: 450,
     comments: 34,
@@ -23,8 +23,8 @@ const POSTS = [
   },
   {
     id: 3,
-    user: '@ai_junkie',
-    msg: 'Agentic AI rounds are going to be a game changer. Building a swarm that solves real-world logistics. \uD83D\uDD25 #TechnoFestInnovation',
+    user: '@neuro_dev',
+    msg: 'NeuroAvatar Arena is going to be insane. Our team already has the MVP ready — Digital Persona theme is right up our alley. 🔥 #TechnoFest2026',
     type: 'Twitter',
     likes: 89,
     comments: 5,
@@ -32,8 +32,8 @@ const POSTS = [
   },
   {
     id: 4,
-    user: '@pune_coder',
-    msg: "The TechnoFest arena is looking futuristic! Can't wait to see the RoboVerse battles. \uD83E\uDD16\uD83D\uDD25 #ICEMTechnoFest",
+    user: '@pune_hacker',
+    msg: "Cyber Shield Challenge — ethical hacking competition at ICEM! Can't wait to test our defensive strategies. 🛡️🔥 #ICEMTechnoFest",
     type: 'Twitter',
     likes: 210,
     comments: 18,
@@ -41,8 +41,8 @@ const POSTS = [
   },
   {
     id: 5,
-    user: 'design_node',
-    msg: 'Vibe Coding is my new favorite genre. UI design with live rhythm? Count me in! \uD83C\uDFA8\uD83C\uDFB9',
+    user: 'data_craft',
+    msg: 'Data Dash is calling all data enthusiasts! Analysis + visualization = the ultimate showdown. 📊🎨 #TechnoFest2026',
     type: 'Instagram',
     likes: 567,
     comments: 42,
@@ -87,14 +87,14 @@ export const SocialFeed: React.FC = () => {
       </div>
 
       <div className="relative w-full overflow-hidden py-10 group">
-        <div className="absolute top-0 left-0 w-32 md:w-64 h-full bg-gradient-to-r from-[#0c0a09] to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute top-0 right-0 w-32 md:w-64 h-full bg-gradient-to-l from-[#0c0a09] to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute top-0 left-0 w-32 md:w-64 h-full bg-gradient-to-r from-[#0a0a12] to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-32 md:w-64 h-full bg-gradient-to-l from-[#0a0a12] to-transparent z-10 pointer-events-none"></div>
 
         <div className="flex animate-scroll-social group-hover:pause gap-8 w-max px-4">
           {scrollingPosts.map((post, i) => (
             <div
               key={`${post.id}-${i}`}
-              className="w-[320px] md:w-[400px] shrink-0 glass p-8 rounded-[2.5rem] border border-white/5 space-y-6 group/card hover:border-amber-500/40 transition-all relative overflow-hidden bg-stone-900/40 backdrop-blur-xl"
+              className="w-[320px] md:w-[400px] shrink-0 glass p-8 rounded-[2.5rem] border border-white/5 space-y-6 group/card hover:border-amber-500/40 transition-all relative overflow-hidden bg-[#0a0a12]/80 backdrop-blur-xl"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${post.color} opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}></div>
 

@@ -1,19 +1,19 @@
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Home, 
-  Terminal, 
-  Cpu, 
-  Zap, 
-  Layers, 
-  Shield, 
-  Info,
-  MessageSquare,
-  X,
-  ChevronRight,
-  ShieldCheck
+    ChevronRight,
+    Cpu,
+    Home,
+    Info,
+    Layers,
+    MessageSquare,
+    Shield,
+    ShieldCheck,
+    Terminal,
+    X,
+    Zap
 } from 'lucide-react';
+import React from 'react';
 import { AppView, Department } from '../types';
 
 interface SidebarProps {
@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onNavigate })
   const deptItems = Object.entries(Department).map(([key, value]) => ({
     name: value,
     short: key,
-    icon: key === 'COMPS' ? Cpu : key === 'MECH' ? Layers : Shield
+    icon: key === 'COMPS' || key === 'IT' ? Cpu : key === 'MECH' || key === 'ENTC' ? Layers : Shield
   }));
 
   return (
@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, onNavigate })
                   <span className="text-[8px] font-bold text-amber-500/50 uppercase tracking-[0.3em]">System Navigation</span>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={onClose}
                 className="p-2 hover:bg-white/5 rounded-xl transition-colors text-slate-400 hover:text-white"
               >

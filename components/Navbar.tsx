@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Home, Zap, Info, Menu } from "lucide-react";
 import { motion } from "framer-motion";
-import { Sidebar } from "./Sidebar";
-import { AppView } from "../types";
+import { Home, Info, Menu, Zap } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useSiteConfig } from "../contexts/useSiteConfig";
+import { AppView } from "../types";
+import { Sidebar } from "./Sidebar";
 
 const TechnoLogo = () => {
   return (
@@ -88,11 +88,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
   };
 
   const handleRegisterClick = () => {
-    const target = config.registration.isOpen
-      ? "events-section"
-      : "site-notice";
+    if (!config.registration.isOpen) {
+      if (currentView !== 'home') {
+        setView('home');
+        setTimeout(() => {
+          document.getElementById('site-notice')?.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      } else {
+        document.getElementById('site-notice')?.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
 
-    document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+    if (currentView !== 'home') {
+      setView('home');
+      setTimeout(() => {
+        document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    } else {
+      document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleSidebarNavigate = (view: AppView, section?: string) => {
@@ -146,14 +161,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             <div className="flex flex-col">
 
               <span className="font-futuristic text-lg md:text-3xl tracking-tight font-black italic text-white group-hover:text-amber-400 transition-colors">
-                TECHNOFEST
+                {config.hero.mainTitlePart1}
                 <span className="ml-1 text-amber-400 group-hover:text-white">
-                  2026
+                  {config.hero.mainTitlePart2}
                 </span>
               </span>
 
               <span className="text-[7px] md:text-[9px] font-black text-amber-400/90 uppercase tracking-[0.25em] italic">
-                ICEM TECHNOLOGICAL FEST
+                {config.hero.institution.length > 30
+                  ? config.hero.institution.split(' ').slice(0, 4).join(' ')
+                  : config.hero.institution}
               </span>
 
             </div>
