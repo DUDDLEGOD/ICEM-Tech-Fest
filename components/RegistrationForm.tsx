@@ -14,6 +14,7 @@ import {
   Users as UsersIcon
 } from 'lucide-react';
 
+import { QRCodeSVG } from 'qrcode.react';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSiteConfig } from '../contexts/useSiteConfig';
 import { submitRegistration } from '../services/registrationApi';
@@ -648,24 +649,50 @@ const validateMembers = () => {
                 </div>
 
                 <div className="flex flex-col items-center justify-center space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10">
-                  {/* Bank Details Card */}
+                  {/* Bank Details & QR Card */}
                   {bankAccountNo && bankIfsc ? (
-                    <div className="w-full space-y-4">
-                      <div className="text-center mb-4">
-                        <span className="text-[10px] font-black text-pink-400 uppercase tracking-widest">Bank Transfer Details (NEFT / IMPS)</span>
+                    <div className="w-full flex flex-col items-center space-y-6">
+                      
+                      {/* Scan to Pay */}
+                      <div className="flex flex-col items-center space-y-3">
+                        <span className="text-[10px] font-black text-pink-400 uppercase tracking-widest text-center">
+                          Scan to Pay via UPI
+                        </span>
+                        <div className="p-4 bg-white rounded-2xl shadow-[0_0_30px_rgba(236,72,153,0.15)] flex items-center justify-center">
+                          <QRCodeSVG
+                            value={`upi://pay?pa=${bankAccountNo}@${bankIfsc}.ifsc.npci&pn=${encodeURIComponent(payeeName)}&am=${numericFee}&cu=INR`}
+                            size={160}
+                            bgColor="#ffffff"
+                            fgColor="#000000"
+                            level="M"
+                            includeMargin={false}
+                          />
+                        </div>
+                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest pt-2">
+                          Accepts GPay, PhonePe, Paytm, etc.
+                        </span>
                       </div>
-                      <div className="grid grid-cols-1 gap-3">
-                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account Name</span>
-                          <span className="text-sm font-bold text-white tracking-wide">{payeeName}</span>
+
+                      <div className="w-full h-px bg-white/10" />
+
+                      {/* Manual Transfer Details */}
+                      <div className="w-full">
+                        <div className="text-center mb-4">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Or Transfer Manually (NEFT / IMPS)</span>
                         </div>
-                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account No.</span>
-                          <span className="text-sm font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankAccountNo}</span>
-                        </div>
-                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">IFSC Code</span>
-                          <span className="text-sm font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankIfsc}</span>
+                        <div className="grid grid-cols-1 gap-3">
+                          <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Name</span>
+                            <span className="text-xs font-bold text-white tracking-wide">{payeeName}</span>
+                          </div>
+                          <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account No.</span>
+                            <span className="text-xs font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankAccountNo}</span>
+                          </div>
+                          <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">IFSC Code</span>
+                            <span className="text-xs font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankIfsc}</span>
+                          </div>
                         </div>
                       </div>
                     </div>
