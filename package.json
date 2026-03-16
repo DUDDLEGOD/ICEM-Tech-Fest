@@ -10,7 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "test:email": "bun run server/test-email.ts"
+    "test:email": "bun run server/test-email.ts",
+    "export:sheets": "bun run scripts/export-to-sheets.ts"
   },
   "dependencies": {
     "@fontsource/manrope": "^5.2.8",
@@ -19,10 +20,13 @@
     "@react-three/fiber": "^9.5.0",
     "@supabase/supabase-js": "^2.98.0",
     "@types/multer": "^2.1.0",
+    "canvas": "^3.2.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "framer-motion": "^12.35.2",
+    "googleapis": "^171.4.0",
+    "jimp": "^0.22.12",
     "lucide-react": "0.463.0",
     "multer": "^2.1.1",
     "nodemailer": "^8.0.1",
@@ -33,7 +37,7 @@
     "three": "^0.183.2"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
+    "@types/node": "^25.5.0",
     "@vitejs/plugin-react": "^5.0.0",
     "concurrently": "^9.2.1",
     "typescript": "~5.8.2",

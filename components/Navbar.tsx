@@ -6,52 +6,58 @@ import { AppView } from "../types";
 import { Sidebar } from "./Sidebar";
 
 const TechnoLogo = () => {
+  const [logoSrc, setLogoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = '/fest-logo.png';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, img.width, img.height);
+      const data = imageData.data;
+
+      // Scan through image, key out dark blue and remove watermark
+      for (let y = 0; y < img.height; y++) {
+        for (let x = 0; x < img.width; x++) {
+          const idx = (y * img.width + x) * 4;
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
+          const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+
+          // Watermark is roughly bottom-right 15%
+          const inWatermarkZone = x > img.width * 0.85 && y > img.height * 0.85;
+
+          // Drop pixel if it's the dark background (luminance check) or in the watermark zone
+          if (inWatermarkZone || luminance <= 40) {
+            data[idx + 3] = 0; // set alpha to 0 for transparency
+          }
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      setLogoSrc(canvas.toDataURL('image/png'));
+    };
+  }, []);
+
   return (
     <motion.div
-      className="relative w-8 h-8 md:w-12 md:h-12 flex items-center justify-center"
-      whileHover="hover"
+      className="relative w-10 h-10 md:w-14 md:h-14 flex items-center justify-center drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+      whileHover={{ scale: 1.1 }}
       initial="initial"
     >
-      <motion.div
-        className="absolute inset-0 bg-amber-400/30 blur-2xl rounded-full"
-        variants={{ hover: { scale: 1.6, opacity: 0.7 } }}
-      />
-
-      <svg
-        viewBox="0 0 100 100"
-        className="w-full h-full drop-shadow-[0_0_12px_rgba(255,180,0,0.6)]"
-      >
-        <motion.path
-          d="M50 5 L90 25 L90 75 L50 95 L10 75 L10 25 Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="4"
-          className="text-white/20"
-          variants={{
-            initial: { rotate: 0 },
-            hover: { rotate: 90, transition: { duration: 0.6 } },
-          }}
+      {logoSrc && (
+        <img
+          src={logoSrc}
+          alt="Technofest Logo"
+          className="w-full h-full object-contain"
         />
-
-        <motion.path
-          d="M30 35 H70 M50 35 V75"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="10"
-          strokeLinecap="round"
-          className="text-amber-500"
-          variants={{ hover: { scale: 1.1 } }}
-        />
-
-        <motion.circle
-          cx="50"
-          cy="5"
-          r="4"
-          className="fill-amber-500"
-          animate={{ opacity: [0.2, 1, 0.2] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-      </svg>
+      )}
     </motion.div>
   );
 };

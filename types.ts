@@ -50,6 +50,7 @@ export interface EventConfig {
   isRegistrationOpen: boolean;
   rules: string[];
   rounds: EventRound[];
+  imageUrl?: string;
 }
 
 export interface User {
@@ -124,6 +125,8 @@ export interface RegistrationSettings {
   closedMessage: string;
   paymentUpiIds?: string[];
   payeeName?: string;
+  bankAccountNo?: string;
+  bankIfsc?: string;
 }
 
 export interface SponsorConfig {

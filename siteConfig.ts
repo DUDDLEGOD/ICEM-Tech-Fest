@@ -448,6 +448,7 @@ const normalizeEvent = (value: unknown, fallback: EventConfig): EventConfig => {
     isRegistrationOpen: getBoolean(value.isRegistrationOpen, fallback.isRegistrationOpen),
     rules: getStringArray(value.rules, fallback.rules),
     rounds: normalizeRounds(value.rounds, fallback.rounds),
+    imageUrl: typeof value.imageUrl === 'string' ? value.imageUrl : fallback.imageUrl,
   };
 };
 
@@ -555,6 +556,8 @@ const normalizeRegistrationSettings = (value: unknown): RegistrationSettings => 
     closedMessage: getString(value.closedMessage, fallback.closedMessage),
     paymentUpiIds,
     payeeName: getString(value.payeeName, fallback.payeeName),
+    bankAccountNo: typeof value.bankAccountNo === 'string' ? value.bankAccountNo : fallback.bankAccountNo,
+    bankIfsc: typeof value.bankIfsc === 'string' ? value.bankIfsc : fallback.bankIfsc,
   };
 };
 

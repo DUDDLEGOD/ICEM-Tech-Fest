@@ -13,7 +13,7 @@ import {
   User as UserIcon,
   Users as UsersIcon
 } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
+
 import React, { useEffect, useState, useRef } from 'react';
 import { useSiteConfig } from '../contexts/useSiteConfig';
 import { submitRegistration } from '../services/registrationApi';
@@ -85,14 +85,7 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
 
   const currentEvent = config.events.find((event) => event.id === selectedEventId) ?? config.events[0];
 
-  const [paymentUpiId, setPaymentUpiId] = useState('technofest@okhdfcbank');
 
-  useEffect(() => {
-    const ids = config.registration.paymentUpiIds || ['technofest@okhdfcbank'];
-    if (ids.length > 0) {
-      setPaymentUpiId(ids[Math.floor(Math.random() * ids.length)]);
-    }
-  }, [config.registration.paymentUpiIds]);
   useEffect(() => {
 
   const scrollToForm = () => {
@@ -632,9 +625,9 @@ const validateMembers = () => {
 
           {step === 'payment' && (() => {
             const numericFee = typeof currentEvent.fee === 'number' ? currentEvent.fee : parseInt(String(currentEvent.fee).replace(/[^0-9]/g, ''), 10) || 0;
-            const encodedPayeeAddress = encodeURIComponent(paymentUpiId);
-            const encodedPayeeName = encodeURIComponent(config.registration.payeeName || 'TechnoFest 2026');
-            const upiUrl = `upi://pay?pa=${encodedPayeeAddress}&pn=${encodedPayeeName}&am=${numericFee}&cu=INR`;
+            const bankAccountNo = config.registration.bankAccountNo;
+            const bankIfsc = config.registration.bankIfsc;
+            const payeeName = config.registration.payeeName || 'TechnoFest 2026';
 
             return (
               <motion.div
@@ -650,25 +643,41 @@ const validateMembers = () => {
                   </div>
                   <div>
                     <h4 className="font-futuristic text-xl text-white uppercase tracking-tighter">Registration Fee</h4>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Complete payment via UPI</p>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Complete payment via Bank Transfer (NEFT / IMPS)</p>
                   </div>
                 </div>
 
                 <div className="flex flex-col items-center justify-center space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10">
-                  <div className="p-4 bg-white rounded-2xl">
-                    <QRCodeSVG value={upiUrl} size={160} />
-                  </div>
-                  <a
-  href={upiUrl}
-  className="px-6 py-3 bg-pink-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-pink-400 transition"
->
-  OPEN UPI APP
-</a>
+                  {/* Bank Details Card */}
+                  {bankAccountNo && bankIfsc ? (
+                    <div className="w-full space-y-4">
+                      <div className="text-center mb-4">
+                        <span className="text-[10px] font-black text-pink-400 uppercase tracking-widest">Bank Transfer Details (NEFT / IMPS)</span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account Name</span>
+                          <span className="text-sm font-bold text-white tracking-wide">{payeeName}</span>
+                        </div>
+                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account No.</span>
+                          <span className="text-sm font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankAccountNo}</span>
+                        </div>
+                        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">IFSC Code</span>
+                          <span className="text-sm font-bold text-amber-400 tracking-[0.2em] font-mono select-all">{bankIfsc}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-slate-400 text-center">Bank details are not configured. Please contact the organizers for payment information.</p>
+                  )}
+
                   <p className="text-sm font-bold text-white uppercase tracking-widest">
                     Amount Due: <span className="text-pink-500">₹{numericFee}</span>
                   </p>
                   <p className="text-[10px] text-slate-400 text-center max-w-sm leading-relaxed">
-                    Scan the QR code with any UPI app (GPay, PhonePe, Paytm) to complete the payment. Organizers will manually verify your transaction.
+                    Transfer ₹{numericFee} using the bank details above via NEFT or IMPS. Organizers will manually verify your transaction.
                   </p>
 
                   <label className="flex items-center gap-3 mt-4 cursor-pointer group">

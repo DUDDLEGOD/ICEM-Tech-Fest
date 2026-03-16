@@ -35,7 +35,10 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "closedMessage": "Registrations are currently paused. Please check back later or contact the organizing team.",
   "paymentUpiIds": [
     "ashishpdng@okicici"
-  ]
+  ],
+  "payeeName": "TechnoFest 2026",
+  "bankAccountNo": "201025452641",
+  "bankIfsc": "INDB0000999"
 }
 ```
 
@@ -276,6 +279,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9819298069",
     "isRegistrationOpen": true,
+    "imageUrl": "/bridge-event.png",
     "rules": [
       "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
       "Participant-Supplied: Members must bring their own Hot Glue Gun",
