@@ -6,7 +6,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ## Hero
 ```json hero
 {
-  "institution": "INDIRA COLLEGE OF ENGINEERING & MANAGEMENT AND INDIRA GLOBAL SCHOOL OF BUSINESS",
+  "institution": "INDIRA COLLEGE OF ENGINEERING & MANAGEMENT, INDIRA GLOBAL SCHOOL OF BUSINESS",
   "organizingLabel": "Organizing",
   "subLabel": "The Largest Gathering of Pune's Tech Innovators",
   "mainTitlePart1": "TECHNOFEST",
