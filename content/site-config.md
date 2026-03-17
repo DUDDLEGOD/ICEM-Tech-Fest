@@ -1,3 +1,4 @@
+````markdown
 # Static Site Config
 
 Edit the JSON blocks in this file, then rebuild/redeploy the site.
@@ -15,9 +16,10 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "buttonText": "INITIATE CONNECTION",
   "countdownDate": "2026-03-27T09:00:00"
 }
-```
+````
 
 ## Announcement
+
 ```json announcement
 {
   "enabled": false,
@@ -29,6 +31,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## Registration
+
 ```json registration
 {
   "isOpen": true,
@@ -43,16 +46,18 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## Sponsors
+
 ```json sponsors
 [
   {
-    "name": "LEMMA",
-    "logo": "https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774"
+    //"name": "LEMMA",
+    //"logo": "https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774"
   }
 ]
 ```
 
 ## Social Links
+
 ```json socialLinks
 {
   "instagram": "#",
@@ -62,6 +67,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## Contact
+
 ```json contact
 {
   "address": "Parandwadi, Pune, MH 410506",
@@ -73,6 +79,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## Brochure Visibility
+
 ```json brochureVisibility
 {
   "CHAKRAVYUH": false,
@@ -88,6 +95,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## About Page
+
 ```json about
 {
   "eventBadge": "Live Event Briefing",
@@ -132,6 +140,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 ```
 
 ## Events
+
 ```json events
 [
   {
@@ -144,7 +153,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "maxTeam": 5,
     "fee": 250,
     "requiresUpload": false,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
@@ -155,7 +164,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "rules": [
       "Team size: 3-5 MEMBERS",
       "Registration: 250 per team",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Prize Distribution: 1st - ₹15K, 2nd - ₹10K",
       "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
@@ -177,13 +186,13 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "id": "NEUROAVATAR",
     "name": "NeuroAvatar Arena",
     "tagline": "The 4-Hour Challenge",
-    "description": "An exclusive, fast-paced project showcase and refinement competition. Focused on the theme of \"Digital Avatar, Virtual Avatar, and Virtual Persona,\" this event requires teams to arrive with a ready-to-demonstrate MVP.",
+    "description": "An exclusive, fast-paced project showcase and refinement competition focused on Digital Avatar, Virtual Avatar, and Virtual Persona.",
     "department": "Computer Dept.",
     "minTeam": 3,
     "maxTeam": 5,
     "fee": 300,
     "requiresUpload": true,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
@@ -193,7 +202,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "isRegistrationOpen": true,
     "rules": [
       "Teams must arrive with a ready-to-demonstrate MVP",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
+      "Prize Distribution: 1st - ₹15K, 2nd - ₹10K",
       "Trophy for winner and runner-up; certificates for all participants"
     ],
     "rounds": [
@@ -204,225 +213,170 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     ]
   },
   {
-    "id": "DATA_DASH",
-    "name": "Data Dash",
-    "tagline": "Data analysis and visualization contest",
-    "description": "A high-level competition focused on deep data analysis and effective visualization techniques.",
+    "id": "ORCHESTRON",
+    "name": "Orchestron - Agentic AI",
+    "tagline": "Agentic AI Innovation Challenge",
+    "description": "Showcase AI systems capable of planning, reasoning, and solving real-world problems.",
     "department": "AIDS Dept.",
     "minTeam": 3,
     "maxTeam": 5,
     "fee": 250,
     "requiresUpload": true,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Organizing Team",
+    "coordinatorName": "Prof. Pallavi Chavan",
     "coordinatorEmail": "icem@indiraicem.ac.in",
-    "coordinatorPhone": "+91 88559 77815",
+    "coordinatorPhone": "+91 9175151731",
     "isRegistrationOpen": true,
     "rules": [
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
+      "Prize Distribution: 1st - ₹15K, 2nd - ₹10K"
     ],
     "rounds": [
       {
-        "title": "Data Challenge",
-        "desc": "Analyze provided datasets and build comprehensive visualizations."
+        "title": "Round 1",
+        "desc": "Project presentation with PPT or demo."
+      },
+      {
+        "title": "Round 2",
+        "desc": "Q&A and scenario-based evaluation."
       }
     ]
   },
   {
-    "id": "CYBER_SHIELD",
-    "name": "Cyber Shield Challenge",
-    "tagline": "The Ultimate Defensive Gauntlet",
-    "description": "A competition focused on cybersecurity, ethical hacking, and digital defense strategies.",
-    "department": "IT Dept",
+    "id": "CODEVERSE",
+    "name": "CodeVerse",
+    "tagline": "Programming Battle Arena",
+    "description": "Multi-round coding event including output prediction, DSA problems, and debugging.",
+    "department": "IT Dept.",
     "minTeam": 3,
-    "maxTeam": 5,
+    "maxTeam": 3,
     "fee": 250,
-    "requiresUpload": true,
-    "prizePool": "₹40,000",
+    "requiresUpload": false,
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Organizing Team",
+    "coordinatorName": "Prof. Ashwini Wankhede",
     "coordinatorEmail": "icem@indiraicem.ac.in",
-    "coordinatorPhone": "+91 88559 77815",
+    "coordinatorPhone": "+91 7066230348",
     "isRegistrationOpen": true,
     "rules": [
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
+      "Team size fixed at 3",
+      "Prize Distribution: 1st - ₹15K, 2nd - ₹10K"
     ],
     "rounds": [
       {
-        "title": "Security Challenge",
-        "desc": "Solve ethical hacking tasks and bypass security challenges."
+        "title": "Round 1",
+        "desc": "Predict the output"
+      },
+      {
+        "title": "Round 2",
+        "desc": "DSA problems"
+      },
+      {
+        "title": "Round 3",
+        "desc": "Debugging"
       }
     ]
   },
   {
     "id": "BRIDGE",
     "name": "The Gravity Game.... Bridge Making",
-    "tagline": "Structural Elegance & Strength",
-    "description": "A hands-on engineering competition designed to test structural design, load distribution, and material efficiency by constructing a model bridge.",
+    "tagline": "Structural Design Challenge",
+    "description": "Build a bridge using limited materials and test load capacity.",
     "department": "Civil Dept.",
     "minTeam": 2,
     "maxTeam": 5,
-    "fee": 500,
+    "fee": 250,
     "requiresUpload": false,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "09:30 AM - 03:30 PM",
     "venueLabel": "ICEM Campus",
     "coordinatorName": "Prof. Vijay Kumar Saini",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9819298069",
-    "isRegistrationOpen": true,
-    "imageUrl": "/bridge-event.png",
-    "rules": [
-      "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
-      "Participant-Supplied: Members must bring their own Hot Glue Gun",
-      "No electronic devices allowed",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Construction Phase",
-        "desc": "On-site bridge building for approximately 2 hours."
-      },
-      {
-        "title": "Load Test",
-        "desc": "Incremental weights added to the geometric center until failure."
-      }
-    ]
+    "isRegistrationOpen": true
   },
   {
-    "id": "FAST_FURIOUS",
-    "name": "Fast & Furious",
-    "tagline": "Mechanical Intuition & Memory",
-    "description": "A high-octane individual competition where participants identify and assemble mechanical systems blindfolded using touch and memory.",
+    "id": "BLIND_ASSEMBLY",
+    "name": "Blind Assembly",
+    "tagline": "Mechanical Intuition Test",
+    "description": "Identify and assemble components blindfolded using touch.",
     "department": "Mech Dept.",
     "minTeam": 2,
     "maxTeam": 2,
-    "fee": 0,
+    "fee": 250,
     "requiresUpload": false,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Prof. Pranali Knatake",
+    "coordinatorName": "Prof. Pranali Khatake",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 7083597073",
-    "isRegistrationOpen": true,
-    "rules": [
-      "Blindfold Protocol: Removing blindfold results in instant disqualification.",
-      "Hands-Only identification and assembly.",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Qualification",
-        "desc": "Initial heat to filter top performers."
-      },
-      {
-        "title": "Semi-Final",
-        "desc": "Advanced assembly tasks for qualifiers."
-      },
-      {
-        "title": "Final",
-        "desc": "Head-to-head race for the fastest correct assembly."
-      }
-    ]
+    "isRegistrationOpen": true
   },
   {
-    "id": "CIRCUIT_CRAFTERS",
-    "name": "Circuit Crafters",
-    "tagline": "Precision Hardware Design",
-    "description": "Challenge your ability to design and implement complex electronic circuits effectively.",
+    "id": "ROBONEX",
+    "name": "RoboNex",
+    "tagline": "Robotics Combat & Race",
+    "description": "Includes Robo Race and Robo Rumble events.",
     "department": "ENTC Dept.",
-    "minTeam": 3,
-    "maxTeam": 5,
+    "minTeam": 2,
+    "maxTeam": 4,
     "fee": 250,
     "requiresUpload": false,
-    "prizePool": "₹40,000",
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
     "coordinatorName": "Prof. Balu Tandale",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 8805048185",
-    "isRegistrationOpen": true,
-    "rules": [
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Circuit Implementation",
-        "desc": "Design, build, and test circuits based on provided challenges."
-      }
-    ]
+    "isRegistrationOpen": true
   },
   {
-    "id": "WEB_WIZARDS",
-    "name": "Web Wizards Challenge",
-    "tagline": "Full-Stack Design & Development",
-    "description": "Showcase your web development skills in this high-speed design and deployment competition.",
+    "id": "VIBEASTRA",
+    "name": "VibeAstra",
+    "tagline": "Creative Coding Experience",
+    "description": "Gamified coding event focused on logic and creativity.",
     "department": "MCA/BCA Dept.",
-    "minTeam": 3,
-    "maxTeam": 5,
+    "minTeam": 1,
+    "maxTeam": 1,
     "fee": 250,
-    "requiresUpload": true,
-    "prizePool": "₹40,000",
+    "requiresUpload": false,
+    "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Organizing Team",
+    "coordinatorName": "Dr. Dhanashree Patil",
     "coordinatorEmail": "icem@indiraicem.ac.in",
-    "coordinatorPhone": "+91 88559 77815",
-    "isRegistrationOpen": true,
-    "rules": [
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Web Development",
-        "desc": "Develop and design a functional website based on the given theme."
-      }
-    ]
+    "coordinatorPhone": "+91 7972308184",
+    "isRegistrationOpen": true
   },
   {
     "id": "LAUNCHPAD",
-    "name": "LaunchPad Business Plan Challenge",
-    "tagline": "The Entrepreneurial Pitch",
-    "description": "Present your innovative startup idea, develop a feasible business model, and showcase market potential.",
+    "name": "LaunchPad – Business Plan Challenge",
+    "tagline": "Startup Pitch Arena",
+    "description": "Present startup ideas and business models.",
     "department": "MBA Dept. (IGSB+ICEM)",
     "minTeam": 1,
     "maxTeam": 5,
     "fee": 500,
     "requiresUpload": true,
-    "prizePool": "₹40,000",
+    "prizePool": "₹15,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "Indira Global School of Business",
-    "coordinatorName": "Prof. Aditee Huparikar & Anirudha Thuse",
+    "coordinatorName": "Prof. Aditee Huparikar & Dr. Aniruddha Thuse",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9823459833 / 9850901315",
     "isRegistrationOpen": true,
     "rules": [
-      "Registration deadline: 23rd March 2026",
-      "Prize Distribution: 1st - ₹25K, 2nd - ₹10K, 3rd - ₹5K",
-      "Trophy for winner and runner-up; certificates for all participants"
-    ],
-    "rounds": [
-      {
-        "title": "Business Model Pitch",
-        "desc": "Present your innovative startup idea and financial viability."
-      }
+      "Prize Distribution: 1st - ₹7K, 2nd - ₹5K, 3rd - ₹3K"
     ]
   }
 ]
