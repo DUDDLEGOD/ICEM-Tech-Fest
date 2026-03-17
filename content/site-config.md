@@ -36,9 +36,6 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 {
   "isOpen": true,
   "closedMessage": "Registrations are currently paused. Please check back later or contact the organizing team.",
-  "paymentUpiIds": [
-    "ashishpdng@okicici"
-  ],
   "payeeName": "TechnoFest 2026",
   "bankAccountNo": "201025452641",
   "bankIfsc": "INDB0000999"

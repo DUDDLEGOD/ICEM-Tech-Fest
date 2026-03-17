@@ -553,7 +553,7 @@ const normalizeRegistrationSettings = (value: unknown): RegistrationSettings => 
   let paymentUpiIds = fallback.paymentUpiIds;
   if (Array.isArray(value.paymentUpiIds)) {
     const ids = value.paymentUpiIds.map(v => String(v).trim()).filter(Boolean);
-    if (ids.length > 0) paymentUpiIds = ids;
+    paymentUpiIds = ids.length > 0 ? ids : undefined;
   }
 
   return {
