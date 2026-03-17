@@ -357,10 +357,7 @@ const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
 };
 
 const DEFAULT_SPONSORS: SponsorConfig[] = [
-<<<<<<< HEAD
   
-=======
->>>>>>> 265321cd0a21643093f9774d6f9fad292b957dfb
 ];
 
 const DEFAULT_ABOUT_STATS: AboutStatConfig[] = [
