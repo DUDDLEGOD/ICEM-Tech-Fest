@@ -49,10 +49,6 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 
 ```json sponsors
 [
-  {
-    //"name": "LEMMA",
-    //"logo": "https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774"
-  }
 ]
 ```
 
