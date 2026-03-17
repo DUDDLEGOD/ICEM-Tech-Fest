@@ -143,7 +143,7 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="flex flex-col items-center gap-3 md:gap-4 mb-1 md:mb-2"
         >
-          <div className="relative w-16 h-16 md:w-24 md:h-24 rounded-full p-[2px] bg-gradient-to-tr from-teal-400 to-purple-500 shadow-[0_0_50px_rgba(6,182,212,0.25)]">
+          <div className="relative w-16 h-16 md:w-24 md:h-24 rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 to-purple-400 shadow-[0_0_50px_rgba(6,182,212,0.25)]">
             <img
               src="/icem-logo.png"
               alt="ICEM Logo"
@@ -152,24 +152,25 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Title Block */}
-          <div className="relative flex flex-col items-center">
+          <div className="relative flex flex-col items-center gap-4 px-6 py-5 md:px-10 md:py-8 rounded-[2rem] border border-cyan-400/10 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.14),rgba(5,8,22,0.45)_48%,rgba(5,8,22,0.2))] shadow-[0_30px_80px_rgba(2,6,23,0.55)]">
+            <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/80 to-transparent" />
 
             {/* Cinematic readability layer */}
             <div className="absolute w-[620px] h-[200px] bg-black/45 blur-3xl rounded-full -z-10" />
 
-            <span className="text-[12px] md:text-[14px] font-black text-white/90 uppercase tracking-[0.25em] italic">
+            <span className="text-[11px] md:text-[13px] font-black text-cyan-50/90 uppercase tracking-[0.25em] italic">
               {config.hero.institution} — {config.hero.organizingLabel}
             </span>
 
-            <h1 className="font-futuristic text-3xl md:text-6xl lg:text-7xl tracking-tight leading-none font-black italic text-white drop-shadow-2xl whitespace-nowrap px-4">
+            <h1 className="font-futuristic text-3xl md:text-6xl lg:text-7xl tracking-tight leading-none font-black italic text-white drop-shadow-2xl px-4">
 
               {config.hero.mainTitlePart1}
 
               <span
-                className="ml-2 inline-block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-300 px-2"
+                className="ml-2 inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-300 px-2"
                 style={{
-                  textShadow: "0 0 20px rgba(255,140,0,0.65)",
-                  filter: "drop-shadow(0 0 12px rgba(255,140,0,0.45))",
+                  textShadow: "0 0 20px rgba(6,182,212,0.45)",
+                  filter: "drop-shadow(0 0 12px rgba(168,85,247,0.35))",
                 }}
               >
                 {config.hero.mainTitlePart2}
@@ -184,7 +185,7 @@ export const Hero: React.FC = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-amber-400 text-sm md:text-md lg:text-lg font-bold max-w-xl tracking-[0.08em] drop-shadow-[0_0_16px_rgba(255,140,0,0.6)] mb-2"
+          className="text-purple-300 text-sm md:text-md lg:text-lg font-bold max-w-xl tracking-[0.08em] drop-shadow-[0_0_16px_rgba(168,85,247,0.35)] mb-2"
         >
           {config.hero.subLabel}
         </motion.p>
@@ -211,18 +212,18 @@ export const Hero: React.FC = () => {
               }, 400);
             }
           }}
-          className="mt-3 group relative px-8 py-3 md:px-10 md:py-3.5 border font-bold uppercase tracking-[0.25em] text-[10px] md:text-[11px] rounded-full overflow-hidden transition-all duration-500 backdrop-blur-xl"
+          className="mt-3 group relative px-8 py-3 md:px-10 md:py-3.5 border font-bold uppercase tracking-[0.25em] text-[10px] md:text-[11px] rounded-[1.25rem] overflow-hidden transition-all duration-500 backdrop-blur-xl"
           style={{
-            borderColor: "rgba(0,251,255,0.7)",
+            borderColor: "rgba(103,232,249,0.5)",
             color: "#ffffff",
-            background: "rgba(10,10,18,0.45)",
-            boxShadow: "0 0 30px rgba(0,251,255,0.35), inset 0 0 20px rgba(0,251,255,0.08)",
+            background: "linear-gradient(180deg, rgba(6,11,28,0.76), rgba(9,14,32,0.58))",
+            boxShadow: "0 18px 45px rgba(2,6,23,0.45), inset 0 0 20px rgba(0,251,255,0.08)",
           }}
         >
           {/* Animated Background Fill */}
           <div
             className="absolute inset-0 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
-            style={{ background: "linear-gradient(90deg, #006466, #0b3d3e)" }}
+            style={{ background: "linear-gradient(90deg, #06b6d4, #c084fc)" }}
           />
 
           {/* Shine Effect */}

@@ -107,8 +107,8 @@ export default function App() {
   };
 
   const LoadingFallback = () => (
-    <div className="flex flex-col items-center justify-center min-h-[50vh] text-teal-400 gap-6">
-      <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-teal-500 to-purple-500 animate-pulse shadow-[0_0_30px_rgba(6,182,212,0.3)]">
+    <div className="flex flex-col items-center justify-center min-h-[50vh] text-cyan-300 gap-6">
+      <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-tr from-cyan-400 to-purple-400 animate-pulse shadow-[0_0_30px_rgba(6,182,212,0.3)]">
         <img src="/icem-logo.png" alt="ICEM Logo" className="w-full h-full object-cover rounded-full bg-black" />
       </div>
       <div className="flex items-center gap-3">
@@ -119,7 +119,7 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen relative text-slate-50 selection:bg-[#006466] selection:text-white bg-[#0a0a12]">
+    <div className="min-h-screen relative text-slate-50 selection:bg-cyan-300 selection:text-slate-950 bg-[#050816]">
       <BackgroundEffect />
 
       <Navbar

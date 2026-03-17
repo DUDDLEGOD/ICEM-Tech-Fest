@@ -9,8 +9,8 @@ export const Marquee: React.FC = () => {
   return (
     <div className="pt-8 pb-2 bg-black/40 border-y border-white/5 overflow-hidden whitespace-nowrap relative">
       {/* Edge Fades */}
-      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-[#0c0a09] to-transparent z-20"></div>
-      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#0c0a09] to-transparent z-20"></div>
+      <div className="absolute top-0 left-0 w-32 h-full bg-gradient-to-r from-[#0a0a12] to-transparent z-20"></div>
+      <div className="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-[#0a0a12] to-transparent z-20"></div>
 
       <div className="flex animate-marquee hover:pause cursor-default relative">
         {[...departments, ...departments].map((dept, i) => (
@@ -32,12 +32,12 @@ export const Marquee: React.FC = () => {
                 ease: "linear"
               }}
               className={`absolute inset-0 blur-[60px] rounded-full z-0 pointer-events-none ${
-                i % 2 === 0 ? 'bg-amber-500' : 'bg-blue-500'
+                i % 2 === 0 ? 'bg-cyan-400' : 'bg-purple-400'
               }`}
             />
 
             {/* Shimmering Gradient Text */}
-            <span className="relative z-10 font-futuristic text-5xl font-black uppercase tracking-[0.2em] transition-all duration-700 bg-gradient-to-r from-white/10 via-white/40 to-white/10 bg-[length:200%_auto] animate-shimmer group-hover:from-amber-400 group-hover:via-white group-hover:to-blue-500 bg-clip-text text-transparent group-hover:scale-110">
+            <span className="relative z-10 font-futuristic text-5xl font-black uppercase tracking-[0.2em] transition-all duration-700 bg-gradient-to-r from-white/10 via-white/40 to-white/10 bg-[length:200%_auto] animate-shimmer group-hover:from-cyan-300 group-hover:via-white group-hover:to-purple-300 bg-clip-text text-transparent group-hover:scale-110">
               {dept}
             </span>
 
@@ -47,14 +47,14 @@ export const Marquee: React.FC = () => {
                 scale: [1, 1.8, 1],
                 opacity: [0.4, 0.8, 0.4],
                 boxShadow: [
-                  "0 0 10px rgba(245,158,11,0.5)",
-                  "0 0 30px rgba(59,130,246,0.8)",
-                  "0 0 10px rgba(245,158,11,0.5)"
+                  "0 0 10px rgba(6,182,212,0.5)",
+                  "0 0 30px rgba(192,132,252,0.8)",
+                  "0 0 10px rgba(6,182,212,0.5)"
                 ]
               }}
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: i * 0.5 }}
               className={`w-3 h-3 rounded-full relative z-10 ${
-                i % 2 === 0 ? 'bg-amber-500' : 'bg-blue-500'
+                i % 2 === 0 ? 'bg-cyan-400' : 'bg-purple-400'
               }`}
             >
               <div className="absolute inset-0 animate-ping rounded-full bg-inherit opacity-20"></div>

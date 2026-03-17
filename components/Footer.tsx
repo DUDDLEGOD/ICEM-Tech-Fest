@@ -45,8 +45,8 @@ export const Footer: React.FC = () => {
     >
 
       {/* subtle lighting */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-teal-500/5 blur-[140px] rounded-full" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/5 blur-[140px] rounded-full" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-400/5 blur-[140px] rounded-full" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-400/5 blur-[140px] rounded-full" />
 
       <div className="max-w-7xl mx-auto relative z-10">
 
@@ -60,12 +60,12 @@ export const Footer: React.FC = () => {
 
             <h2 className="font-futuristic text-2xl tracking-tighter leading-none font-black italic text-white">
               TECHNOFEST
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300 ml-1">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-purple-300 ml-1">
                 2026
               </span>
             </h2>
 
-            <div className="border-l-2 border-teal-500/40 pl-4 space-y-2">
+            <div className="border-l-2 border-cyan-400/40 pl-4 space-y-2">
 
               <p className="text-slate-300 text-[10px] font-bold uppercase">
                 Indira College of Engineering and Management
@@ -89,7 +89,7 @@ export const Footer: React.FC = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-teal-400 hover:border-teal-400/40 hover:shadow-[0_0_15px_rgba(20,184,166,0.3)] transition-all"
+                  className="w-10 h-10 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center text-slate-500 hover:text-cyan-300 hover:border-cyan-300/40 hover:shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all"
                 >
                   <social.icon size={16}/>
                 </a>
@@ -103,7 +103,7 @@ export const Footer: React.FC = () => {
 
           <div className="space-y-8 lg:border-l lg:border-white/5 lg:pl-10">
 
-            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-teal-400 uppercase">
+            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-cyan-300 uppercase">
               Academic Sectors
             </h5>
 
@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
 
                   <ExternalLink
                     size={11}
-                    className="text-slate-700 opacity-0 group-hover:opacity-100 group-hover:text-teal-400 transition-all"
+                    className="text-slate-700 opacity-0 group-hover:opacity-100 group-hover:text-cyan-300 transition-all"
                   />
 
                 </a>
@@ -174,34 +174,34 @@ export const Footer: React.FC = () => {
 
           <div className="space-y-8 lg:border-l lg:border-white/5 lg:pl-10">
 
-            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-teal-400 uppercase">
+            <h5 className="font-futuristic text-[11px] font-black tracking-[0.4em] text-cyan-300 uppercase">
               Connect
             </h5>
 
             <ul className="space-y-6">
 
               <li className="flex gap-4">
-                <MapPin size={16} className="text-teal-400"/>
+                <MapPin size={16} className="text-cyan-300"/>
                 <span className="text-[11px] font-bold text-slate-300 uppercase">
                   {config.contact.address}
                 </span>
               </li>
 
               <li className="flex gap-4">
-                <Mail size={16} className="text-teal-400"/>
+                <Mail size={16} className="text-cyan-300"/>
                 <a
                   href={`mailto:${config.contact.email}`}
-                  className="text-[11px] font-bold text-slate-300 hover:text-teal-400"
+                  className="text-[11px] font-bold text-slate-300 hover:text-cyan-300"
                 >
                   {config.contact.email}
                 </a>
               </li>
 
               <li className="flex gap-4">
-                <Phone size={16} className="text-teal-400"/>
+                <Phone size={16} className="text-cyan-300"/>
                 <a
                   href={`tel:${config.contact.phone.replace(/\s+/g, "")}`}
-                  className="text-[11px] font-bold text-white hover:text-teal-400"
+                  className="text-[11px] font-bold text-white hover:text-cyan-300"
                 >
                   {config.contact.phone}
                 </a>
@@ -221,9 +221,9 @@ export const Footer: React.FC = () => {
             © 2026 ICEM TECHNOFEST • OFFICIAL REGISTRATION PORTAL
           </p>
 
-          <div className="flex items-center gap-3 px-5 py-2.5 bg-purple-500/5 rounded-xl border border-purple-500/20">
-            <ShieldCheck size={14} className="text-purple-500"/>
-            <span className="text-[10px] font-black text-purple-500 uppercase tracking-widest">
+          <div className="flex items-center gap-3 px-5 py-2.5 bg-purple-400/5 rounded-xl border border-purple-400/20">
+            <ShieldCheck size={14} className="text-purple-300"/>
+            <span className="text-[10px] font-black text-purple-300 uppercase tracking-widest">
               SSL SECURE CONNECTION
             </span>
           </div>

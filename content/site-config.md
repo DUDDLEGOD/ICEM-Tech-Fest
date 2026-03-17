@@ -147,7 +147,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "name": "Chakravyuh",
     "tagline": "Break through the challenge, innovate, and conquer the core!",
     "description": "Chakravyuh 2026 is a multistage technical challenge inspired by breaking through layers of complexity. Participants must demonstrate teamwork, logic, creativity, and innovation to advance through three rounds.",
-    "department": "First-Year",
+    "department": "First-Year Dept.",
     "minTeam": 3,
     "maxTeam": 5,
     "fee": 250,
@@ -326,7 +326,8 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "department": "ENTC Dept.",
     "minTeam": 2,
     "maxTeam": 4,
-    "fee": 250,
+    // 200 without robot, 250 if the team brings its own robot.
+    "fee": 200/250,
     "requiresUpload": false,
     "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",

@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 px-4 md:px-10 flex justify-between items-center transition-all duration-500 ${
           scrolled
-            ? "h-14 md:h-20 bg-black/50 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.7)]"
+            ? "h-14 md:h-20 bg-[linear-gradient(180deg,rgba(5,8,22,0.9),rgba(5,8,22,0.72))] backdrop-blur-xl shadow-[0_18px_50px_rgba(2,6,23,0.65)]"
             : "h-16 md:h-24 bg-transparent"
         }`}
       >
@@ -151,14 +151,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
 
             <div className="flex flex-col">
 
-              <span className="font-futuristic whitespace-nowrap text-base md:text-3xl tracking-tight font-black italic text-white group-hover:text-amber-400 transition-colors">
+              <span className="font-futuristic whitespace-nowrap text-base md:text-3xl tracking-tight font-black italic text-white group-hover:text-cyan-300 transition-colors">
                 TECHNOFEST
-                <span className="ml-1 text-amber-400 group-hover:text-white">
+                <span className="ml-1 text-purple-300 group-hover:text-white">
                   2026
                 </span>
               </span>
 
-              <span className="hidden md:block text-[9px] font-black text-amber-400/90 uppercase tracking-[0.25em] italic">
+              <span className="hidden md:block text-[9px] font-black text-cyan-300/90 uppercase tracking-[0.25em] italic">
                 ICEM TECHNOLOGICAL FEST
               </span>
 
@@ -174,8 +174,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             onClick={handleHomeClick}
             className={`hidden md:flex items-center gap-2 transition-colors ${
               currentView === "home"
-                ? "text-amber-400"
-                : "text-slate-500 hover:text-amber-400"
+                ? "text-cyan-300"
+                : "text-slate-500 hover:text-cyan-300"
             }`}
           >
             <Home size={14} />
@@ -187,8 +187,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             onClick={handleAboutClick}
             className={`hidden md:flex items-center gap-2 transition-colors ${
               currentView === "about"
-                ? "text-amber-400"
-                : "text-slate-500 hover:text-amber-400"
+                ? "text-cyan-300"
+                : "text-slate-500 hover:text-cyan-300"
             }`}
           >
             <Info size={14} />
@@ -202,7 +202,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             onClick={handleRegisterClick}
             className={`flex items-center gap-2 px-3 md:px-8 py-2 md:py-3 rounded-xl font-black text-[11px] transition-all border ${
               config.registration.isOpen
-                ? "border-cyan-400/40 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/25 shadow-[0_0_25px_rgba(0,255,255,0.25)]"
+                ? "border-cyan-300/35 bg-[linear-gradient(180deg,rgba(8,18,35,0.8),rgba(9,16,30,0.65))] text-cyan-200 hover:border-cyan-200/60 shadow-[0_12px_35px_rgba(2,6,23,0.4)]"
                 : "border-red-400/40 bg-red-500/10 text-red-300"
             }`}
           >

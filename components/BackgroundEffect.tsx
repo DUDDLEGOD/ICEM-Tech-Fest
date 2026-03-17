@@ -9,30 +9,32 @@ export const BackgroundEffect: React.FC = React.memo(() => {
   const gridOpacity = useTransform(scrollY, [0, 800], [0.03, 0.015]);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[#0c0a09]">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 bg-[#050816]">
 
       {/* GRID */}
       <motion.div
         style={{ y: gridY, opacity: gridOpacity }}
         className="absolute inset-0
-        bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),
-        linear-gradient(to_bottom,#ffffff_1px,transparent_1px)]
-        bg-[size:80px_80px]"
+        bg-[linear-gradient(to_right,rgba(103,232,249,0.08)_1px,transparent_1px),
+        linear-gradient(to_bottom,rgba(192,132,252,0.06)_1px,transparent_1px)]
+        bg-[size:72px_72px]"
       />
+
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.12),transparent_38%),radial-gradient(circle_at_bottom,rgba(192,132,252,0.1),transparent_34%)]" />
 
       {/* LIGHT BLOBS */}
       <motion.div
         animate={{ scale: [1, 1.1, 1] }}
         transition={{ duration: 18, repeat: Infinity }}
-        className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%]
-        bg-[radial-gradient(circle,rgba(245,158,11,0.06)_0%,transparent_70%)]"
+        className="absolute top-[-12%] left-[-10%] w-[60%] h-[60%]
+        bg-[radial-gradient(circle,rgba(6,182,212,0.08)_0%,transparent_70%)]"
       />
 
       <motion.div
         animate={{ scale: [1.1, 1, 1.1] }}
         transition={{ duration: 22, repeat: Infinity }}
-        className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%]
-        bg-[radial-gradient(circle,rgba(59,130,246,0.06)_0%,transparent_70%)]"
+        className="absolute bottom-[-14%] right-[-10%] w-[60%] h-[60%]
+        bg-[radial-gradient(circle,rgba(192,132,252,0.08)_0%,transparent_70%)]"
       />
 
       {/* DATA STREAMS */}
@@ -49,7 +51,7 @@ export const BackgroundEffect: React.FC = React.memo(() => {
               ease: "linear",
               delay: i * 1.2
             }}
-            className="absolute w-[1px] h-[50px] bg-amber-500"
+            className="absolute w-[1px] h-[50px] bg-gradient-to-b from-[#06b6d4] to-purple-400"
           />
         ))}
 
@@ -70,7 +72,7 @@ export const BackgroundEffect: React.FC = React.memo(() => {
       {/* NOISE TEXTURE */}
       <div className="absolute inset-0
         bg-[url('https://www.transparenttextures.com/patterns/asfalt-light.png')]
-        opacity-[0.015]"
+        opacity-[0.02]"
       />
 
     </div>

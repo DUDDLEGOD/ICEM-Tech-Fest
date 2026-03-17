@@ -68,25 +68,25 @@ const campusFeatures = [
     icon: Library,
     title: "Central Library",
     desc: "Digital repository with journals and IEEE access.",
-    color: "text-emerald-500"
+    color: "text-cyan-300"
   },
   {
     icon: Microscope,
     title: "Research Labs",
     desc: "Infrastructure for AI, Robotics, and Civil.",
-    color: "text-purple-500"
+    color: "text-purple-300"
   },
   {
     icon: Globe,
     title: "Academic Synergy",
     desc: "Collaborations with global institutions.",
-    color: "text-blue-500"
+    color: "text-cyan-400"
   },
   {
     icon: Shield,
     title: "NAAC Accredited",
     desc: "Certified standards of excellence.",
-    color: "text-amber-500"
+    color: "text-purple-300"
   }
 ];
 
@@ -106,8 +106,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
     >
 
       {/* background lighting */}
-      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-amber-500/5 blur-[140px] rounded-full" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[140px] rounded-full" />
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-400/5 blur-[140px] rounded-full" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-400/5 blur-[140px] rounded-full" />
 
       <HUDDecoration className="top-24 left-12 hidden lg:block" />
       <HUDDecoration className="bottom-24 right-12 hidden lg:block rotate-180" />
@@ -119,7 +119,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
         <motion.button
           onClick={onNavigateBack}
           whileHover={{ x: -5 }}
-          className="flex items-center gap-2 text-slate-500 hover:text-amber-500 transition-colors group mb-6"
+          className="flex items-center gap-2 text-slate-500 hover:text-cyan-300 transition-colors group mb-6"
         >
           <ChevronLeft size={18} className="group-hover:animate-pulse" />
           <span className="font-futuristic text-[9px] font-black uppercase tracking-[0.3em]">
@@ -141,19 +141,19 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
 
             <div className="space-y-4">
 
-              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 text-[10px] font-black uppercase tracking-widest">
+              <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-cyan-400/10 border border-cyan-400/20 rounded-full text-cyan-300 text-[10px] font-black uppercase tracking-widest">
                 <Activity size={12} /> {about.eventBadge}
               </div>
 
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-futuristic font-black uppercase italic tracking-tighter text-white leading-[1]">
                 {about.eventHeadline}
                 <br />
-                <span className="text-amber-500">{about.eventHighlight}</span>
+                <span className="text-purple-300">{about.eventHighlight}</span>
               </h1>
 
             </div>
 
-            <p className="text-lg md:text-xl text-slate-400 font-medium leading-relaxed italic border-l-2 border-amber-500/30 pl-6 max-w-2xl">
+            <p className="text-lg md:text-xl text-slate-400 font-medium leading-relaxed italic border-l-2 border-cyan-400/30 pl-6 max-w-2xl">
               "{about.eventQuote}"
             </p>
 
@@ -161,9 +161,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
 
               {/* TECH FRAMEWORK */}
 
-              <div className="glass p-6 rounded-2xl border-white/5 hover:border-amber-500/30 hover:shadow-[0_0_30px_rgba(245,158,11,0.2)] transition-all space-y-3">
+              <div className="glass p-6 rounded-2xl border-white/5 hover:border-cyan-400/30 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] transition-all space-y-3">
 
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                <div className="w-10 h-10 rounded-xl bg-cyan-400/10 flex items-center justify-center text-cyan-300">
                   <Code size={18} />
                 </div>
 
@@ -179,9 +179,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
 
               {/* INDUSTRY */}
 
-              <div className="glass p-6 rounded-2xl border-white/5 hover:border-blue-500/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all space-y-3">
+              <div className="glass p-6 rounded-2xl border-white/5 hover:border-purple-400/30 hover:shadow-[0_0_30px_rgba(192,132,252,0.2)] transition-all space-y-3">
 
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                <div className="w-10 h-10 rounded-xl bg-purple-400/10 flex items-center justify-center text-purple-300">
                   <Rocket size={18} />
                 </div>
 
@@ -202,7 +202,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
 
           <div className="lg:col-span-2 relative group mt-8 lg:mt-0">
 
-            <div className="absolute -inset-4 bg-amber-500/5 blur-2xl rounded-[2.5rem] group-hover:bg-amber-500/10 transition-all duration-700" />
+            <div className="absolute -inset-4 bg-cyan-400/5 blur-2xl rounded-[2.5rem] group-hover:bg-cyan-400/10 transition-all duration-700" />
 
             <div className="relative glass border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl">
 
@@ -240,7 +240,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
                 className="space-y-1 group"
               >
 
-                <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] group-hover:text-amber-500 transition-colors">
+                <span className="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] group-hover:text-cyan-300 transition-colors">
                   {stat.label}
                 </span>
 

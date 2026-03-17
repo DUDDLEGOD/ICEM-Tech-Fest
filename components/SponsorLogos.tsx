@@ -48,7 +48,7 @@ export const SponsorLogos: React.FC = () => {
         </div>
 
 
-          <div className="relative flex items-center justify-center w-32 h-16 md:w-40 md:h-20 rounded-2xl px-4 py-2 bg-white/95 border-2 border-white/20 hover:border-amber-400 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.45)] overflow-hidden">
+          <div className="relative flex items-center justify-center w-32 h-16 md:w-40 md:h-20 rounded-2xl px-4 py-2 bg-white/95 border-2 border-white/20 hover:border-cyan-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.45)] overflow-hidden">
 
             {/* Glimmer */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-700" />
@@ -106,7 +106,7 @@ export const SponsorLogos: React.FC = () => {
             key={`${sponsor.name}-${index}`}
             className="flex flex-col items-center gap-3 group shrink-0"
           >
-            <div className="relative flex items-center justify-center w-28 h-14 md:w-40 md:h-20 rounded-2xl px-4 py-2 bg-white/95 border-2 border-white/20 hover:border-amber-400 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.45)] overflow-hidden">
+            <div className="relative flex items-center justify-center w-28 h-14 md:w-40 md:h-20 rounded-2xl px-4 py-2 bg-white/95 border-2 border-white/20 hover:border-cyan-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.45)] overflow-hidden">
 
               {/* Glimmer sweep */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-700" />
@@ -119,7 +119,7 @@ export const SponsorLogos: React.FC = () => {
               />
             </div>
 
-            <span className="text-[11px] md:text-[13px] font-bold text-slate-300 group-hover:text-amber-400 uppercase tracking-widest transition-colors">
+            <span className="text-[11px] md:text-[13px] font-bold text-slate-300 group-hover:text-cyan-300 uppercase tracking-widest transition-colors">
               {sponsor.name}
             </span>
           </div>

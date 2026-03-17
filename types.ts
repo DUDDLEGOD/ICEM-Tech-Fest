@@ -1,6 +1,6 @@
 
 export enum Department {
-  FIRST_YEAR = 'First-Year',
+  FIRST_YEAR = 'First-Year Dept.',
   COMPS = 'Computer Dept.',
   AIDS = 'AIDS Dept.',
   IT = 'IT Dept.',
@@ -77,6 +77,7 @@ export interface Registration {
   timestamp: number;
   feePaid?: number;
   hasPaid?: boolean;
+  hasRobot?: boolean;
   transactionId?: string;
   verifiedAt?: number;
 }

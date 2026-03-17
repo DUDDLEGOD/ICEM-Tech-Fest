@@ -33,8 +33,14 @@ const getStringArray = (value: unknown, fallback: string[]) => {
   return next.length > 0 ? next : fallback;
 };
 
-const getDepartment = (value: unknown, fallback: string) =>
-  typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+const getDepartment = (value: unknown, fallback: string) => {
+  if (typeof value !== 'string' || value.trim().length === 0) {
+    return fallback;
+  }
+
+  const normalizedValue = value.trim();
+  return normalizedValue === 'First-Year' ? Department.FIRST_YEAR : normalizedValue;
+};
 
 const createDefaultBrochureVisibility = (): BrochureVisibility => ({
   [EventID.CHAKRAVYUH]: false,
@@ -347,12 +353,11 @@ const DEFAULT_ANNOUNCEMENT_CONFIG: AnnouncementConfig = {
 const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
   isOpen: true,
   closedMessage: 'Registrations are currently paused. Please check back later or contact the organizing team.',
-  paymentUpiIds: ['ashishpdng@okicici'],
   payeeName: 'TechnoFest 2026',
 };
 
 const DEFAULT_SPONSORS: SponsorConfig[] = [
-  { name: 'LEMMA', logo: 'https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774' },
+  
 ];
 
 const DEFAULT_ABOUT_STATS: AboutStatConfig[] = [
@@ -673,21 +678,60 @@ const parseJsonBlock = (markdown: string, blockName: string) => {
   } catch (error) {
     throw new Error(
       `Invalid JSON in "${blockName}" block inside content/site-config.md. ` +
-        `If you use multiline text, keep it inside quotes and the parser will convert line breaks automatically.`
+        `If you use multiline text, keep it inside quotes. The parser also accepts // comments and slash fee values like 200/250.`
     );
   }
 };
 
-const sanitizeJsonBlock = (block: string) => {
+// Allow lightweight authoring comments without breaking URLs inside strings.
+const stripJsonLineComments = (block: string) => {
   let result = '';
   let inString = false;
   let isEscaped = false;
 
   for (let index = 0; index < block.length; index += 1) {
     const character = block[index];
+    const nextCharacter = block[index + 1];
+
+    if (!inString && character === '/' && nextCharacter === '/') {
+      while (index < block.length && block[index] !== '\n' && block[index] !== '\r') {
+        index += 1;
+      }
+      index -= 1;
+      continue;
+    }
+
+    result += character;
+
+    if (character === '"' && !isEscaped) {
+      inString = !inString;
+    }
+
+    if (character === '\\\\' && !isEscaped) {
+      isEscaped = true;
+    } else {
+      isEscaped = false;
+    }
+  }
+
+  return result;
+};
+
+// Support bare config values like "fee": 200/250 by converting them into strings before JSON parsing.
+const quoteSlashDelimitedValues = (block: string) =>
+  block.replace(/(:\s*)(\d+\s*\/\s*\d+)(\s*[,}\]])/g, '$1"$2"$3');
+
+const sanitizeJsonBlock = (block: string) => {
+  const preprocessedBlock = quoteSlashDelimitedValues(stripJsonLineComments(block));
+  let result = '';
+  let inString = false;
+  let isEscaped = false;
+
+  for (let index = 0; index < preprocessedBlock.length; index += 1) {
+    const character = preprocessedBlock[index];
 
     if (inString && character === '\\r') {
-      if (block[index + 1] === '\\n') {
+      if (preprocessedBlock[index + 1] === '\\n') {
         index += 1;
       }
       result += '\\\\n';

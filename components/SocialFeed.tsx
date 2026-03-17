@@ -10,7 +10,7 @@ const POSTS = [
     type: 'Twitter',
     likes: 124,
     comments: 12,
-    color: 'from-blue-500/20 to-transparent'
+    color: 'from-cyan-400/20 to-transparent'
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ const POSTS = [
     type: 'Instagram',
     likes: 450,
     comments: 34,
-    color: 'from-pink-500/20 to-transparent'
+    color: 'from-purple-400/20 to-transparent'
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ const POSTS = [
     type: 'Twitter',
     likes: 89,
     comments: 5,
-    color: 'from-amber-500/20 to-transparent'
+    color: 'from-cyan-300/20 to-transparent'
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const POSTS = [
     type: 'Twitter',
     likes: 210,
     comments: 18,
-    color: 'from-purple-500/20 to-transparent'
+    color: 'from-purple-400/20 to-transparent'
   },
   {
     id: 5,
@@ -61,7 +61,7 @@ export const SocialFeed: React.FC = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="text-amber-500 font-futuristic text-sm tracking-[0.4em] font-bold uppercase"
+            className="text-cyan-300 font-futuristic text-sm tracking-[0.4em] font-bold uppercase"
           >
             Live Feed
           </motion.h2>
@@ -94,7 +94,7 @@ export const SocialFeed: React.FC = () => {
           {scrollingPosts.map((post, i) => (
             <div
               key={`${post.id}-${i}`}
-              className="w-[320px] md:w-[400px] shrink-0 glass p-8 rounded-[2.5rem] border border-white/5 space-y-6 group/card hover:border-amber-500/40 transition-all relative overflow-hidden bg-[#0a0a12]/80 backdrop-blur-xl"
+              className="w-[320px] md:w-[400px] shrink-0 glass p-8 rounded-[2.5rem] border border-white/5 space-y-6 group/card hover:border-cyan-400/40 transition-all relative overflow-hidden bg-[#0a0a12]/80 backdrop-blur-xl"
             >
               <div className={`absolute inset-0 bg-gradient-to-br ${post.color} opacity-0 group-hover/card:opacity-100 transition-opacity duration-500`}></div>
 
@@ -122,8 +122,8 @@ export const SocialFeed: React.FC = () => {
                   <Heart size={16} className="group-hover/stat:fill-red-500 transition-all" />
                   <span className="text-xs font-black">{post.likes}</span>
                 </div>
-                <div className="flex items-center gap-2 hover:text-blue-500 transition-colors cursor-pointer group/stat">
-                  <MessageCircle size={16} className="group-hover/stat:fill-blue-500 transition-all" />
+                <div className="flex items-center gap-2 hover:text-cyan-300 transition-colors cursor-pointer group/stat">
+                  <MessageCircle size={16} className="group-hover/stat:fill-cyan-300 transition-all" />
                   <span className="text-xs font-black">{post.comments}</span>
                 </div>
                 <div className="ml-auto hover:text-white transition-colors cursor-pointer">
