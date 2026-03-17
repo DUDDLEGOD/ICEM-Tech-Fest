@@ -38,7 +38,63 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "closedMessage": "Registrations are currently paused. Please check back later or contact the organizing team.",
   "payeeName": "TechnoFest 2026",
   "bankAccountNo": "201025452641",
-  "bankIfsc": "INDB0000999"
+  "bankIfsc": "INDB0000999",
+  "departmentPayments": {
+    "First-Year Dept.": {
+      "upiId": "not given",
+      "payeeName": "ICEM First Year Dept",
+      "bankAccountNo": "4040010100057655",
+      "bankIfsc": "UTIB0000404"
+    },
+    "Computer Dept.": {
+      "upiId": "9145616101@ibl",
+      "payeeName": "ICEM Computer Dept",
+      "bankAccountNo": "50100351881924",
+      "bankIfsc": "HDFC0004884"
+    },
+    "AIDS Dept.": {
+      "upiId": "pallavichavan1707@oksbi",
+      "payeeName": "ICEM AIDS Dept",
+      "bankAccountNo": "922010060640068",
+      "bankIfsc": "UTIB0000110"
+    },
+    "IT Dept.": {
+      "upiId": "wankhade81@okhdfcbank",
+      "payeeName": "ICEM IT Dept",
+      "bankAccountNo": "50100391133848",
+      "bankIfsc": "HDFC0002524"
+    },
+    "Civil Dept.": {
+      "upiId": "9819298069@yescred",
+      "payeeName": "ICEM Civil Dept",
+      "bankAccountNo": "30724368718",
+      "bankIfsc": "SBIN0000569"
+    },
+    "Mech Dept.": {
+      "upiId": "pranali.khatake@okicici",
+      "payeeName": "ICEM Mech Dept",
+      "bankAccountNo": "169701500487",
+      "bankIfsc": "ICOC0001697"
+    },
+    "ENTC Dept.": {
+      "upiId": "psmrpatil-4@okhdfcbank",
+      "payeeName": "ICEM ENTC Dept",
+      "bankAccountNo": "50100754250032",
+      "bankIfsc": "HDFC0007247"
+    },
+    "MCA/BCA Dept.": {
+      "upiId": "dhanashree.patil89-1@oksbi",
+      "payeeName": "ICEM MCA/BCA Dept",
+      "bankAccountNo": "201025452648",
+      "bankIfsc": "INDB0000999"
+    },
+    "MBA Dept. (IGSB+ICEM)": {
+      "upiId": "ashishpdng@okicici",
+      "payeeName": "IGSB MBA Dept",
+      "bankAccountNo": "201025452649",
+      "bankIfsc": "INDB0000999"
+    }
+  }
 }
 ```
 

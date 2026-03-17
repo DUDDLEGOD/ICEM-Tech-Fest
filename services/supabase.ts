@@ -17,3 +17,31 @@ export const supabase = createClient(
     }
   }
 );
+
+const SCREENSHOT_BUCKET = 'payment-screenshots';
+
+export const uploadPaymentScreenshot = async (
+  file: File,
+  registrationId: string
+): Promise<string | null> => {
+  const ext = file.name.split('.').pop() || 'png';
+  const filePath = `${registrationId}-${Date.now()}.${ext}`;
+
+  const { error } = await supabase.storage
+    .from(SCREENSHOT_BUCKET)
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+
+  if (error) {
+    console.error('Screenshot upload failed:', error.message);
+    return null;
+  }
+
+  const { data } = supabase.storage
+    .from(SCREENSHOT_BUCKET)
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+};

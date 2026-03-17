@@ -556,6 +556,24 @@ const normalizeRegistrationSettings = (value: unknown): RegistrationSettings => 
     paymentUpiIds = ids.length > 0 ? ids : undefined;
   }
 
+  let departmentPayments: Record<string, import('./types').DepartmentPaymentInfo> | undefined;
+  if (isRecord(value.departmentPayments)) {
+    const entries = Object.entries(value.departmentPayments)
+      .filter(([, v]) => isRecord(v))
+      .map(([key, v]) => {
+        const rec = v as Record<string, unknown>;
+        return [key, {
+          upiId: typeof rec.upiId === 'string' ? rec.upiId : undefined,
+          payeeName: typeof rec.payeeName === 'string' ? rec.payeeName : undefined,
+          bankAccountNo: typeof rec.bankAccountNo === 'string' ? rec.bankAccountNo : undefined,
+          bankIfsc: typeof rec.bankIfsc === 'string' ? rec.bankIfsc : undefined,
+        }] as const;
+      });
+    if (entries.length > 0) {
+      departmentPayments = Object.fromEntries(entries);
+    }
+  }
+
   return {
     isOpen: getBoolean(value.isOpen, fallback.isOpen),
     closedMessage: getString(value.closedMessage, fallback.closedMessage),
@@ -563,6 +581,7 @@ const normalizeRegistrationSettings = (value: unknown): RegistrationSettings => 
     payeeName: getString(value.payeeName, fallback.payeeName),
     bankAccountNo: typeof value.bankAccountNo === 'string' ? value.bankAccountNo : fallback.bankAccountNo,
     bankIfsc: typeof value.bankIfsc === 'string' ? value.bankIfsc : fallback.bankIfsc,
+    departmentPayments,
   };
 };
 
@@ -635,7 +654,12 @@ export const cloneSiteConfig = (config: SiteConfig): SiteConfig => ({
   announcement: { ...config.announcement },
   registration: {
     ...config.registration,
-    paymentUpiIds: config.registration.paymentUpiIds ? [...config.registration.paymentUpiIds] : undefined
+    paymentUpiIds: config.registration.paymentUpiIds ? [...config.registration.paymentUpiIds] : undefined,
+    departmentPayments: config.registration.departmentPayments
+      ? Object.fromEntries(
+          Object.entries(config.registration.departmentPayments).map(([k, v]) => [k, { ...v }])
+        )
+      : undefined,
   },
   sponsors: config.sponsors.map(s => ({ ...s })),
   brochureVisibility: { ...config.brochureVisibility },

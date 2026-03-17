@@ -4,12 +4,15 @@ import {
   AlertTriangle,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
   Database,
   Lightbulb,
   PlusCircle,
+  QrCode,
   Send,
   ShieldCheck,
   Trash2,
+  Upload,
   User as UserIcon,
   Users as UsersIcon
 } from 'lucide-react';
@@ -18,6 +21,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSiteConfig } from '../contexts/useSiteConfig';
 import { submitRegistration } from '../services/registrationApi';
+import { uploadPaymentScreenshot } from '../services/supabase';
 import { Department, EventConfig, Registration, RegistrationApiResult } from '../types';
 
 interface RegistrationFormProps {
@@ -149,11 +153,11 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState<Step>('leader');
   const [error, setError] = useState('');
-  const [hasPaid, setHasPaid] = useState(false);
-  const [transactionId, setTransactionId] = useState('');
   const [hasRobot, setHasRobot] = useState(false);
   const [paymentQrSrc, setPaymentQrSrc] = useState<string | null>(null);
   const [isDepartmentQrMissing, setIsDepartmentQrMissing] = useState(false);
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
 
   const currentEvent = useMemo(
     () => config.events.find((event) => event.id === selectedEventId) ?? config.events[0],
@@ -212,8 +216,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
   }, [currentEvent.maxTeam]);
 
   useEffect(() => {
-    setHasPaid(false);
-    setTransactionId('');
     setHasRobot(false);
     setError('');
   }, [selectedEventId]);
@@ -225,7 +227,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSuccess, i
     }
 
     if (step === 'payment' && numericFee === 0) {
-      setHasPaid(true);
       setStep('confirm');
     }
   }, [currentEvent.requiresUpload, numericFee, step]);
@@ -388,17 +389,11 @@ const validateMembers = () => {
 
   setError('');
 
-  if (numericFee > 0) {
-    goToNextVisibleStep('members');
-  } else {
-    setHasPaid(true);
-    goToNextVisibleStep('members');
-  }
+  goToNextVisibleStep('members');
 
 };
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   const phoneRegex = /^[6-9]\d{9}$/;
-  const utrRegex = /^(?=.*\d)(?!([0-9])\1{11,})[A-Za-z0-9]{12,22}$/;
   const handleFinalSubmission = async () => {
     setIsSubmitting(true);
     setError('');
@@ -441,12 +436,24 @@ const validateMembers = () => {
       })),
       timestamp: Date.now(),
       feePaid: numericFee,
-      hasPaid,
+      hasPaid: numericFee === 0 || !!paymentScreenshot,
       hasRobot: robotFeeOptions ? hasRobot : undefined,
-      transactionId: transactionId.trim(),
+      paymentScreenshotUrl: undefined,
     };
 
     try {
+      // Upload screenshot to Supabase Storage if present
+      if (paymentScreenshot) {
+        const screenshotUrl = await uploadPaymentScreenshot(paymentScreenshot, registration.id);
+        if (screenshotUrl) {
+          registration.paymentScreenshotUrl = screenshotUrl;
+        } else {
+          setError('Failed to upload payment screenshot. Please try again.');
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const result = await submitRegistration({
         registration,
         eventName: currentEvent.name,
@@ -918,10 +925,12 @@ const validateMembers = () => {
           )}
 
           {step === 'payment' && (() => {
-            const bankAccountNo = config.registration.bankAccountNo;
-            const bankIfsc = config.registration.bankIfsc;
-            const payeeName = config.registration.payeeName || 'TechnoFest 2026';
-            const fallbackUpiLink = primaryUpiId ? getUpiPaymentLink(primaryUpiId, payeeName, numericFee) : '';
+            const deptPayment = config.registration.departmentPayments?.[currentEvent.department];
+            const bankAccountNo = deptPayment?.bankAccountNo || config.registration.bankAccountNo;
+            const bankIfsc = deptPayment?.bankIfsc || config.registration.bankIfsc;
+            const payeeName = deptPayment?.payeeName || config.registration.payeeName || 'TechnoFest 2026';
+            const deptUpiId = deptPayment?.upiId || primaryUpiId;
+            const fallbackUpiLink = deptUpiId ? getUpiPaymentLink(deptUpiId, payeeName, numericFee) : '';
 
             return (
               <motion.div
@@ -943,116 +952,145 @@ const validateMembers = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center justify-center space-y-6 bg-white/5 p-8 rounded-3xl border border-white/10">
-                  {/* Bank Details & QR Card */}
-                  {paymentQrSrc || fallbackUpiLink || bankAccountNo || bankIfsc || primaryUpiId ? (
-                    <div className="w-full flex flex-col items-center space-y-6">
-                      
-                      {/* Scan to Pay */}
-                      <div className="flex flex-col items-center space-y-3">
-                        <span className="text-[10px] font-black text-[#67e8f9] uppercase tracking-widest text-center">
-                          Scan {currentEvent.department} QR
-                        </span>
-                        <div className="p-4 bg-white rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.15)] flex items-center justify-center min-h-[192px] min-w-[192px]">
-                          {paymentQrSrc ? (
-                            <img
-                              src={paymentQrSrc}
-                              alt={`${currentEvent.department} payment QR`}
-                              className="w-40 h-40 object-contain"
-                            />
-                          ) : fallbackUpiLink ? (
-                            <QRCodeSVG
-                              value={fallbackUpiLink}
-                              size={160}
-                              bgColor="#ffffff"
-                              fgColor="#0f172a"
-                              level="M"
-                              includeMargin={false}
-                            />
-                          ) : (
-                            <div className="px-4 text-center text-slate-700">
-                              <p className="text-xs font-black uppercase tracking-[0.2em]">QR unavailable</p>
-                            </div>
-                          )}
-                        </div>
-                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest pt-2">
-                          {paymentQrSrc
-                            ? 'Department-specific QR loaded from the payment assets folder.'
-                            : fallbackUpiLink
-                              ? 'Fallback UPI QR is active until the department asset is added.'
-                              : 'Contact the organizing desk for the active payment route.'}
-                        </span>
-                        {isDepartmentQrMissing && (
-                          <span className="sr-only">Expected QR asset: {expectedDepartmentQrFile}</span>
-                        )}
-                      </div>
+                {/* Amount Due Banner */}
+                <div className="text-center bg-white/5 border border-white/10 rounded-2xl py-4 px-6">
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Amount Due</p>
+                  <p className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-purple-300">{formatFee(numericFee)}</p>
+                  {robotFeeOptions && <p className="text-[9px] text-slate-500 mt-1">{hasRobot ? 'With robot' : 'Without robot'}</p>}
+                </div>
 
-                      <div className="w-full h-px bg-white/10" />
-
-                      {/* Manual Transfer Details */}
-                      <div className="w-full">
-                        <div className="text-center mb-4">
-                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Direct Payment Details</span>
-                        </div>
-                        <div className="grid grid-cols-1 gap-3">
-                          <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Name</span>
-                            <span className="text-xs font-bold text-white tracking-wide">{payeeName}</span>
-                          </div>
-                          {primaryUpiId && (
-                            <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">UPI ID</span>
-                              <span className="text-xs font-bold text-[#67e8f9] tracking-[0.16em] font-mono select-all">{primaryUpiId}</span>
-                            </div>
-                          )}
-                          {bankAccountNo && (
-                            <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Account No.</span>
-                              <span className="text-xs font-bold text-purple-300 tracking-[0.2em] font-mono select-all">{bankAccountNo}</span>
-                            </div>
-                          )}
-                          {bankIfsc && (
-                            <div className="bg-white/5 border border-white/10 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">IFSC Code</span>
-                              <span className="text-xs font-bold text-purple-300 tracking-[0.2em] font-mono select-all">{bankIfsc}</span>
-                            </div>
-                          )}
-                        </div>
+                {/* Two side-by-side payment method cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Option 1: Pay with QR */}
+                  <div className="bg-white/5 border border-[#06b6d4]/20 rounded-3xl p-6 flex flex-col items-center space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-[#06b6d4]/10 rounded-xl flex items-center justify-center text-[#67e8f9] border border-[#06b6d4]/20">
+                        <QrCode size={18} />
                       </div>
+                      <span className="text-[10px] font-black text-[#67e8f9] uppercase tracking-widest">Pay with QR</span>
                     </div>
-                  ) : (
-                    <p className="text-sm text-slate-400 text-center">Payment details are not configured yet. Please contact the organizers for payment information.</p>
-                  )}
 
-                  <p className="text-sm font-bold text-white uppercase tracking-widest">
-                    Amount Due: <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#06b6d4] to-purple-300">{formatFee(numericFee)}</span>
-                  </p>
-                  <p className="text-[10px] text-slate-400 text-center max-w-md leading-relaxed">
-                    Pay using the department QR above or use the direct account details here. Organizers will verify your payment against the transaction reference you submit next.
-                  </p>
+                    <div className="p-3 bg-white rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.12)] flex items-center justify-center min-h-[180px] min-w-[180px]">
+                      {paymentQrSrc ? (
+                        <img
+                          src={paymentQrSrc}
+                          alt={`${currentEvent.department} payment QR`}
+                          className="w-40 h-40 object-contain"
+                        />
+                      ) : fallbackUpiLink ? (
+                        <QRCodeSVG
+                          value={fallbackUpiLink}
+                          size={156}
+                          bgColor="#ffffff"
+                          fgColor="#0f172a"
+                          level="M"
+                          includeMargin={false}
+                        />
+                      ) : (
+                        <div className="px-4 text-center text-slate-700">
+                          <p className="text-xs font-black uppercase tracking-[0.2em]">QR unavailable</p>
+                        </div>
+                      )}
+                    </div>
 
-                  <label className="flex items-center gap-3 mt-4 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={hasPaid}
-                      onChange={(e) => setHasPaid(e.target.checked)}
-                      className="w-5 h-5 accent-[#06b6d4]"
-                    />
-                    <span className="text-sm font-bold text-slate-300 group-hover:text-white transition-colors">
-                      I confirm that I have transferred {formatFee(numericFee)}{robotFeeOptions ? (hasRobot ? ' with our robot.' : ' without bringing a robot.') : '.'}
-                    </span>
-                  </label>
-
-                  <div className="w-full mt-2">
-                    <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 mb-2 block text-left">Transaction ID / UTR</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 312345678901"
-                      value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
-                      className="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-purple-400 transition-all font-bold text-white text-sm tracking-widest text-center"
-                    />
+                    <p className="text-[9px] text-slate-500 text-center leading-relaxed">
+                      Scan this QR with any UPI app (GPay, PhonePe, Paytm) to pay instantly.
+                    </p>
+                    {isDepartmentQrMissing && (
+                      <span className="sr-only">Expected QR asset: {expectedDepartmentQrFile}</span>
+                    )}
                   </div>
+
+                  {/* Option 2: Bank Transfer Details */}
+                  <div className="bg-white/5 border border-purple-400/20 rounded-3xl p-6 flex flex-col space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-purple-400/10 rounded-xl flex items-center justify-center text-purple-300 border border-purple-400/20">
+                        <CreditCard size={18} />
+                      </div>
+                      <span className="text-[10px] font-black text-purple-300 uppercase tracking-widest">Bank Transfer</span>
+                    </div>
+
+                    <div className="flex-1 grid grid-cols-1 gap-3">
+                      <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Payee Name</p>
+                        <p className="text-sm font-bold text-white">{payeeName}</p>
+                      </div>
+                      {bankAccountNo && (
+                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Account No.</p>
+                          <p className="text-sm font-bold text-purple-300 font-mono select-all tracking-wider">{bankAccountNo}</p>
+                        </div>
+                      )}
+                      {bankIfsc && (
+                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">IFSC Code</p>
+                          <p className="text-sm font-bold text-purple-300 font-mono select-all tracking-wider">{bankIfsc}</p>
+                        </div>
+                      )}
+                      {deptUpiId && (
+                        <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
+                          <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">UPI ID</p>
+                          <p className="text-sm font-bold text-[#67e8f9] font-mono select-all tracking-wider break-all">{deptUpiId}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="text-[9px] text-slate-500 leading-relaxed">
+                      Use NEFT / IMPS / UPI to transfer the exact amount to this account.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Screenshot Upload */}
+                <div className="space-y-3 bg-white/5 border border-white/10 rounded-3xl p-6">
+                  <label className="text-[10px] uppercase tracking-widest font-black text-slate-500 block">Upload Payment Screenshot</label>
+                  <div
+                    className={`relative w-full border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center gap-3 transition-all cursor-pointer group ${
+                      screenshotPreview
+                        ? 'border-[#06b6d4]/40 bg-[#06b6d4]/5'
+                        : 'border-white/10 hover:border-[#06b6d4]/30 bg-white/[0.02]'
+                    }`}
+                    onClick={() => document.getElementById('payment-screenshot-input')?.click()}
+                  >
+                    <input
+                      id="payment-screenshot-input"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 5 * 1024 * 1024) {
+                          setError('Screenshot must be under 5 MB.');
+                          return;
+                        }
+                        setPaymentScreenshot(file);
+                        const reader = new FileReader();
+                        reader.onload = () => setScreenshotPreview(reader.result as string);
+                        reader.readAsDataURL(file);
+                        setError('');
+                      }}
+                    />
+                    {screenshotPreview ? (
+                      <div className="flex flex-col items-center gap-3">
+                        <img src={screenshotPreview} alt="Payment proof" className="max-h-32 rounded-xl border border-white/10 object-contain" />
+                        <span className="text-[9px] font-black text-[#67e8f9] uppercase tracking-widest">
+                          {paymentScreenshot?.name} — Click to change
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload size={28} className="text-slate-500 group-hover:text-[#67e8f9] transition-colors" />
+                        <span className="text-[10px] font-black text-slate-500 group-hover:text-white uppercase tracking-widest transition-colors">
+                          Upload Payment Screenshot
+                        </span>
+                        <span className="text-[9px] text-slate-600">PNG, JPG, JPEG — Max 5 MB</span>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-[9px] text-slate-500 text-center leading-relaxed">
+                    Upload a screenshot of your payment confirmation from your banking or UPI app.
+                  </p>
                 </div>
 
                 <div className="flex gap-4">
@@ -1061,23 +1099,13 @@ const validateMembers = () => {
                   </button>
                   <button
                     onClick={() => {
-
-			  if (!hasPaid) {
-			    setError('Please confirm payment before continuing.');
-			    return;
-			  }
-
-			  if (!utrRegex.test(transactionId.trim())) {
-			    setError(
-			      'Invalid UTR. Enter the real transaction ID from your UPI app.'
-			    );
-			    return;
-			  }
-
-			  setError('');
-			  setStep('confirm');
-
-			}}
+                      if (!paymentScreenshot) {
+                        setError('Please upload a screenshot of your payment.');
+                        return;
+                      }
+                      setError('');
+                      setStep('confirm');
+                    }}
                     className="flex-[2] py-5 bg-gradient-to-r from-[#06b6d4] to-purple-400 text-slate-950 font-black uppercase tracking-[0.4em] text-xs rounded-2xl transition-all shadow-xl shadow-[#06b6d4]/20 flex items-center justify-center gap-2 active:scale-95"
                   >
                     VERIFY PAYMENT <ChevronRight size={16} />

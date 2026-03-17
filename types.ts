@@ -78,7 +78,7 @@ export interface Registration {
   feePaid?: number;
   hasPaid?: boolean;
   hasRobot?: boolean;
-  transactionId?: string;
+  paymentScreenshotUrl?: string;
   verifiedAt?: number;
 }
 
@@ -121,6 +121,13 @@ export interface AnnouncementConfig {
   ctaHref: string;
 }
 
+export interface DepartmentPaymentInfo {
+  upiId?: string;
+  payeeName?: string;
+  bankAccountNo?: string;
+  bankIfsc?: string;
+}
+
 export interface RegistrationSettings {
   isOpen: boolean;
   closedMessage: string;
@@ -128,6 +135,7 @@ export interface RegistrationSettings {
   payeeName?: string;
   bankAccountNo?: string;
   bankIfsc?: string;
+  departmentPayments?: Record<string, DepartmentPaymentInfo>;
 }
 
 export interface SponsorConfig {

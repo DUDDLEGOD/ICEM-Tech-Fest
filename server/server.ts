@@ -64,7 +64,7 @@ app.post('/api/register', async (req: Request, res: Response): Promise<void> => 
         status: 'Confirmed',
         fee_paid: registration.feePaid || 0,
         has_paid: registration.hasPaid || false,
-        transaction_id: registration.transactionId || null,
+        payment_screenshot_url: registration.paymentScreenshotUrl || null,
       })
       .select('id')
       .single();

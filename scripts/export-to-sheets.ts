@@ -129,7 +129,7 @@ interface RegistrationRow {
   status: string;
   fee_paid: number;
   has_paid: boolean;
-  transaction_id: string | null;
+  payment_screenshot_url: string | null;
   created_at: string;
 }
 
@@ -264,18 +264,22 @@ async function main() {
 
   // ── Write data + format ──────────────────────────────────────────────────
   const HEADER = [
-    '#', 'Ref ID', 'Team Name', 'Event', 'Department',
+    '#', 'Reference ID', 'Team Name', 'Event', 'Department',
     'Leader Name', 'Leader Email', 'Leader Phone', 'College',
-    'Members', 'Abstract', 'Status', 'Paid', 'Fee', 'Transaction ID', 'Registered At',
+    'Team Members', 'Abstract', 'Status', 'Payment', 'Fee', 'Screenshot URL', 'Timestamp',
   ];
 
   function buildRows(regList: RegistrationRow[]): string[][] {
     return regList.map((reg, idx) => {
       const teamMembers = membersByReg.get(reg.id) || [];
-      const memberStr = teamMembers.map(m => `${m.name} (${m.email})`).join('\n');
+      const memberStr = teamMembers.map(m => `• ${m.name} (${m.email} / ${m.college})`).join('\n');
       const dept = EVENT_DEPARTMENT[reg.event_id] || 'Other';
       const eventName = EVENT_NAME[reg.event_id] || reg.event_id;
-      const date = new Date(reg.created_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      const date = new Date(reg.created_at).toLocaleString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: true, timeZone: 'Asia/Kolkata'
+      });
 
       return [
         String(idx + 1),
@@ -287,12 +291,12 @@ async function main() {
         reg.leader_email,
         reg.leader_phone,
         reg.leader_college,
-        memberStr || '—',
-        reg.abstract_text || '—',
+        memberStr || 'Standalone',
+        reg.abstract_text || 'None',
         reg.status,
-        reg.has_paid ? '✅ Yes' : '❌ No',
+        reg.has_paid ? '✅ PAID' : '❌ UNPAID',
         `₹${reg.fee_paid}`,
-        reg.transaction_id || '—',
+        reg.payment_screenshot_url || 'N/A',
         date,
       ];
     });
@@ -350,7 +354,45 @@ async function main() {
       },
     });
 
-    // 3. Auto-resize columns
+    // 3. Set column widths
+    const COLUMN_WIDTHS = [
+      40,  // #
+      120, // Reference ID
+      180, // Team Name
+      180, // Event
+      150, // Department
+      150, // Leader Name
+      180, // Leader Email
+      120, // Leader Phone
+      200, // College
+      350, // Team Members
+      350, // Abstract
+      100, // Status
+      80,  // Payment
+      80,  // Fee
+      300, // Screenshot URL
+      200, // Timestamp
+    ];
+
+    formatRequests.push({
+      updateDimensionProperties: {
+        range: { sheetId, dimension: 'COLUMNS', startIndex: 0, endIndex: HEADER.length },
+        properties: { pixelSize: 100 }, // default fallback
+        fields: 'pixelSize',
+      },
+    });
+
+    COLUMN_WIDTHS.forEach((width, i) => {
+      formatRequests.push({
+        updateDimensionProperties: {
+          range: { sheetId, dimension: 'COLUMNS', startIndex: i, endIndex: i + 1 },
+          properties: { pixelSize: width },
+          fields: 'pixelSize',
+        },
+      });
+    });
+
+    // Also auto-resize for any overflow
     formatRequests.push({
       autoResizeDimensions: {
         dimensions: { sheetId, dimension: 'COLUMNS', startIndex: 0, endIndex: HEADER.length },

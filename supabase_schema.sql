@@ -14,7 +14,7 @@ CREATE TABLE registrations (
     status TEXT NOT NULL DEFAULT 'Pending',
     fee_paid INTEGER DEFAULT 0,
     has_paid BOOLEAN DEFAULT false,
-    transaction_id TEXT,
+    payment_screenshot_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
