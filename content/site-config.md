@@ -46,9 +46,12 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 
 ```json sponsors
 [
+<<<<<<< HEAD
   {
     
   }
+=======
+>>>>>>> 265321cd0a21643093f9774d6f9fad292b957dfb
 ]
 ```
 
