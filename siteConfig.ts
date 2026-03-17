@@ -352,7 +352,6 @@ const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
 };
 
 const DEFAULT_SPONSORS: SponsorConfig[] = [
-  { name: 'LEMMA', logo: 'https://cdn.brandfetch.io/idV-rrqz9M/theme/dark/logo.svg?c=1bxid64Mup7aczewSAYMX&t=1767051353774' },
 ];
 
 const DEFAULT_ABOUT_STATS: AboutStatConfig[] = [
