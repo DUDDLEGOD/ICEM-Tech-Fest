@@ -239,7 +239,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "department": "Computer Dept.",
     "minTeam": 3,
     "maxTeam": 5,
-    "fee": 300,
+    "fee": 250,
     "requiresUpload": true,
     "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
