@@ -273,10 +273,10 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "requiresUpload": true,
     "prizePool": "₹25,000",
     "eventDateLabel": "March 27, 2026",
-    "eventTimeLabel": "To Be Announced",
+    "eventTimeLabel": "10am",
     "venueLabel": "ICEM Campus",
     "coordinatorName": "Prof. Pallavi Chavan",
-    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorEmail": "pallavichavan@indiraicem.ac.in",
     "coordinatorPhone": "+91 9175151731",
     "isRegistrationOpen": true,
     "rules": [
@@ -308,7 +308,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
     "coordinatorName": "Prof. Ashwini Wankhede",
-    "coordinatorEmail": "icem@indiraicem.ac.in",
+    "coordinatorEmail": "ashwini.wankhade@indiraicem.ac.in",
     "coordinatorPhone": "+91 7066230348",
     "isRegistrationOpen": true,
     "rules": [
