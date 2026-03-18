@@ -572,7 +572,7 @@ const validateMembers = () => {
               {currentEvent.name}
             </h3>
             <p className="text-sm text-slate-400 max-w-xl">
-              {currentEvent.department} • {currentEvent.eventDateLabel} • {currentEvent.venueLabel}
+              {currentEvent.department} | {currentEvent.eventDateLabel} | {currentEvent.venueLabel}
             </p>
           </div>
 
@@ -1075,7 +1075,7 @@ const validateMembers = () => {
                       <div className="flex flex-col items-center gap-3">
                         <img src={screenshotPreview} alt="Payment proof" className="max-h-32 rounded-xl border border-white/10 object-contain" />
                         <span className="text-[9px] font-black text-[#67e8f9] uppercase tracking-widest">
-                          {paymentScreenshot?.name} — Click to change
+                          {paymentScreenshot?.name} - Click to change
                         </span>
                       </div>
                     ) : (
@@ -1084,7 +1084,7 @@ const validateMembers = () => {
                         <span className="text-[10px] font-black text-slate-500 group-hover:text-white uppercase tracking-widest transition-colors">
                           Upload Payment Screenshot
                         </span>
-                        <span className="text-[9px] text-slate-600">PNG, JPG, JPEG — Max 5 MB</span>
+                        <span className="text-[9px] text-slate-600">PNG, JPG, JPEG - Max 5 MB</span>
                       </>
                     )}
                   </div>

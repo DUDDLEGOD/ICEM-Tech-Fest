@@ -94,24 +94,24 @@ const DEFAULT_COLOUR: RGB = { red: 0.5, green: 0.5, blue: 0.5 };
 const EVENT_DEPARTMENT: Record<string, string> = {
   CHAKRAVYUH:       'First-Year',
   NEUROAVATAR:      'Computer Dept.',
-  DATA_DASH:        'AIDS Dept.',
-  CYBER_SHIELD:     'IT Dept',
+  ORCHESTRON:       'AIDS Dept.',
+  CODEVERSE:        'IT Dept',
   BRIDGE:           'Civil Dept.',
-  FAST_FURIOUS:     'Mech Dept.',
-  CIRCUIT_CRAFTERS: 'ENTC Dept.',
-  WEB_WIZARDS:      'MCA/BCA Dept.',
+  BLIND_ASSEMBLY:   'Mech Dept.',
+  ROBONEX:          'ENTC Dept.',
+  VIBEASTRA:        'MCA/BCA Dept.',
   LAUNCHPAD:        'MBA Dept. (IGSB+ICEM)',
 };
 
 const EVENT_NAME: Record<string, string> = {
   CHAKRAVYUH:       'Chakravyuh',
   NEUROAVATAR:      'NeuroAvatar Arena',
-  DATA_DASH:        'Data Dash',
-  CYBER_SHIELD:     'Cyber Shield Challenge',
+  ORCHESTRON:       'Orchestron - Agentic AI',
+  CODEVERSE:        'CodeVerse',
   BRIDGE:           'The Gravity Game – Bridge Making',
-  FAST_FURIOUS:     'Fast & Furious',
-  CIRCUIT_CRAFTERS: 'Circuit Crafters',
-  WEB_WIZARDS:      'Web Wizards Challenge',
+  BLIND_ASSEMBLY:   'Blind Assembly',
+  ROBONEX:          'RoboNex',
+  VIBEASTRA:        'VibeAstra',
   LAUNCHPAD:        'LaunchPad Business Plan Challenge',
 };
 

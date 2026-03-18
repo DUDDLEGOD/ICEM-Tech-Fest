@@ -89,7 +89,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
       "bankIfsc": "INDB0000999"
     },
     "MBA Dept. (IGSB+ICEM)": {
-      "upiId": "ashishpdng@okicici",
+      "upiId": "not given",
       "payeeName": "IGSB MBA Dept",
       "bankAccountNo": "201025452649",
       "bankIfsc": "INDB0000999"
@@ -123,7 +123,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "email": "icem@indiraicem.ac.in",
   "phone": "+91 88559 77815",
   "institutionSiteUrl": "https://indiraicem.ac.in/",
-  "footerBlurb": "Official technical wing of SCES. Focusing on Engineering & Management excellence."
+  "footerBlurb": "S.No. 64,65, Gat No. 276 At Post: Parandwadi, Near Somatne phata, Tal.: Maval, Dist. Pune – 410 506"
 }
 ```
 
@@ -133,12 +133,12 @@ This keeps all site content static and removes the runtime CMS/server-config fet
 {
   "CHAKRAVYUH": false,
   "NEUROAVATAR": false,
-  "DATA_DASH": false,
-  "CYBER_SHIELD": false,
+  "ORCHESTRON": false,
+  "CODEVERSE": false,
   "BRIDGE": false,
-  "FAST_FURIOUS": false,
-  "CIRCUIT_CRAFTERS": false,
-  "WEB_WIZARDS": false,
+  "BLIND_ASSEMBLY": false,
+  "ROBONEX": false,
+  "VIBEASTRA": false,
   "LAUNCHPAD": false
 }
 ```
@@ -209,6 +209,23 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Trupti Kethale",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 7841994889",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Trupti Kethale",
+        "phone": "+91 7841994889",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Sampada Katageri",
+        "phone": "+91 8668955724"
+      },
+      {
+        "name": "Sujal Dhumal",
+        "phone": "+91 9028820220"
+      }
+    ],
     "isRegistrationOpen": true,
     "rules": [
       "Team size: 3-5 MEMBERS",
@@ -248,6 +265,23 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Minal Patil",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9145616101",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Minal Patil",
+        "phone": "+91 9145616101",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Advait Kende",
+        "phone": "+91 9552637352"
+      },
+      {
+        "name": "Suraj Prajapati",
+        "phone": "+91 8767291440"
+      }
+    ],
     "isRegistrationOpen": true,
     "rules": [
       "Teams must arrive with a ready-to-demonstrate MVP",
@@ -278,6 +312,23 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Pallavi Chavan",
     "coordinatorEmail": "pallavichavan@indiraicem.ac.in",
     "coordinatorPhone": "+91 9175151731",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Pallavi Chavan",
+        "phone": "+91 9175151731",
+        "email": "pallavichavan@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Soham Kate",
+        "phone": "+91 7385504133"
+      },
+      {
+        "name": "Vedant Padmawar",
+        "phone": "+91 9561258843"
+      }
+    ],
     "isRegistrationOpen": true,
     "rules": [
       "Prize Distribution: 1st - ₹15K, 2nd - ₹10K"
@@ -307,9 +358,26 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Prof. Ashwini Wankhede",
+    "coordinatorName": "Prof. Ashwini Wankhade",
     "coordinatorEmail": "ashwini.wankhade@indiraicem.ac.in",
     "coordinatorPhone": "+91 7066230348",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Ashwini Wankhade",
+        "phone": "+91 7066230348",
+        "email": "ashwini.wankhade@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Dharmesh Bhatt",
+        "phone": "+91 7249452498"
+      },
+      {
+        "name": "Shubham Shinde",
+        "phone": "+91 9689650744"
+      }
+    ],
     "isRegistrationOpen": true,
     "rules": [
       "Team size fixed at 3",
@@ -347,7 +415,45 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Vijay Kumar Saini",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9819298069",
-    "isRegistrationOpen": true
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Vijay Kumar Saini",
+        "phone": "+91 9819298069",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Yash Mhatre",
+        "phone": "+91 9322044906"
+      },
+      {
+        "name": "Neel Bodade",
+        "phone": "+91 9975836063"
+      }
+    ],
+    "isRegistrationOpen": true,
+    "rules": [
+      "Provided Kit: 150 Ice Cream Sticks and Rubber Bands",
+      "Participant-Supplied: Members must bring their own Hot Glue Gun",
+      "No electronic devices or unauthorized materials allowed",
+      "Bridge must satisfy span, width, height, and mid-span load requirements",
+      "Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K"
+    ],
+    "rounds": [
+      {
+        "title": "Round 1: Bridge Construction",
+        "desc": "Build the bridge on site within the allotted time while staying within the span, width, height, and support constraints."
+      },
+      {
+        "title": "Round 2: Stability and Roadway Check",
+        "desc": "The bridge is checked for alignment, symmetry, free-standing stability, and roadway readiness for the RC testing car/static load."
+      },
+      {
+        "title": "Round 3: Central Load Test",
+        "desc": "Weights are applied incrementally at the exact geometric center until failure, with scoring based on load carrying capacity and structural efficiency."
+      }
+    ]
   },
   {
     "id": "BLIND_ASSEMBLY",
@@ -366,13 +472,30 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Pranali Khatake",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 7083597073",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Pranali Khatake",
+        "phone": "+91 7083597073",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Ritesh Supekar",
+        "phone": "+91 9730920512"
+      },
+      {
+        "name": "Keval Salunke",
+        "phone": "+91 9313449805"
+      }
+    ],
     "isRegistrationOpen": true
   },
   {
     "id": "ROBONEX",
     "name": "RoboNex",
     "tagline": "Robotics Combat & Race",
-    "description": "Includes Robo Race and Robo Rumble events.",
+    "description": "Robo Race is a fast-paced robotics competition in Robonex where teams design manually controlled robots to race through a challenging track. The robots must navigate obstacles such as turns, ramps, and hurdles while completing the track in the shortest possible time, testing participants' skills in robot design, control, and speed.",
     "department": "ENTC Dept.",
     "minTeam": 2,
     "maxTeam": 4,
@@ -386,7 +509,35 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Balu Tandale",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 8805048185",
-    "isRegistrationOpen": true
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Balu Tandale",
+        "phone": "+91 8805048185",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Soham Kulkarni",
+        "phone": "+91 8623990668"
+      },
+      {
+        "name": "Atharv Kulkarni",
+        "phone": "+91 7219536282"
+      }
+    ],
+    "isRegistrationOpen": true,
+    "rules": [
+      "Fee: \u20B9200 without robot / \u20B9250 with your own robot",
+      "Manually controlled robots only",
+      "Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K"
+    ],
+    "rounds": [
+      {
+        "title": "Robo Race",
+        "desc": "Race a manually controlled robot through turns, ramps, and hurdles in the shortest possible time."
+      }
+    ]
   },
   {
     "id": "VIBEASTRA",
@@ -405,6 +556,23 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Dr. Dhanashree Patil",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 7972308184",
+    "facultyCoordinators": [
+      {
+        "name": "Dr. Dhanashree Patil",
+        "phone": "+91 7972308184",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Aditya Agarwal",
+        "phone": "+91 7076525693"
+      },
+      {
+        "name": "Stanley James",
+        "phone": "+91 8408077248"
+      }
+    ],
     "isRegistrationOpen": true
   },
   {
@@ -424,6 +592,32 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorName": "Prof. Aditee Huparikar & Dr. Aniruddha Thuse",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9823459833 / 9850901315",
+    "facultyCoordinators": [
+      {
+        "name": "Prof. Aditee Huparikar",
+        "phone": "+91 9823459833",
+        "email": "icem@indiraicem.ac.in"
+      },
+      {
+        "name": "Dr. Aniruddha Thuse",
+        "phone": "+91 9850901315",
+        "email": "icem@indiraicem.ac.in"
+      }
+    ],
+    "studentCoordinators": [
+      {
+        "name": "Rajveer Gil",
+        "phone": "+91 7587227100"
+      },
+      {
+        "name": "Radhika Nannaware",
+        "phone": "+91 8956717423"
+      },
+      {
+        "name": "Atharv Salunke / Rajveer Preet Gill",
+        "phone": "+91 7888106167"
+      }
+    ],
     "isRegistrationOpen": true,
     "rules": [
       "Prize Distribution: 1st - ₹7K, 2nd - ₹5K, 3rd - ₹3K"

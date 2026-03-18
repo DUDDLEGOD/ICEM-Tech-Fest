@@ -36,6 +36,41 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const WHATSAPP_GROUPS: Record<string, { label: string; url: string }> = {
+  CHAKRAVYUH: {
+    label: 'First Year',
+    url: 'https://chat.whatsapp.com/HfcCQeDg2DNARHt8CE6rkp?mode=gi_t',
+  },
+  NEUROAVATAR: {
+    label: 'Computer Dept.',
+    url: 'https://chat.whatsapp.com/IFb2xaUcJmPDXw1BnglNBk?mode=gi_t',
+  },
+  ORCHESTRON: {
+    label: 'AIDS Dept.',
+    url: 'https://chat.whatsapp.com/EwzUOvppNySAyGgZNCfJfQ',
+  },
+  CODEVERSE: {
+    label: 'IT Dept.',
+    url: 'https://chat.whatsapp.com/EM667NPGlNCCQOAuUW1u4Q?mode=gi_t',
+  },
+  BRIDGE: {
+    label: 'Civil Dept.',
+    url: 'https://chat.whatsapp.com/JMsOAX4x8Ze5Xu8MXhWaHQ',
+  },
+  BLIND_ASSEMBLY: {
+    label: 'Mech Dept.',
+    url: 'https://chat.whatsapp.com/LIV994BVM7vBsVBMVV5vl9?mode=gi_t',
+  },
+  ROBONEX: {
+    label: 'ENTC Dept.',
+    url: 'https://chat.whatsapp.com/HBDB1rx4f1cHoasNlcqunZ',
+  },
+  VIBEASTRA: {
+    label: 'MCA/BCA Dept.',
+    url: 'https://chat.whatsapp.com/KhDlbj4FPkYIDBziZKycM8?mode=gi_t',
+  },
+};
+
 app.post('/api/register', async (req: Request, res: Response): Promise<void> => {
   if (!supabase) {
     res.status(500).json({ status: 'failed', message: 'Supabase is not configured on the server.' });
@@ -100,6 +135,8 @@ app.post('/api/register', async (req: Request, res: Response): Promise<void> => 
       }
     }
 
+    const whatsappGroup = WHATSAPP_GROUPS[registration.eventId];
+
     const mailOptions = {
       from: `"${process.env.SMTP_FROM_NAME || 'TechnoFest 2026'}" <${process.env.SMTP_USER}>`,
       to: registration.leaderEmail,
@@ -117,6 +154,24 @@ app.post('/api/register', async (req: Request, res: Response): Promise<void> => 
             <p style="margin: 5px 0; color: #0ea5e9;"><strong>TIME:</strong> ${eventTimeLabel}</p>
             <p style="margin: 5px 0; color: #a855f7;"><strong>TRACKING REF:</strong> ${registration.id}</p>
           </div>
+
+          ${
+            whatsappGroup
+              ? `
+          <div style="background: rgba(14,165,233,0.08); border: 1px solid rgba(14,165,233,0.2); padding: 18px 20px; border-radius: 8px; margin: 0 0 25px;">
+            <p style="margin: 0 0 10px; font-size: 15px; color: #e2e8f0;">
+              Join the <strong>${whatsappGroup.label}</strong> coordination group for updates and instructions.
+            </p>
+            <a
+              href="${whatsappGroup.url}"
+              style="display: inline-block; padding: 10px 16px; border-radius: 999px; background: #22c55e; color: #04130a; font-weight: 700; text-decoration: none;"
+            >
+              Join WhatsApp Group
+            </a>
+          </div>
+          `
+              : ''
+          }
 
           <p style="font-size: 14px; color: #9ca3af;">Prepare your equipment and brief your squad. Further intelligence will follow closer to drop day.</p>
 

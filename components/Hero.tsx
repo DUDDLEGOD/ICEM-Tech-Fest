@@ -88,14 +88,14 @@ const Countdown: React.FC<{ targetDate: string }> = ({ targetDate }) => {
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.6 }}
-      className="flex items-center gap-3 md:gap-4"
+      className="flex flex-wrap items-center justify-center gap-2 md:gap-4"
     >
       <CountdownUnit value={timeLeft.days} label="Days" />
-      <span className={colonStyle}>:</span>
+      <span className={`${colonStyle} hidden sm:block`}>:</span>
       <CountdownUnit value={timeLeft.hours} label="Hours" />
-      <span className={colonStyle}>:</span>
+      <span className={`${colonStyle} hidden sm:block`}>:</span>
       <CountdownUnit value={timeLeft.minutes} label="Min" />
-      <span className={colonStyle}>:</span>
+      <span className={`${colonStyle} hidden sm:block`}>:</span>
       <CountdownUnit value={timeLeft.seconds} label="Sec" />
     </motion.div>
   );
@@ -113,7 +113,7 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="hero-section"
-      className="relative w-full min-h-screen pt-20 md:pt-8 flex flex-col items-center justify-start overflow-hidden bg-[#0a0a12]"
+      className="relative w-full min-h-[100svh] pt-24 sm:pt-20 md:pt-8 flex flex-col items-center justify-start overflow-hidden bg-[#0a0a12]"
     >
       {/* Background */}
       <div className="absolute inset-0 z-0">
@@ -158,8 +158,8 @@ export const Hero: React.FC = () => {
             {/* Cinematic readability layer */}
             <div className="absolute w-[620px] h-[200px] bg-black/45 blur-3xl rounded-full -z-10" />
 
-            <span className="text-[11px] md:text-[13px] font-black text-cyan-50/90 uppercase tracking-[0.25em] italic">
-              {config.hero.institution} — {config.hero.organizingLabel}
+            <span className="text-[9px] sm:text-[11px] md:text-[13px] font-black text-cyan-50/90 uppercase tracking-[0.2em] md:tracking-[0.25em] italic text-center">
+              {config.hero.institution} - {config.hero.organizingLabel}
             </span>
 
             <h1 className="font-futuristic text-3xl md:text-6xl lg:text-7xl tracking-tight leading-none font-black italic text-white drop-shadow-2xl px-4">
@@ -212,7 +212,7 @@ export const Hero: React.FC = () => {
               }, 400);
             }
           }}
-          className="mt-3 group relative px-8 py-3 md:px-10 md:py-3.5 border font-bold uppercase tracking-[0.25em] text-[10px] md:text-[11px] rounded-[1.25rem] overflow-hidden transition-all duration-500 backdrop-blur-xl"
+          className="mt-3 group relative px-10 py-4 md:px-14 md:py-[1.125rem] border font-bold uppercase tracking-[0.25em] text-[11px] md:text-[12px] rounded-[1.4rem] overflow-hidden transition-all duration-500 backdrop-blur-xl"
           style={{
             borderColor: "rgba(103,232,249,0.5)",
             color: "#ffffff",

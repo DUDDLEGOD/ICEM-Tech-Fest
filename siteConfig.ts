@@ -4,6 +4,7 @@ import {
     AnnouncementConfig,
     BrochureVisibility,
     ContactConfig,
+    CoordinatorContact,
     Department,
     EventConfig,
     EventID,
@@ -33,6 +34,19 @@ const getStringArray = (value: unknown, fallback: string[]) => {
   return next.length > 0 ? next : fallback;
 };
 
+const createCoordinatorContact = (
+  name: string,
+  phone: string,
+  email?: string,
+): CoordinatorContact => ({
+  name,
+  phone,
+  email,
+});
+
+const cloneCoordinatorContacts = (contacts?: CoordinatorContact[]) =>
+  contacts?.map((contact) => ({ ...contact }));
+
 const getDepartment = (value: unknown, fallback: string) => {
   if (typeof value !== 'string' || value.trim().length === 0) {
     return fallback;
@@ -45,12 +59,12 @@ const getDepartment = (value: unknown, fallback: string) => {
 const createDefaultBrochureVisibility = (): BrochureVisibility => ({
   [EventID.CHAKRAVYUH]: false,
   [EventID.NEUROAVATAR]: false,
-  [EventID.DATA_DASH]: false,
-  [EventID.CYBER_SHIELD]: false,
+  [EventID.ORCHESTRON]: false,
+  [EventID.CODEVERSE]: false,
   [EventID.BRIDGE]: false,
-  [EventID.FAST_FURIOUS]: false,
-  [EventID.CIRCUIT_CRAFTERS]: false,
-  [EventID.WEB_WIZARDS]: false,
+  [EventID.BLIND_ASSEMBLY]: false,
+  [EventID.ROBONEX]: false,
+  [EventID.VIBEASTRA]: false,
   [EventID.LAUNCHPAD]: false,
 });
 
@@ -63,29 +77,40 @@ const DEFAULT_EVENT_ROUNDS: Record<EventID, EventRound[]> = {
   [EventID.NEUROAVATAR]: [
     { title: 'Project Showcase', desc: 'Demonstrate your MVP and refine it based on the theme.' },
   ],
-  [EventID.DATA_DASH]: [
-    { title: 'Data Challenge', desc: 'Analyze provided datasets and build comprehensive visualizations.' },
+  [EventID.ORCHESTRON]: [
+    { title: 'Round 1', desc: 'Project presentation with PPT or demo.' },
+    { title: 'Round 2', desc: 'Q&A and scenario-based evaluation.' },
   ],
-  [EventID.CYBER_SHIELD]: [
-    { title: 'Security Challenge', desc: 'Solve ethical hacking tasks and bypass security challenges.' },
+  [EventID.CODEVERSE]: [
+    { title: 'Round 1', desc: 'Predict the output.' },
+    { title: 'Round 2', desc: 'Solve DSA problems.' },
+    { title: 'Round 3', desc: 'Debug and fix program issues.' },
   ],
   [EventID.BRIDGE]: [
-    { title: 'Construction Phase', desc: 'On-site bridge building for approximately 2 hours.' },
-    { title: 'Load Test', desc: 'Incremental weights added to the geometric center until failure.' },
+    {
+      title: 'Round 1: Bridge Construction',
+      desc: 'Build the bridge on site within the allotted time while staying within the span, width, height, and support constraints.',
+    },
+    {
+      title: 'Round 2: Stability and Roadway Check',
+      desc: 'The bridge is checked for alignment, symmetry, free-standing stability, and roadway readiness for the RC testing car/static load.',
+    },
+    {
+      title: 'Round 3: Central Load Test',
+      desc: 'Weights are applied incrementally at the exact geometric center until failure, with scoring based on load carrying capacity and structural efficiency.',
+    },
   ],
-  [EventID.FAST_FURIOUS]: [
-    { title: 'Qualification', desc: 'Initial heat to filter top performers.' },
-    { title: 'Semi-Final', desc: 'Advanced assembly tasks for qualifiers.' },
-    { title: 'Final', desc: 'Head-to-head race for the fastest correct assembly.' },
+  [EventID.BLIND_ASSEMBLY]: [
+    { title: 'Blind Assembly', desc: 'Identify and assemble components blindfolded using touch and mechanical intuition.' },
   ],
-  [EventID.CIRCUIT_CRAFTERS]: [
-    { title: 'Circuit Implementation', desc: 'Design, build, and test circuits based on provided challenges.' },
+  [EventID.ROBONEX]: [
+    { title: 'Robo Race', desc: 'Race a manually controlled robot through turns, ramps, and hurdles in the shortest possible time.' },
   ],
-  [EventID.WEB_WIZARDS]: [
-    { title: 'Web Development', desc: 'Develop and design a functional website based on the given theme.' },
+  [EventID.VIBEASTRA]: [
+    { title: 'Creative Coding', desc: 'Solve logic-driven coding challenges in a gamified format focused on creativity and problem solving.' },
   ],
   [EventID.LAUNCHPAD]: [
-    { title: 'Business Model Pitch', desc: 'Present your innovative startup idea and financial viability.' },
+    { title: 'Business Model Pitch', desc: 'Present your startup idea, business model, and market viability.' },
   ],
 };
 
@@ -100,18 +125,25 @@ export const DEFAULT_EVENTS: EventConfig[] = [
     maxTeam: 5,
     fee: 250,
     requiresUpload: false,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
     coordinatorName: 'Prof. Trupti Kethale',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 7841994889',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Trupti Kethale', '+91 7841994889', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Sampada Katageri', '+91 8668955724'),
+      createCoordinatorContact('Sujal Dhumal', '+91 9028820220'),
+    ],
     isRegistrationOpen: true,
     rules: [
       'Team size: 3-5 MEMBERS',
       'Registration: 250 per team',
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
       'Trophy for winner and runner-up; certificates for all participants',
     ],
     rounds: DEFAULT_EVENT_ROUNDS[EventID.CHAKRAVYUH],
@@ -126,199 +158,255 @@ export const DEFAULT_EVENTS: EventConfig[] = [
     maxTeam: 5,
     fee: 300,
     requiresUpload: true,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
     coordinatorName: 'Prof. Minal Patil',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 9145616101',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Minal Patil', '+91 9145616101', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Advait Kende', '+91 9552637352'),
+      createCoordinatorContact('Suraj Prajapati', '+91 8767291440'),
+    ],
     isRegistrationOpen: true,
     rules: [
       'Teams must arrive with a ready-to-demonstrate MVP',
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
       'Trophy for winner and runner-up; certificates for all participants',
     ],
     rounds: DEFAULT_EVENT_ROUNDS[EventID.NEUROAVATAR],
   },
   {
-    id: EventID.DATA_DASH,
-    name: 'Data Dash',
-    tagline: 'Data analysis and visualization contest',
-    description: 'A high-level competition focused on deep data analysis and effective visualization techniques.',
+    id: EventID.ORCHESTRON,
+    name: 'Orchestron - Agentic AI',
+    tagline: 'Agentic AI Innovation Challenge',
+    description: 'Showcase AI systems capable of planning, reasoning, and solving real-world problems.',
     department: Department.AIDS,
     minTeam: 3,
     maxTeam: 5,
     fee: 250,
     requiresUpload: true,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
-    eventTimeLabel: 'To Be Announced',
+    eventTimeLabel: '10am',
     venueLabel: 'ICEM Campus',
-    coordinatorName: 'Organizing Team',
-    coordinatorEmail: 'icem@indiraicem.ac.in',
-    coordinatorPhone: '+91 88559 77815',
+    coordinatorName: 'Prof. Pallavi Chavan',
+    coordinatorEmail: 'pallavichavan@indiraicem.ac.in',
+    coordinatorPhone: '+91 9175151731',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Pallavi Chavan', '+91 9175151731', 'pallavichavan@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Soham Kate', '+91 7385504133'),
+      createCoordinatorContact('Vedant Padmawar', '+91 9561258843'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
-    rounds: DEFAULT_EVENT_ROUNDS[EventID.DATA_DASH],
+    rounds: DEFAULT_EVENT_ROUNDS[EventID.ORCHESTRON],
   },
   {
-    id: EventID.CYBER_SHIELD,
-    name: 'Cyber Shield Challenge',
-    tagline: 'The Ultimate Defensive Gauntlet',
-    description: 'A competition focused on cybersecurity, ethical hacking, and digital defense strategies.',
+    id: EventID.CODEVERSE,
+    name: 'CodeVerse',
+    tagline: 'Programming Battle Arena',
+    description: 'Multi-round coding event including output prediction, DSA problems, and debugging.',
     department: Department.IT,
     minTeam: 3,
-    maxTeam: 5,
+    maxTeam: 3,
     fee: 250,
-    requiresUpload: true,
-    prizePool: '\u20B940,000',
+    requiresUpload: false,
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
-    coordinatorName: 'Organizing Team',
-    coordinatorEmail: 'icem@indiraicem.ac.in',
-    coordinatorPhone: '+91 88559 77815',
+    coordinatorName: 'Prof. Ashwini Wankhade',
+    coordinatorEmail: 'ashwini.wankhade@indiraicem.ac.in',
+    coordinatorPhone: '+91 7066230348',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Ashwini Wankhade', '+91 7066230348', 'ashwini.wankhade@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Dharmesh Bhatt', '+91 7249452498'),
+      createCoordinatorContact('Shubham Shinde', '+91 9689650744'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Team size fixed at 3',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
-    rounds: DEFAULT_EVENT_ROUNDS[EventID.CYBER_SHIELD],
+    rounds: DEFAULT_EVENT_ROUNDS[EventID.CODEVERSE],
   },
   {
     id: EventID.BRIDGE,
     name: 'The Gravity Game.... Bridge Making',
-    tagline: 'Structural Elegance & Strength',
-    description: 'A hands-on engineering competition designed to test structural design, load distribution, and material efficiency by constructing a model bridge.',
+    tagline: 'Structural Design Challenge',
+    description: 'Build a bridge using limited materials and test load capacity.',
     department: Department.CIVIL,
     minTeam: 2,
     maxTeam: 5,
-    fee: 500,
+    fee: 250,
     requiresUpload: false,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: '09:30 AM - 03:30 PM',
     venueLabel: 'ICEM Campus',
     coordinatorName: 'Prof. Vijay Kumar Saini',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 9819298069',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Vijay Kumar Saini', '+91 9819298069', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Yash Mhatre', '+91 9322044906'),
+      createCoordinatorContact('Neel Bodade', '+91 9975836063'),
+    ],
     isRegistrationOpen: true,
     rules: [
       'Provided Kit: 150 Ice Cream Sticks and Rubber Bands',
       'Participant-Supplied: Members must bring their own Hot Glue Gun',
-      'No electronic devices allowed',
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
+      'No electronic devices or unauthorized materials allowed',
+      'Bridge must satisfy span, width, height, and mid-span load requirements',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
       'Trophy for winner and runner-up; certificates for all participants',
     ],
     rounds: DEFAULT_EVENT_ROUNDS[EventID.BRIDGE],
   },
   {
-    id: EventID.FAST_FURIOUS,
-    name: 'Fast & Furious',
-    tagline: 'Mechanical Intuition & Memory',
-    description: 'A high-octane individual competition where participants identify and assemble mechanical systems blindfolded using touch and memory.',
+    id: EventID.BLIND_ASSEMBLY,
+    name: 'Blind Assembly',
+    tagline: 'Mechanical Intuition Test',
+    description: 'Identify and assemble components blindfolded using touch.',
     department: Department.MECH,
     minTeam: 2,
     maxTeam: 2,
-    fee: 0,
+    fee: 250,
     requiresUpload: false,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
-    coordinatorName: 'Prof. Pranali Knatake',
+    coordinatorName: 'Prof. Pranali Khatake',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 7083597073',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Pranali Khatake', '+91 7083597073', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Ritesh Supekar', '+91 9730920512'),
+      createCoordinatorContact('Keval Salunke', '+91 9313449805'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Blindfold Protocol: Removing blindfold results in instant disqualification.',
-      'Hands-Only identification and assembly.',
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Blindfold Protocol: Removing the blindfold results in disqualification',
+      'Use touch and memory to identify and assemble components',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
-    rounds: DEFAULT_EVENT_ROUNDS[EventID.FAST_FURIOUS],
+    rounds: DEFAULT_EVENT_ROUNDS[EventID.BLIND_ASSEMBLY],
   },
   {
-    id: EventID.CIRCUIT_CRAFTERS,
-    name: 'Circuit Crafters',
-    tagline: 'Precision Hardware Design',
-    description: 'Challenge your ability to design and implement complex electronic circuits effectively.',
+    id: EventID.ROBONEX,
+    name: 'RoboNex',
+    tagline: 'Robotics Combat & Race',
+    description: 'Robo Race is a fast-paced robotics competition in Robonex where teams design manually controlled robots to race through a challenging track. The robots must navigate obstacles such as turns, ramps, and hurdles while completing the track in the shortest possible time, testing participants\' skills in robot design, control, and speed.',
     department: Department.ENTC,
-    minTeam: 3,
-    maxTeam: 5,
-    fee: 250,
+    minTeam: 2,
+    maxTeam: 4,
+    fee: '200/250',
     requiresUpload: false,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
     coordinatorName: 'Prof. Balu Tandale',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 8805048185',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Balu Tandale', '+91 8805048185', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Soham Kulkarni', '+91 8623990668'),
+      createCoordinatorContact('Atharv Kulkarni', '+91 7219536282'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Fee: \u20B9200 without robot / \u20B9250 with your own robot',
+      'Manually controlled robots only',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
-    rounds: DEFAULT_EVENT_ROUNDS[EventID.CIRCUIT_CRAFTERS],
+    rounds: DEFAULT_EVENT_ROUNDS[EventID.ROBONEX],
   },
   {
-    id: EventID.WEB_WIZARDS,
-    name: 'Web Wizards Challenge',
-    tagline: 'Full-Stack Design & Development',
-    description: 'Showcase your web development skills in this high-speed design and deployment competition.',
+    id: EventID.VIBEASTRA,
+    name: 'VibeAstra',
+    tagline: 'Creative Coding Experience',
+    description: 'Gamified coding event focused on logic and creativity.',
     department: Department.MCA_BCA,
-    minTeam: 3,
-    maxTeam: 5,
+    minTeam: 1,
+    maxTeam: 1,
     fee: 250,
-    requiresUpload: true,
-    prizePool: '\u20B940,000',
+    requiresUpload: false,
+    prizePool: '\u20B925,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'ICEM Campus',
-    coordinatorName: 'Organizing Team',
+    coordinatorName: 'Dr. Dhanashree Patil',
     coordinatorEmail: 'icem@indiraicem.ac.in',
-    coordinatorPhone: '+91 88559 77815',
+    coordinatorPhone: '+91 7972308184',
+    facultyCoordinators: [
+      createCoordinatorContact('Dr. Dhanashree Patil', '+91 7972308184', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Aditya Agarwal', '+91 7076525693'),
+      createCoordinatorContact('Stanley James', '+91 8408077248'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Individual participation only',
+      'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
-    rounds: DEFAULT_EVENT_ROUNDS[EventID.WEB_WIZARDS],
+    rounds: DEFAULT_EVENT_ROUNDS[EventID.VIBEASTRA],
   },
   {
     id: EventID.LAUNCHPAD,
     name: 'LaunchPad Business Plan Challenge',
-    tagline: 'The Entrepreneurial Pitch',
-    description: 'Present your innovative startup idea, develop a feasible business model, and showcase market potential.',
+    tagline: 'Startup Pitch Arena',
+    description: 'Present startup ideas and business models.',
     department: Department.MBA,
     minTeam: 1,
     maxTeam: 5,
     fee: 500,
     requiresUpload: true,
-    prizePool: '\u20B940,000',
+    prizePool: '\u20B915,000',
     eventDateLabel: 'March 27, 2026',
     eventTimeLabel: 'To Be Announced',
     venueLabel: 'Indira Global School of Business',
-    coordinatorName: 'Prof. Aditee Huparikar & Anirudha Thuse',
+    coordinatorName: 'Prof. Aditee Huparikar & Dr. Aniruddha Thuse',
     coordinatorEmail: 'icem@indiraicem.ac.in',
     coordinatorPhone: '+91 9823459833 / 9850901315',
+    facultyCoordinators: [
+      createCoordinatorContact('Prof. Aditee Huparikar', '+91 9823459833', 'icem@indiraicem.ac.in'),
+      createCoordinatorContact('Dr. Aniruddha Thuse', '+91 9850901315', 'icem@indiraicem.ac.in'),
+    ],
+    studentCoordinators: [
+      createCoordinatorContact('Rajveer Gil', '+91 7587227100'),
+      createCoordinatorContact('Radhika Nannaware', '+91 8956717423'),
+      createCoordinatorContact('Atharv Salunke / Rajveer Preet Gill', '+91 7888106167'),
+    ],
     isRegistrationOpen: true,
     rules: [
-      'Registration deadline: 23rd March 2026',
-      'Prize Distribution: 1st - \u20B925K, 2nd - \u20B910K, 3rd - \u20B95K',
-      'Trophy for winner and runner-up; certificates for all participants',
+      'Prize Distribution: 1st - \u20B97K, 2nd - \u20B95K, 3rd - \u20B93K',
     ],
     rounds: DEFAULT_EVENT_ROUNDS[EventID.LAUNCHPAD],
   },
 ];
 
 const DEFAULT_HERO_CONFIG: HeroConfig = {
-  institution: 'INDIRA COLLEGE OF ENGINEERING & MANAGEMENT',
+  institution: 'INDIRA COLLEGE OF ENGINEERING & MANAGEMENT, INDIRA GLOBAL SCHOOL OF BUSINESS',
   organizingLabel: 'Organizing',
   subLabel: "The Largest Gathering of Pune's Tech Innovators",
   mainTitlePart1: 'TECHNOFEST',
@@ -354,6 +442,64 @@ const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
   isOpen: true,
   closedMessage: 'Registrations are currently paused. Please check back later or contact the organizing team.',
   payeeName: 'TechnoFest 2026',
+  bankAccountNo: '201025452641',
+  bankIfsc: 'INDB0000999',
+  departmentPayments: {
+    [Department.FIRST_YEAR]: {
+      upiId: 'truptikathale@ybl',
+      payeeName: 'ICEM First Year Dept',
+      bankAccountNo: '4040010100057655',
+      bankIfsc: 'UTIB0000404',
+    },
+    [Department.COMPS]: {
+      upiId: '9145616101@ibl',
+      payeeName: 'ICEM Computer Dept',
+      bankAccountNo: '50100351881924',
+      bankIfsc: 'HDFC0004884',
+    },
+    [Department.AIDS]: {
+      upiId: 'pallavichavan1707@oksbi',
+      payeeName: 'ICEM AIDS Dept',
+      bankAccountNo: '922010060640068',
+      bankIfsc: 'UTIB0000110',
+    },
+    [Department.IT]: {
+      upiId: 'wankhade81@okhdfcbank',
+      payeeName: 'ICEM IT Dept',
+      bankAccountNo: '50100391133848',
+      bankIfsc: 'HDFC0002524',
+    },
+    [Department.CIVIL]: {
+      upiId: '9819298069@yescred',
+      payeeName: 'ICEM Civil Dept',
+      bankAccountNo: '30724368718',
+      bankIfsc: 'SBIN0000569',
+    },
+    [Department.MECH]: {
+      upiId: 'pranali.khatake@okicici',
+      payeeName: 'ICEM Mech Dept',
+      bankAccountNo: '169701500487',
+      bankIfsc: 'ICOC0001697',
+    },
+    [Department.ENTC]: {
+      upiId: 'psmrpatil-4@okhdfcbank',
+      payeeName: 'ICEM ENTC Dept',
+      bankAccountNo: '50100754250032',
+      bankIfsc: 'HDFC0007247',
+    },
+    [Department.MCA_BCA]: {
+      upiId: 'dhanashree.patil89-1@oksbi',
+      payeeName: 'ICEM MCA/BCA Dept',
+      bankAccountNo: '201025452648',
+      bankIfsc: 'INDB0000999',
+    },
+    [Department.MBA]: {
+      upiId: 'ashishpdng@okicici',
+      payeeName: 'IGSB MBA Dept',
+      bankAccountNo: '201025452649',
+      bankIfsc: 'INDB0000999',
+    },
+  },
 };
 
 const DEFAULT_SPONSORS: SponsorConfig[] = [
@@ -430,8 +576,37 @@ const normalizeStats = (value: unknown, fallback: AboutStatConfig[]) => {
   return next.length > 0 ? next : fallback;
 };
 
+const normalizeCoordinatorContacts = (
+  value: unknown,
+  fallback?: CoordinatorContact[],
+) => {
+  const fallbackContacts = cloneCoordinatorContacts(fallback) || [];
+  if (!Array.isArray(value)) return fallbackContacts;
+
+  const next = value
+    .filter(isRecord)
+    .map((contact, index) => ({
+      name: getString(contact.name, fallbackContacts[index]?.name || ''),
+      phone: getString(contact.phone, fallbackContacts[index]?.phone || ''),
+      email: typeof contact.email === 'string'
+        ? contact.email
+        : fallbackContacts[index]?.email,
+    }))
+    .filter((contact) => contact.name || contact.phone || contact.email);
+
+  return next.length > 0 ? next : fallbackContacts;
+};
+
+const cloneEventConfig = (event: EventConfig): EventConfig => ({
+  ...event,
+  rules: [...event.rules],
+  rounds: event.rounds.map((round) => ({ ...round })),
+  facultyCoordinators: cloneCoordinatorContacts(event.facultyCoordinators),
+  studentCoordinators: cloneCoordinatorContacts(event.studentCoordinators),
+});
+
 const normalizeEvent = (value: unknown, fallback: EventConfig): EventConfig => {
-  if (!isRecord(value)) return { ...fallback };
+  if (!isRecord(value)) return cloneEventConfig(fallback);
 
   return {
     ...fallback,
@@ -450,6 +625,8 @@ const normalizeEvent = (value: unknown, fallback: EventConfig): EventConfig => {
     coordinatorName: getString(value.coordinatorName, fallback.coordinatorName),
     coordinatorEmail: getString(value.coordinatorEmail, fallback.coordinatorEmail),
     coordinatorPhone: getString(value.coordinatorPhone, fallback.coordinatorPhone),
+    facultyCoordinators: normalizeCoordinatorContacts(value.facultyCoordinators, fallback.facultyCoordinators),
+    studentCoordinators: normalizeCoordinatorContacts(value.studentCoordinators, fallback.studentCoordinators),
     isRegistrationOpen: getBoolean(value.isRegistrationOpen, fallback.isRegistrationOpen),
     rules: getStringArray(value.rules, fallback.rules),
     rounds: normalizeRounds(value.rounds, fallback.rounds),
@@ -460,7 +637,7 @@ const normalizeEvent = (value: unknown, fallback: EventConfig): EventConfig => {
 const createFallbackEvent = (eventId: string, index: number): EventConfig => {
   const template = DEFAULT_SITE_CONFIG.events[index] ?? DEFAULT_SITE_CONFIG.events[0];
   return {
-    ...template,
+    ...cloneEventConfig(template),
     id: eventId,
   };
 };
@@ -644,11 +821,7 @@ const cloneAboutConfig = (about: AboutPageConfig): AboutPageConfig => ({
 
 export const cloneSiteConfig = (config: SiteConfig): SiteConfig => ({
   hero: { ...config.hero },
-  events: config.events.map((event) => ({
-    ...event,
-    rules: [...event.rules],
-    rounds: event.rounds.map((round) => ({ ...round })),
-  })),
+  events: config.events.map(cloneEventConfig),
   socialLinks: { ...config.socialLinks },
   contact: { ...config.contact },
   announcement: { ...config.announcement },

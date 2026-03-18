@@ -124,14 +124,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 px-4 md:px-10 flex justify-between items-center transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 px-3 sm:px-4 md:px-10 flex justify-between items-center transition-all duration-500 ${
           scrolled
             ? "h-14 md:h-20 bg-[linear-gradient(180deg,rgba(5,8,22,0.9),rgba(5,8,22,0.72))] backdrop-blur-xl shadow-[0_18px_50px_rgba(2,6,23,0.65)]"
-            : "h-16 md:h-24 bg-transparent"
+            : "h-14 sm:h-16 md:h-24 bg-transparent"
         }`}
       >
         {/* LEFT SIDE */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 md:gap-3 min-w-0">
 
           {/* MOBILE MENU BUTTON */}
           <button
@@ -143,15 +143,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
 
           {/* LOGO + TITLE */}
           <motion.div
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-2 md:gap-3 cursor-pointer group min-w-0"
             onClick={handleHomeClick}
             whileHover={{ scale: 1.03 }}
           >
             <TechnoLogo />
 
-            <div className="flex flex-col">
+            <div className="flex min-w-0 flex-col">
 
-              <span className="font-futuristic whitespace-nowrap text-base md:text-3xl tracking-tight font-black italic text-white group-hover:text-cyan-300 transition-colors">
+              <span className="font-futuristic whitespace-nowrap text-sm sm:text-base md:text-3xl tracking-tight font-black italic text-white group-hover:text-cyan-300 transition-colors">
                 TECHNOFEST
                 <span className="ml-1 text-purple-300 group-hover:text-white">
                   2026
@@ -167,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex gap-3 md:gap-10 items-center text-[10px] font-black tracking-[0.2em]">
+        <div className="flex gap-2 md:gap-10 items-center text-[10px] font-black tracking-[0.2em]">
 
           {/* HOME */}
           <button
@@ -200,7 +200,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setView }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRegisterClick}
-            className={`flex items-center gap-2 px-3 md:px-8 py-2 md:py-3 rounded-xl font-black text-[11px] transition-all border ${
+            className={`flex items-center gap-2 px-3 sm:px-4 md:px-8 py-2 md:py-3 rounded-xl font-black text-[10px] md:text-[11px] transition-all border ${
               config.registration.isOpen
                 ? "border-cyan-300/35 bg-[linear-gradient(180deg,rgba(8,18,35,0.8),rgba(9,16,30,0.65))] text-cyan-200 hover:border-cyan-200/60 shadow-[0_12px_35px_rgba(2,6,23,0.4)]"
                 : "border-red-400/40 bg-red-500/10 text-red-300"

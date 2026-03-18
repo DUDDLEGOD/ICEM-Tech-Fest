@@ -6,7 +6,6 @@ import {
     Download,
     Mail,
     MapPin,
-    Phone,
     Trophy,
     User,
     Users,
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { useSiteConfig } from "../contexts/useSiteConfig";
-import { EventConfig } from "../types";
+import { BrochureVisibility, CoordinatorContact, Department, EventConfig } from "../types";
 
 const formatEventFee = (fee: EventConfig["fee"]) => {
   if (typeof fee === "number") {
@@ -29,6 +28,90 @@ const formatEventFee = (fee: EventConfig["fee"]) => {
 
   return fee;
 };
+
+const formatPhoneHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
+
+const getFacultyCoordinators = (event: EventConfig): CoordinatorContact[] => {
+  if (event.facultyCoordinators && event.facultyCoordinators.length > 0) {
+    return event.facultyCoordinators;
+  }
+
+  return event.coordinatorName && event.coordinatorPhone
+    ? [
+        {
+          name: event.coordinatorName,
+          phone: event.coordinatorPhone,
+          email: event.coordinatorEmail,
+        },
+      ]
+    : [];
+};
+
+const BROCHURE_SLUGS: Record<string, string> = {
+  [Department.FIRST_YEAR]: "first-year",
+  [Department.COMPS]: "computer",
+  [Department.AIDS]: "aids",
+  [Department.IT]: "it",
+  [Department.CIVIL]: "civil",
+  [Department.MECH]: "mech",
+  [Department.ENTC]: "entc",
+  [Department.MCA_BCA]: "mca-bca",
+  [Department.MBA]: "mba",
+};
+
+const getBrochureHref = (event: EventConfig) => {
+  const slug = BROCHURE_SLUGS[event.department] || event.id.toLowerCase();
+  return `/brochurs/${slug}.pdf`;
+};
+
+const CoordinatorCards: React.FC<{
+  coordinators: CoordinatorContact[];
+  icon: React.ReactNode;
+  sharedEmail?: string;
+}> = ({ coordinators, icon, sharedEmail }) => (
+  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+    {coordinators.map((coordinator, index) => (
+      <div
+        key={`${coordinator.name}-${index}`}
+        className="h-full rounded-lg border border-white/5 bg-white/[0.02] p-2.5"
+      >
+        <div className="flex items-start gap-2">
+          <div className="mt-0.5 text-slate-500">{icon}</div>
+          <div className="min-w-0">
+            <p className="text-white font-bold text-xs">{coordinator.name}</p>
+            <a
+              href={formatPhoneHref(coordinator.phone)}
+              className="block text-slate-400 text-xs hover:text-cyan-400 transition-colors"
+            >
+              {coordinator.phone}
+            </a>
+            {(coordinator.email || (index === 0 ? sharedEmail : undefined)) && (
+              <a
+                href={`mailto:${coordinator.email || sharedEmail}`}
+                className="mt-1 flex items-center gap-1.5 text-slate-400 text-xs hover:text-cyan-400 transition-colors break-all"
+              >
+                <Mail size={11} className="flex-shrink-0" />
+                <span>{coordinator.email || sharedEmail}</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+interface EventCardProps {
+  event: EventConfig;
+  onRegister: (eventId: string) => void;
+  onOpenDetails: (event: EventConfig) => void;
+  registrationEnabled: boolean;
+}
+
+interface EventCatalogProps {
+  onRegister: (eventId: string) => void;
+  brochureVisibility?: BrochureVisibility;
+}
 
 /* ---------------- ANIMATIONS ---------------- */
 
@@ -113,11 +196,11 @@ const EventCard = ({
   onRegister,
   onOpenDetails,
   registrationEnabled
-}: any) => (
+}: EventCardProps) => (
   <motion.div
     variants={cardVariants}
     whileHover="hover"
-    className="group relative h-[440px]"
+    className="group relative min-h-[380px] md:h-[440px]"
   >
 
     {/* glow border */}
@@ -128,9 +211,9 @@ const EventCard = ({
       <div className="absolute -right-10 top-10 w-28 h-28 rounded-full bg-purple-400/10 blur-3xl" />
       <div className="absolute -left-10 bottom-10 w-24 h-24 rounded-full bg-cyan-400/10 blur-3xl" />
 
-      <div className="relative z-10 p-8 flex flex-col h-full text-left">
+      <div className="relative z-10 p-6 md:p-8 flex flex-col h-full text-left">
 
-        <div className="flex justify-between items-start gap-4 mb-8">
+        <div className="flex justify-between items-start gap-4 mb-6 md:mb-8">
 
           <div className="space-y-1.5 min-w-0">
             <div className="flex items-center gap-2.5 px-3 py-2 bg-cyan-400/5 border border-cyan-400/20 rounded-[1.25rem] w-fit max-w-[14rem]">
@@ -152,7 +235,7 @@ const EventCard = ({
 
         <div className="flex-1 space-y-3">
 
-          <h4 className="text-3xl font-futuristic font-black text-white group-hover:text-cyan-400 transition-colors uppercase leading-[0.9] italic tracking-tighter">
+          <h4 className="text-2xl md:text-3xl font-futuristic font-black text-white group-hover:text-cyan-400 transition-colors uppercase leading-[0.9] italic tracking-tighter">
             {event.name}
           </h4>
 
@@ -169,7 +252,7 @@ const EventCard = ({
 
         </div>
 
-        <div className="flex items-center gap-3 pt-8 border-t border-white/5">
+        <div className="flex items-center gap-3 pt-6 md:pt-8 border-t border-white/5">
 
           <button
             onClick={() => onOpenDetails(event)}
@@ -200,15 +283,22 @@ const EventCard = ({
 
 /* ---------------- EVENT CATALOG ---------------- */
 
-export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
+export const EventCatalog: React.FC<EventCatalogProps> = ({
+  onRegister,
+  brochureVisibility = {},
+}) => {
 
   const { config } = useSiteConfig();
   const [selectedEvent, setSelectedEvent] = useState<EventConfig | null>(null);
+  const selectedBrochureHref = selectedEvent ? getBrochureHref(selectedEvent) : null;
+  const shouldShowBrochure = selectedEvent
+    ? brochureVisibility[selectedEvent.id] || Boolean(selectedBrochureHref)
+    : false;
 
   return (
     <section
       id="events-section"
-      className="py-12 md:py-16 px-6 max-w-7xl mx-auto relative bg-[#0a0a12]"
+      className="py-12 md:py-16 px-4 sm:px-6 max-w-7xl mx-auto relative bg-[#0a0a12]"
     >
 
       {/* background glows */}
@@ -221,7 +311,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
         initial={{ opacity: 0, y: 25 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8"
+        className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-12 gap-6 md:gap-8"
       >
 
         <div className="space-y-5 text-left">
@@ -233,7 +323,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
             </h2>
           </div>
 
-          <h3 className="text-4xl md:text-6xl lg:text-7xl font-futuristic font-black tracking-tighter uppercase leading-[0.85] italic text-white pr-4">
+          <h3 className="text-3xl md:text-6xl lg:text-7xl font-futuristic font-black tracking-tighter uppercase leading-[0.9] md:leading-[0.85] italic text-white pr-2 md:pr-4">
             SELECT YOUR <br />
             <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-purple-300 py-1">
               ENVIRONMENT
@@ -250,7 +340,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10"
       >
 
         {config.events.map((event) => (
@@ -267,7 +357,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
 
       </motion.div>
 
-      {/* MODAL — Compact two-column layout */}
+      {/* MODAL - Compact two-column layout */}
 
       <AnimatePresence>
         {selectedEvent && (
@@ -276,7 +366,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedEvent(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-4 md:p-6"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-2 sm:p-4 md:p-6"
           >
 
             <motion.div
@@ -285,7 +375,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 140, damping: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass max-w-5xl w-full rounded-[2rem] border border-white/10 p-5 md:p-8 relative"
+              className="glass max-h-[88vh] w-full max-w-4xl overflow-y-auto rounded-[1.5rem] border border-white/10 p-4 sm:p-5 md:rounded-[2rem] md:p-8 relative"
             >
 
               <button
@@ -296,7 +386,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
               </button>
 
               {/* Header */}
-              <div className="mb-5">
+              <div className="mb-4 md:mb-5 pr-8">
                 <div className="flex items-center gap-3 mb-2">
                   <span className="px-2.5 py-0.5 bg-cyan-400/10 border border-cyan-400/30 rounded-full text-[9px] font-black text-cyan-400 uppercase tracking-widest">
                     {selectedEvent.department}
@@ -305,7 +395,7 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
                     SECTOR_{selectedEvent.id}
                   </span>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-futuristic font-black uppercase text-white leading-tight">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-futuristic font-black uppercase text-white leading-tight">
                   {selectedEvent.name}
                 </h2>
                 <p className="text-purple-300 font-bold text-xs mt-1 tracking-wide">
@@ -313,13 +403,13 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
                 </p>
               </div>
 
-              <p className="text-slate-400 text-sm mb-5 leading-relaxed line-clamp-2">{selectedEvent.description}</p>
+              <p className="text-slate-400 text-xs sm:text-sm mb-4 md:mb-5 leading-relaxed line-clamp-3">{selectedEvent.description}</p>
 
               {/* Key Info Row */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3 mb-4 md:mb-5">
                 {[
                   { icon: <Trophy size={12} />, label: 'Prize', value: selectedEvent.prizePool },
-                  { icon: <Users size={12} />, label: 'Team', value: `${selectedEvent.minTeam}–${selectedEvent.maxTeam}` },
+                  { icon: <Users size={12} />, label: 'Team', value: `${selectedEvent.minTeam}-${selectedEvent.maxTeam}` },
                   { icon: <Zap size={12} />, label: 'Fee', value: formatEventFee(selectedEvent.fee) },
                   { icon: <Calendar size={12} />, label: 'Date', value: selectedEvent.eventDateLabel.replace('March ', 'Mar ') },
                 ].map((item, i) => (
@@ -334,9 +424,9 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
               </div>
 
               {/* Two-Column Body */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
 
-                {/* Left Column — Rules + Venue */}
+                {/* Left Column - Rules + Venue */}
                 <div className="space-y-4">
                   <div>
                     <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-3">Rules</h4>
@@ -362,15 +452,15 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
                   </div>
                 </div>
 
-                {/* Right Column — Rounds + Coordinator */}
+                {/* Right Column - Rounds */}
                 <div className="space-y-4">
                   {selectedEvent.rounds.length > 0 && (
                     <div>
                       <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-3">Rounds</h4>
-                      <div className="relative space-y-4 pl-7 border-l border-white/10 ml-1">
+                      <div className="relative space-y-3 pl-6 border-l border-white/10 ml-1">
                         {selectedEvent.rounds.map((round, i) => (
                           <div key={i} className="relative">
-                            <div className="absolute -left-[33px] top-0 w-5 h-5 rounded-full bg-stone-900 border-2 border-cyan-400/60 flex items-center justify-center text-[8px] font-black text-cyan-400 z-10">
+                            <div className="absolute -left-[29px] top-0 w-4.5 h-4.5 rounded-full bg-stone-900 border-2 border-cyan-400/60 flex items-center justify-center text-[8px] font-black text-cyan-400 z-10">
                               {i + 1}
                             </div>
                             <div>
@@ -382,38 +472,50 @@ export const EventCatalog = ({ onRegister, brochureVisibility = {} }: any) => {
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
 
-                  <div className="p-3 bg-white/[0.03] border border-white/5 rounded-xl">
-                    <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-2">Coordinator</h4>
-                    <div className="space-y-1.5">
-                      <div className="flex items-center gap-2">
-                        <User size={12} className="text-slate-500" />
-                        <span className="text-white font-bold text-xs">{selectedEvent.coordinatorName}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Mail size={12} className="text-slate-500" />
-                        <a href={`mailto:${selectedEvent.coordinatorEmail}`} className="text-slate-400 text-xs hover:text-cyan-400 transition-colors">
-                          {selectedEvent.coordinatorEmail}
-                        </a>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Phone size={12} className="text-slate-500" />
-                        <a href={`tel:${selectedEvent.coordinatorPhone.replace(/\s+/g, '')}`} className="text-slate-400 text-xs hover:text-cyan-400 transition-colors">
-                          {selectedEvent.coordinatorPhone}
-                        </a>
-                      </div>
-                    </div>
+              <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.03] p-3 md:p-4">
+                <h4 className="text-[10px] font-black text-cyan-400 uppercase tracking-[0.3em] mb-3">Contacts</h4>
+
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                  <div>
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.28em] mb-2">
+                      Faculty Coordinators
+                    </p>
+                    <CoordinatorCards
+                      coordinators={getFacultyCoordinators(selectedEvent)}
+                      icon={<User size={12} />}
+                      sharedEmail={selectedEvent.coordinatorEmail}
+                    />
                   </div>
+
+                  {selectedEvent.studentCoordinators && selectedEvent.studentCoordinators.length > 0 && (
+                    <div>
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.28em] mb-2">
+                          Student Coordinators
+                        </p>
+                        <CoordinatorCards
+                          coordinators={selectedEvent.studentCoordinators}
+                          icon={<Users size={12} />}
+                        />
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-5">
-                {brochureVisibility[selectedEvent.id] && (
-                  <button className="flex items-center justify-center gap-2 px-5 py-3 bg-white/5 border border-white/10 hover:border-cyan-400/40 text-white font-black text-[10px] tracking-widest uppercase rounded-xl transition-all">
-                    <Download size={13} />
+              <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-5">
+                {shouldShowBrochure && selectedBrochureHref && (
+                  <a
+                    href={selectedBrochureHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-12 items-center justify-center gap-2 px-6 py-3.5 bg-white/5 border border-white/10 hover:border-cyan-400/40 text-white font-black text-[11px] tracking-[0.22em] uppercase rounded-xl transition-all"
+                  >
+                    <Download size={15} />
                     BROCHURE
-                  </button>
+                  </a>
                 )}
                 <button
                   onClick={() => {
