@@ -41,7 +41,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
   "bankIfsc": "INDB0000999",
   "departmentPayments": {
     "First-Year Dept.": {
-      "upiId": "not given",
+      "upiId": "truptikathale@ybl",
       "payeeName": "ICEM First Year Dept",
       "bankAccountNo": "4040010100057655",
       "bankIfsc": "UTIB0000404"
