@@ -218,7 +218,7 @@ export const Footer: React.FC = () => {
         <div className="pt-10 border-t border-white/5 flex flex-col lg:flex-row justify-between items-center gap-10">
 
           <p className="text-[9px] font-black text-slate-700 tracking-[0.4em] uppercase text-center lg:text-left">
-            © 2026 ICEM TECHNOFEST • OFFICIAL REGISTRATION PORTAL
+            (C) 2026 ICEM TECHNOFEST | OFFICIAL REGISTRATION PORTAL
           </p>
 
           <div className="flex items-center gap-3 px-5 py-2.5 bg-purple-400/5 rounded-xl border border-purple-400/20">

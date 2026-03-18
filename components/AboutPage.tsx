@@ -2,18 +2,12 @@ import React from "react";
 import { motion, Variants } from "framer-motion";
 import {
   Activity,
-  BookOpen,
   ChevronLeft,
   Code,
   Cpu,
-  Globe,
-  Landmark,
-  Library,
-  Microscope,
   Radio,
   Rocket,
   Shield,
-  Target,
 } from "lucide-react";
 import { useSiteConfig } from "../contexts/useSiteConfig";
 
@@ -61,41 +55,12 @@ const HUDDecoration = ({ className }: { className?: string }) => (
   </motion.div>
 );
 
-/* ---------------- CAMPUS FEATURES ---------------- */
-
-const campusFeatures = [
-  {
-    icon: Library,
-    title: "Central Library",
-    desc: "Digital repository with journals and IEEE access.",
-    color: "text-cyan-300"
-  },
-  {
-    icon: Microscope,
-    title: "Research Labs",
-    desc: "Infrastructure for AI, Robotics, and Civil.",
-    color: "text-purple-300"
-  },
-  {
-    icon: Globe,
-    title: "Academic Synergy",
-    desc: "Collaborations with global institutions.",
-    color: "text-cyan-400"
-  },
-  {
-    icon: Shield,
-    title: "NAAC Accredited",
-    desc: "Certified standards of excellence.",
-    color: "text-purple-300"
-  }
-];
-
 /* ---------------- PAGE ---------------- */
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigateBack }) => {
 
   const { config } = useSiteConfig();
-  const { about, contact } = config;
+  const { about } = config;
 
   return (
     <motion.div

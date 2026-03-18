@@ -14,12 +14,12 @@ export enum Department {
 export enum EventID {
   CHAKRAVYUH = 'CHAKRAVYUH',
   NEUROAVATAR = 'NEUROAVATAR',
-  DATA_DASH = 'DATA_DASH',
-  CYBER_SHIELD = 'CYBER_SHIELD',
+  ORCHESTRON = 'ORCHESTRON',
+  CODEVERSE = 'CODEVERSE',
   BRIDGE = 'BRIDGE',
-  FAST_FURIOUS = 'FAST_FURIOUS',
-  CIRCUIT_CRAFTERS = 'CIRCUIT_CRAFTERS',
-  WEB_WIZARDS = 'WEB_WIZARDS',
+  BLIND_ASSEMBLY = 'BLIND_ASSEMBLY',
+  ROBONEX = 'ROBONEX',
+  VIBEASTRA = 'VIBEASTRA',
   LAUNCHPAD = 'LAUNCHPAD'
 }
 
@@ -28,6 +28,12 @@ export type AppView = 'home' | 'register' | 'about';
 export interface EventRound {
   title: string;
   desc: string;
+}
+
+export interface CoordinatorContact {
+  name: string;
+  phone: string;
+  email?: string;
 }
 
 export interface EventConfig {
@@ -47,6 +53,8 @@ export interface EventConfig {
   coordinatorName: string;
   coordinatorEmail: string;
   coordinatorPhone: string;
+  facultyCoordinators?: CoordinatorContact[];
+  studentCoordinators?: CoordinatorContact[];
   isRegistrationOpen: boolean;
   rules: string[];
   rounds: EventRound[];

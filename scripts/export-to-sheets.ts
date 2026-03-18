@@ -78,6 +78,7 @@ const ALL_HEADER_COLOUR: RGB = { red: 0.12, green: 0.12, blue: 0.18 };
 const SECTION_HEADER_COLOUR: RGB = { red: 0.2, green: 0.24, blue: 0.31 };
 const TABLE_HEADER_COLOUR: RGB = { red: 0.89, green: 0.91, blue: 0.94 };
 
+<<<<<<< HEAD
 const DATA_HEADER = [
   '#',
   'Reference ID',
@@ -138,6 +139,32 @@ interface EventExportDetails {
   eventTimeLabel: string;
   venueLabel: string;
 }
+=======
+// ─── Event ID → Dept mapping (mirrors site-config.md) ────────────────────────
+const EVENT_DEPARTMENT: Record<string, string> = {
+  CHAKRAVYUH:       'First-Year',
+  NEUROAVATAR:      'Computer Dept.',
+  ORCHESTRON:       'AIDS Dept.',
+  CODEVERSE:        'IT Dept',
+  BRIDGE:           'Civil Dept.',
+  BLIND_ASSEMBLY:   'Mech Dept.',
+  ROBONEX:          'ENTC Dept.',
+  VIBEASTRA:        'MCA/BCA Dept.',
+  LAUNCHPAD:        'MBA Dept. (IGSB+ICEM)',
+};
+
+const EVENT_NAME: Record<string, string> = {
+  CHAKRAVYUH:       'Chakravyuh',
+  NEUROAVATAR:      'NeuroAvatar Arena',
+  ORCHESTRON:       'Orchestron - Agentic AI',
+  CODEVERSE:        'CodeVerse',
+  BRIDGE:           'The Gravity Game – Bridge Making',
+  BLIND_ASSEMBLY:   'Blind Assembly',
+  ROBONEX:          'RoboNex',
+  VIBEASTRA:        'VibeAstra',
+  LAUNCHPAD:        'LaunchPad Business Plan Challenge',
+};
+>>>>>>> 1657b8f5b922e8eece304ba008f65fbbe0739da9
 
 interface RegistrationRow {
   id: string;
