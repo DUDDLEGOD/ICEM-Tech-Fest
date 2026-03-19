@@ -546,7 +546,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "description": "Gamified coding event focused on logic and creativity.",
     "department": "MCA/BCA Dept.",
     "minTeam": 1,
-    "maxTeam": 1,
+    "maxTeam": 2,
     "fee": 250,
     "requiresUpload": false,
     "prizePool": "₹25,000",
