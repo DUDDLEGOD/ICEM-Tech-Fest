@@ -85,8 +85,8 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "MCA/BCA Dept.": {
       "upiId": "dhanashree.patil89-1@oksbi",
       "payeeName": "ICEM MCA/BCA Dept",
-      "bankAccountNo": "201025452648",
-      "bankIfsc": "INDB0000999"
+      "bankAccountNo": "30677698705",
+      "bankIfsc": "SBIN0011134"
     },
     "MBA Dept. (IGSB+ICEM)": {
       "upiId": "not given",
@@ -211,7 +211,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "coordinatorPhone": "+91 7841994889",
     "facultyCoordinators": [
       {
-        "name": "Prof. Trupti Kethale",
+        "name": "Prof. Trupti Kathale",
         "phone": "+91 7841994889",
         "email": "icem@indiraicem.ac.in"
       }

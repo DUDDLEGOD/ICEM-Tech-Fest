@@ -69,6 +69,10 @@ const WHATSAPP_GROUPS: Record<string, { label: string; url: string }> = {
     label: 'MCA/BCA Dept.',
     url: 'https://chat.whatsapp.com/KhDlbj4FPkYIDBziZKycM8?mode=gi_t',
   },
+  LAUNCHPAD: {
+    label: 'MBA Dept. (IGSB+ICEM)',
+    url: 'https://chat.whatsapp.com/I682uW5mZJiIyNoXshZGSJ?mode=gi_t',
+  },
 };
 
 app.post('/api/register', async (req: Request, res: Response): Promise<void> => {
