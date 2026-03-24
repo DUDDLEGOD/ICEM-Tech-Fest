@@ -366,7 +366,6 @@ export const DEFAULT_EVENTS: EventConfig[] = [
     ],
     isRegistrationOpen: true,
     rules: [
-      'Individual participation only',
       'Prize Distribution: 1st - \u20B915K, 2nd - \u20B910K',
     ],
     rounds: DEFAULT_EVENT_ROUNDS[EventID.VIBEASTRA],
@@ -503,7 +502,7 @@ const DEFAULT_REGISTRATION_SETTINGS: RegistrationSettings = {
 };
 
 const DEFAULT_SPONSORS: SponsorConfig[] = [
-  
+
 ];
 
 const DEFAULT_ABOUT_STATS: AboutStatConfig[] = [
