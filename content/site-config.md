@@ -543,7 +543,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "id": "VIBEASTRA",
     "name": "VibeAstra",
     "tagline": "Creative Coding Experience",
-    "description": "Gamified coding event focused on logic and creativity.",
+    "description": "Step into VibeAstra—where ideas meet action! Compete in exciting challenges, think out of the box, and turn real-world problems into innovative solutions with your team.",
     "department": "MCA/BCA Dept.",
     "minTeam": 1,
     "maxTeam": 2,
