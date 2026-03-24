@@ -409,7 +409,7 @@ export const EventCatalog: React.FC<EventCatalogProps> = ({
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 md:gap-3 mb-4 md:mb-5">
                 {[
                   { icon: <Trophy size={12} />, label: 'Prize', value: selectedEvent.prizePool },
-                  { icon: <Users size={12} />, label: 'Team', value: `${selectedEvent.minTeam}-${selectedEvent.maxTeam}` },
+                  { icon: <Users size={12} />, label: 'Team', value: selectedEvent.minTeam === selectedEvent.maxTeam ? String(selectedEvent.minTeam) : `${selectedEvent.minTeam}-${selectedEvent.maxTeam}` },
                   { icon: <Zap size={12} />, label: 'Fee', value: formatEventFee(selectedEvent.fee) },
                   { icon: <Calendar size={12} />, label: 'Date', value: selectedEvent.eventDateLabel.replace('March ', 'Mar ') },
                 ].map((item, i) => (

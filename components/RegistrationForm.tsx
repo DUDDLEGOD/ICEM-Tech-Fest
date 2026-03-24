@@ -578,7 +578,7 @@ const validateMembers = () => {
 
           <div className="grid grid-cols-2 gap-3 md:min-w-[22rem]">
             {[
-              { label: 'Team Size', value: `${currentEvent.minTeam}-${currentEvent.maxTeam}` },
+              { label: 'Team Size', value: currentEvent.minTeam === currentEvent.maxTeam ? String(currentEvent.minTeam) : `${currentEvent.minTeam}-${currentEvent.maxTeam}` },
               { label: 'Entry Fee', value: feeSummaryLabel },
               { label: 'Abstract', value: currentEvent.requiresUpload ? 'Required' : 'Not Needed' },
               { label: robotFeeOptions ? 'Robot' : 'Status', value: robotFeeOptions ? (hasRobot ? 'Bringing robot' : 'Using event robot') : (currentEvent.isRegistrationOpen ? 'Open' : 'Paused') },
@@ -673,7 +673,7 @@ const validateMembers = () => {
                 <div>
                   <h4 className="font-futuristic text-xl text-white uppercase tracking-tighter">Arena Selection</h4>
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                    {currentEvent.department} | {robotFeeOptions ? feeSummaryLabel : formatFee(numericFee)} | {currentEvent.minTeam}-{currentEvent.maxTeam} members
+                    {currentEvent.department} | {robotFeeOptions ? feeSummaryLabel : formatFee(numericFee)} | {currentEvent.minTeam === currentEvent.maxTeam ? currentEvent.minTeam : `${currentEvent.minTeam}-${currentEvent.maxTeam}`} members
                   </p>
                 </div>
               </div>
