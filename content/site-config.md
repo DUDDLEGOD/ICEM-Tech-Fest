@@ -206,7 +206,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
     "venueLabel": "ICEM Campus",
-    "coordinatorName": "Prof. Trupti Kethale",
+    "coordinatorName": "Prof. Trupti Kathale",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 7841994889",
     "facultyCoordinators": [
