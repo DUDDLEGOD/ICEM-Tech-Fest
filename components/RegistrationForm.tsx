@@ -113,10 +113,39 @@ const getExpectedDepartmentQrFile = (department: string) => {
   return `${slug}.png`;
 };
 
+const sanitizePaymentValue = (value?: string | null) => {
+  const normalized = value?.trim() ?? '';
+  if (!normalized) return '';
+
+  const lowered = normalized.toLowerCase();
+  if (['-', 'na', 'n/a', 'none', 'nil'].includes(lowered)) {
+    return '';
+  }
+
+  return normalized;
+};
+
 const getUpiPaymentLink = (upiId: string, payeeName: string, amount: number) =>
   `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}${
     amount > 0 ? `&am=${amount}` : ''
   }&cu=INR`;
+
+const getBankTransferQrPayload = (
+  payeeName: string,
+  bankAccountNo: string,
+  bankIfsc: string,
+  amount: number,
+) =>
+  [
+    'BANK TRANSFER DETAILS',
+    `PAYEE:${payeeName}`,
+    `ACCOUNT:${bankAccountNo}`,
+    `IFSC:${bankIfsc}`,
+    amount > 0 ? `AMOUNT:${amount}` : '',
+    'CURRENCY:INR',
+  ]
+    .filter(Boolean)
+    .join('\n');
 
 const resolveFailureMessage = (result: RegistrationApiResult) =>
   result.message ?? 'Submission failed. Please verify your network and try again.';
@@ -926,11 +955,16 @@ const validateMembers = () => {
 
           {step === 'payment' && (() => {
             const deptPayment = config.registration.departmentPayments?.[currentEvent.department];
-            const bankAccountNo = deptPayment?.bankAccountNo || config.registration.bankAccountNo;
-            const bankIfsc = deptPayment?.bankIfsc || config.registration.bankIfsc;
-            const payeeName = deptPayment?.payeeName || config.registration.payeeName || 'TechnoFest 2026';
-            const deptUpiId = deptPayment?.upiId || primaryUpiId;
-            const fallbackUpiLink = deptUpiId ? getUpiPaymentLink(deptUpiId, payeeName, numericFee) : '';
+            const bankAccountNo = sanitizePaymentValue(deptPayment?.bankAccountNo) || sanitizePaymentValue(config.registration.bankAccountNo);
+            const bankIfsc = sanitizePaymentValue(deptPayment?.bankIfsc) || sanitizePaymentValue(config.registration.bankIfsc);
+            const payeeName = sanitizePaymentValue(deptPayment?.payeeName) || sanitizePaymentValue(config.registration.payeeName) || 'TechnoFest 2026';
+            const deptUpiId = sanitizePaymentValue(deptPayment?.upiId) || sanitizePaymentValue(primaryUpiId);
+            const generatedQrValue = deptUpiId
+              ? getUpiPaymentLink(deptUpiId, payeeName, numericFee)
+              : bankAccountNo && bankIfsc
+                ? getBankTransferQrPayload(payeeName, bankAccountNo, bankIfsc, numericFee)
+                : '';
+            const generatedQrLabel = deptUpiId ? 'Generated UPI QR' : 'Generated bank-details QR';
 
             return (
               <motion.div
@@ -977,9 +1011,9 @@ const validateMembers = () => {
                           alt={`${currentEvent.department} payment QR`}
                           className="w-40 h-40 object-contain"
                         />
-                      ) : fallbackUpiLink ? (
+                      ) : generatedQrValue ? (
                         <QRCodeSVG
-                          value={fallbackUpiLink}
+                          value={generatedQrValue}
                           size={156}
                           bgColor="#ffffff"
                           fgColor="#0f172a"
@@ -994,7 +1028,11 @@ const validateMembers = () => {
                     </div>
 
                     <p className="text-[9px] text-slate-500 text-center leading-relaxed">
-                      Scan this QR with any UPI app (GPay, PhonePe, Paytm) to pay instantly.
+                      {paymentQrSrc
+                        ? 'Scan this QR with any UPI app (GPay, PhonePe, Paytm) to pay instantly.'
+                        : generatedQrValue
+                          ? `${generatedQrLabel} shown because no department QR image was found.`
+                          : 'QR unavailable for this department right now.'}
                     </p>
                     {isDepartmentQrMissing && (
                       <span className="sr-only">Expected QR asset: {expectedDepartmentQrFile}</span>
