@@ -89,9 +89,9 @@ This keeps all site content static and removes the runtime CMS/server-config fet
       "bankIfsc": "SBIN0011134"
     },
     "MBA Dept. (IGSB+ICEM)": {
-      "upiId": "not given",
+      "upiId": "-",
       "payeeName": "IGSB MBA Dept",
-      "bankAccountNo": "201025452649",
+      "bankAccountNo": "201026465961",
       "bankIfsc": "INDB0000999"
     }
   }
@@ -588,7 +588,7 @@ This keeps all site content static and removes the runtime CMS/server-config fet
     "prizePool": "₹15,000",
     "eventDateLabel": "March 27, 2026",
     "eventTimeLabel": "To Be Announced",
-    "venueLabel": "Indira Global School of Business",
+    "venueLabel": "ICEM campus",
     "coordinatorName": "Prof. Aditee Huparikar & Dr. Aniruddha Thuse",
     "coordinatorEmail": "icem@indiraicem.ac.in",
     "coordinatorPhone": "+91 9823459833 / 9850901315",
